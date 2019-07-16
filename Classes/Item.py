@@ -12,6 +12,7 @@ class Item:
         self.ItemImageUrl = item_image_url
         self.LikesCount = 0
         self.Likes = []
+        self.Comments = []
         self.Gallery = []
 
     @staticmethod
@@ -137,6 +138,67 @@ class Item:
         )
 
         return Tools.Result(True, 'd')
+
+    @staticmethod
+    def comment_on_item(item_id, user_id, comment, rate):
+
+        valid = item_collection.find_one({'_id': ObjectId(item_id)}) is not None
+
+        if not valid:
+            return Tools.Result(False, Tools.errors('INF'))
+
+        # make sure user did not comment on the item before
+        commented_before = item_collection.find_one({'_id': ObjectId(item_id), 'Comments.UserId': user_id}) is not None
+
+        if commented_before:
+            return Tools.Result(False, Tools.errors('IAE'))
+
+        # update the comments
+        item_collection.update_one(
+            {'_id': ObjectId(item_id)},
+            {
+                '$push': {
+                    'Comments': {
+                        'CommentId': ObjectId,
+                        'UserId': user_id,
+                        'Comment': comment,
+                        'Rate': rate,
+                        'Seen': False
+                    }
+                }
+            }
+        )
+
+        return Tools.Result(True, 'd')
+
+    @staticmethod
+    def get_comments_on_item(item_id):
+        item_object = item_collection.find_one({'_id': ObjectId(item_id)}, {'Comments': 1})
+
+        if item_object is None:
+            return Tools.Result(False, Tools.errors('INF'))
+
+        comments = item_object['Comments']
+
+        return Tools.Result(True, Tools.dumps(comments))
+
+    @staticmethod
+    def admin_saw_comment(comment_id):
+
+        valid = item_collection.find_one({'Comments.CommentId': ObjectId(comment_id)}, {'_id': 1}) is not None
+
+        if not valid:
+            return Tools.Result(False, Tools.errors('INF'))
+
+        item_collection.update_one(
+            {
+                'Comments.CommentId': ObjectId(comment_id)
+            },
+            {
+                '$set': {'Comments.$[elem].Seen': True}
+            },
+            array_filters=[{'elem.CommentId': ObjectId(comment_id)}]
+        )
 
     @staticmethod
     def like_image_gallery(item_id, user_id, gallery_image_id):

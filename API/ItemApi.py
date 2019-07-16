@@ -125,3 +125,38 @@ def unlike_image_gallery():
                                          data['GalleryImageId'])
     except Exception as ex:
         return Tools.Result(False, ex.args)
+
+
+@item_route.route('/item/comment/submit', methods=['POST'])
+@json_body_required
+@check_form_json_key(['ItemId', 'UserId', 'Comment', 'Rate'])
+def comment_on_item():
+    try:
+        data = request.get_json()
+        return Item.comment_on_item(data['ItemId'],
+                                    data['UserId'],
+                                    data['Comment'],
+                                    data['Rate'],
+                                    )
+    except Exception as ex:
+        return Tools.Result(False, ex.args)
+
+
+@item_route.route('/item/comments/<item_id>', methods=['POST'])
+def get_comments_on_item(item_id):
+    try:
+        return Item.get_comments_on_item(item_id)
+    except Exception as ex:
+        return Tools.Result(False, ex.args)
+
+
+@item_route.route('/admin/comment/seen', methods=['POST'])
+@login_required
+@json_body_required
+@check_form_json_key(['CommentId'])
+def admin_saw_comment():
+    try:
+        data = request.get_json()
+        return Item.admin_saw_comment(data['CommentId'])
+    except Exception as ex:
+        return Tools.Result(False, ex.args)
