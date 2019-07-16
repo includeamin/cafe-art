@@ -31,7 +31,19 @@ def add_item():
         return Tools.Result(False, ex.args)
 
 
-@item_route.route('/add/item/gallery/image', methods=['POST'])
+@item_route.route('/admin/item/delete', methods=['POST'])
+@login_required
+@json_body_required
+@check_form_json_key(['ItemId'])
+def delete_item():
+    try:
+        data = request.get_json()
+        return Item.delete_item(data['ItemId'])
+    except Exception as ex:
+        return Tools.Result(False, ex.args)
+
+
+@item_route.route('/admin/item/gallery/image', methods=['POST'])
 @login_required
 @json_body_required
 @check_form_json_key(['ItemId', 'ImageUrl'])
@@ -40,6 +52,19 @@ def add_image_gallery():
         data = request.get_json()
         Item.add_image_gallery(data['ItemId'],
                                data['ImageUrl'])
+    except Exception as ex:
+        return Tools.Result(False, ex.args)
+
+
+@item_route.route('/admin/item/gallery/image/delete', methods=['POST'])
+@login_required
+@json_body_required
+@check_form_json_key(['ItemId', 'GalleryImageId'])
+def delete_image_from_gallery():
+    try:
+        data = request.get_json()
+        return Item.delete_image_from_gallery(data['ItemId'],
+                                              data['GalleryImageId'])
     except Exception as ex:
         return Tools.Result(False, ex.args)
 
@@ -64,6 +89,18 @@ def like_item():
         return Tools.Result(False, ex.args)
 
 
+@item_route.route('/item/unlike', methods=['POST'])
+@json_body_required
+@check_form_json_key(['ItemId', 'UserId'])
+def unlike_item():
+    try:
+        data = request.get_json()
+        return Item.unlike_item(data['ItemId'],
+                                data['UserId'])
+    except Exception as ex:
+        return Tools.Result(False, ex.args)
+
+
 @item_route.route('/item/gallery/like', methods=['POST'])
 @json_body_required
 @check_form_json_key(['ItemId', 'UserId', 'GalleryImageId'])
@@ -73,5 +110,18 @@ def like_image_gallery():
         return Item.like_image_gallery(data['ItemId'],
                                        data['UserId'],
                                        data['GalleryImageId'])
+    except Exception as ex:
+        return Tools.Result(False, ex.args)
+
+
+@item_route.route('/item/gallery/unlike', methods=['POST'])
+@json_body_required
+@check_form_json_key(['ItemId', 'UserId', 'GalleryImageId'])
+def unlike_image_gallery():
+    try:
+        data = request.get_json()
+        return Item.unlike_image_gallery(data['ItemId'],
+                                         data['UserId'],
+                                         data['GalleryImageId'])
     except Exception as ex:
         return Tools.Result(False, ex.args)
