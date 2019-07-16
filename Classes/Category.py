@@ -21,8 +21,18 @@ class Category:
         return Tools.Result(True, Tools.dumps(categories))
 
     @staticmethod
-    def init_db(row_id, title, icon_url, image_url):
+    def add_category(row_id, title, icon_url, image_url):
         category_collection.insert_one(Category(row_id, title, icon_url, image_url).__dict__)
+
+    @staticmethod
+    def delete_category(row_id):
+
+        valid = category_collection.find_one({'RowId': row_id}, {'_id': 1}) is not None
+
+        if not valid:
+            return Tools.Result(False, Tools.errors('INF'))
+
+        category_collection.delete_one({'RowId': row_id})
 
 # for i in range(20):
 #     Category.init_db(i, 'title' + str(i), 'icon_url_' + str(i), 'image_url_' + str(i))
