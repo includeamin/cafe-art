@@ -8,6 +8,7 @@ event_route = Blueprint('event_route', __name__, 'template')
 
 
 @event_route.route('/admin/event/add', methods=['POST'])
+@login_required
 @json_body_required
 @check_form_json_key(['Title', 'ImageUrl', 'Description', 'Date', 'Price', 'Capacity'])
 def add_event():
@@ -25,6 +26,7 @@ def add_event():
 
 
 @event_route.route('/admin/event/remove', methods=['POST'])
+@login_required
 @json_body_required
 @check_form_json_key(['EventId'])
 def delete_event():
@@ -36,6 +38,7 @@ def delete_event():
 
 
 @event_route.route('/admin/event', methods=['GET'])
+@login_required
 @json_body_required
 @check_form_json_key
 def get_events():
