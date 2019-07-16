@@ -35,16 +35,14 @@ else:
     configs = {
         "DatabaseName": "TempUserManagement",
         "UserCollection": "User",
-        "PointType": "PointType",
-        "Invite": "Invite",
         "Category": "Category",
-        "Item": "Item"
+        "Item": "Item",
+        "Event": "Event"
     }
 
 mongodb = pymongo.MongoClient(url)
 database = mongodb[configs["DatabaseName"]]
 UserDb = database[configs["UserCollection"]]
-point_collection = database[configs["PointType"]]
-invite_collection = database[configs['Invite']]
 category_collection = database[configs['Category']]
 item_collection = database[configs['Item']]
+event_collection = database[configs['Event']]
