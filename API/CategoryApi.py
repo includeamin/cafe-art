@@ -16,6 +16,7 @@ def get_categories():
 
 
 @category_route.route('/admin/categories/add', methods=['POST'])
+@login_required
 @json_body_required
 @check_form_json_key(['RowId', 'Title', 'IconUrl', 'ImageUrl'])
 def add_category():
@@ -31,6 +32,7 @@ def add_category():
 
 
 @category_route.route('/admin/categories/delete', methods=['POST'])
+@login_required
 @json_body_required
 @check_form_json_key(['RowId'])
 def delete_category():
