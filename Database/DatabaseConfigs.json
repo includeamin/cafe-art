@@ -1,0 +1,9 @@
+{
+  "MicroServiceManagementURl" : "http://localhost:3000",
+  "DatabaseName": "TempUserManagement",
+  "UserCollection": "User",
+  "PointType": "PointType",
+  "Invite": "Invite",
+  "Category": "Category",
+  "Item": "Item"
+}
