@@ -81,7 +81,7 @@ class RowShowComments extends Component {
         return (
             <div className="col-12">
                 <Card>
-                 <div className="position-relative d-flex justify-content-center">
+                 <div className="position-relative d-flex justify-content-center mt-2">
                      <FacebookEmoji type={emoji} size="xl"/>
                  </div>
                     <CardBody>
