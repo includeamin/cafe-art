@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import IntlMessages from "../../../../helpers/IntlMessages";
 import {  Card, CardBody , Button, Modal, ModalHeader, ModalBody, ModalFooter,} from "reactstrap";
-import img from '../../../new/city.jpg';
+// import img from '../../../new/city.jpg';
 import {TweenMax} from "gsap/TweenMax";
 
 var classNames = require('classnames');
@@ -69,7 +69,7 @@ class RowShowMessage extends Component {
 
     render() {
         let { title, detail,data,liClasses}=this.state;
-        let {index}=this.props;
+        let {index , img}=this.props;
         return (
             <div className="col-12">
                 <Card>

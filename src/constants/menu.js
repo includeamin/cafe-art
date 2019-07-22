@@ -38,6 +38,30 @@ const data = [
     ]
   },
     {
+        id: "Items",
+        icon: "iconsminds-shopping-cart",
+        label: "Items",
+        to: "/app/items",
+        subs: [
+            {
+                icon: "iconsminds-add-cart",
+                label: "add-Items",
+                to: "/app/items/additem"
+            },
+            {
+                icon: "iconsminds-checkout",
+                label: "show-Items",
+                to: "/app/items/showitem"
+            },
+            // {
+            //     icon: "iconsminds-mail-photo",
+            //     label: "Show-Message",
+            //     to: "/app/Message/showmessage"
+            // },
+
+        ]
+    },
+    {
         id: "Notification",
         icon: "simple-icon-speech",
         label: "notification",
@@ -53,6 +77,12 @@ const data = [
                 label: "Show-Message",
                 to: "/app/Message/showmessage"
             },
+            {
+                icon: "iconsminds-mail-photo",
+                label: "Show-Events",
+                to: "/app/Message/showevents"
+            },
+
 
         ]
     },
@@ -75,6 +105,7 @@ const data = [
 
         ]
     },
+
 
     {
     id: "pages",

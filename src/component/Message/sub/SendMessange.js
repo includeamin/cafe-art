@@ -4,6 +4,8 @@ import * as Yup from "yup";
 import axios from "axios";
 import ReactCrop from 'react-image-crop';
 import img2 from './../../new/coffee.jpg'
+import {FormikReactSelect} from "../../../containers/form-validations/FormikFields";
+
 
 
 import {
@@ -25,15 +27,21 @@ import {base64StringtoFile,
     extractImageFileExtensionFromBase64,
     image64toCanvasRef} from './../../functions/Functions';
 import {AvFeedback, AvForm, AvGroup, AvInput} from "availity-reactstrap-validation";
+import CropComponent from "../../CropComponent";
 const imageMaxSize = 1000000000 ;// bytes
 const acceptedFileTypes = 'image/x-png, image/png, image/jpg, image/jpeg, image/gif';
 const acceptedFileTypesArray = acceptedFileTypes.split(",").map((item) => {return item.trim()});
+const options = [
+    { value: "notification", label: "notification" },
+    { value: "event", label: "event" }
+];
+
 
 const SignupSchema = Yup.object().shape({
     Title: Yup.string()
         .required("Title is required!"),
-    Rank: Yup.number()
-        .required("Rank is required!"),
+    // TypeKind: Yup.number()
+    //     .required("TypeKind is required!"),
     Description: Yup.mixed()
         .nullable("Description string is required!"),
 
@@ -44,18 +52,7 @@ class SendMessange extends Component {
         super(props);
 
         this.state={
-            src: null,
-            crop: {
-                unit: "%",
-                width: 30,
-                aspect: 16 / 9
-            },imgIcon:null,
-            src2: null,
-            crop2: {
-                unit: "%",
-                width: 30,
-                aspect: 16 / 9
-            },imgIcon2:null
+            src: null, crop: '',imgIcon:null,
         }
     }
 
@@ -102,18 +99,19 @@ class SendMessange extends Component {
             ...values,
         };
         console.log(values);
+        let {src,crop,imgIcon} = this.state;
 
         // e.preventDefault();
-        let {croppedImageUrl} = this.state;
+        // let {croppedImageUrl} = this.state;
         // console.log(this.state.src);
-        console.log(croppedImageUrl);
+        // console.log(croppedImageUrl);
         // console.log(croppedImageUrl2);
-        let file = 'ehsan';
+        // let file = 'ehsan';
         // base64StringtoFile(croppedImageUrl, file);
         // downloadBase64File(croppedImageUrl, file);
-        let ext = extractImageFileExtensionFromBase64(croppedImageUrl);
+        // let ext = extractImageFileExtensionFromBase64(croppedImageUrl);
         // let ext2 = extractImageFileExtensionFromBase64(croppedImageUrl2);
-        console.log(ext);
+        // console.log(ext);
         // console.log(ext2);
         // console.log(ext);
         // console.log(fileasbase64);
@@ -136,41 +134,16 @@ class SendMessange extends Component {
         // }
     }
 
-    getCroppedImg(image, crop, fileName) {
-        const canvas = document.createElement("canvas");
-        const scaleX = image.naturalWidth / image.width;
-        const scaleY = image.naturalHeight / image.height;
-        canvas.width = crop.width;
-        canvas.height = crop.height;
-        const ctx = canvas.getContext("2d");
+    handelCrop = (src,crop,imgIcon) => {
 
-        ctx.drawImage(
-            image,
-            crop.x * scaleX,
-            crop.y * scaleY,
-            crop.width * scaleX,
-            crop.height * scaleY,
-            0,
-            0,
-            crop.width,
-            crop.height
-        );
+        console.log(crop);
 
-        return new Promise((resolve, reject) => {
-            canvas.toBlob(blob => {
-                if (!blob) {
-                    //reject(new Error('Canvas is empty'));
-                    console.error("Canvas is empty");
-                    return;
-                }
-                blob.name = fileName;
-                window.URL.revokeObjectURL(this.fileUrl);
-                this.fileUrl = window.URL.createObjectURL(blob);
-                resolve(this.fileUrl);
-            }, "image/jpeg");
+        this.setState({
+            src,crop,imgIcon
         });
-    }
 
+
+    };
     render() {
         const { crop, croppedImageUrl, src } = this.state;
 
@@ -187,7 +160,7 @@ class SendMessange extends Component {
                                 initialValues={{
 
                                     Title: "",
-                                    Rank:"",
+                                    TypeKind: { value: "notification", label: "notification" },
                                     Description:""
                                     // ImageUrl:"TimeTrial",
                                     // Scene:"city",
@@ -213,7 +186,43 @@ class SendMessange extends Component {
                                       isSubmitting
                                   }) => (
                                     <Form className="av-tooltip tooltip-label-bottom d-flex col-12 flex-column">
+
+                                            <div className="col-sm-12 mb-1">
+                                                <FormGroup className="form-group has-float-label ">
+                                                    <Label>
+                                                        <IntlMessages id="TypeKind" />
+                                                    </Label>
+                                                    <FormikReactSelect
+                                                        name="TypeKind"
+                                                        id="TypeKind"
+                                                        value={values.TypeKind}
+                                                        options={options}
+                                                        onChange={setFieldValue}
+                                                        onBlur={setFieldTouched}
+                                                    />
+                                                    {errors.TypeKind && touched.TypeKind ? (
+                                                        <div className="invalid-feedback d-block">
+                                                            {errors.TypeKind}
+                                                        </div>
+                                                    ) : null}
+                                                </FormGroup>
+                                            </div>
+
+
                                         <div className="w-100 d-flex ">
+                                            <div className="col-sm-6 rowInput">
+                                            <FormGroup className="form-group has-float-label position-relative">
+                                                <Label>
+                                                    <IntlMessages id="Title" />
+                                                </Label>
+                                                <Field className="form-control" name="Title"  />
+                                                {errors.Title && touched.Title ? (
+                                                    <div className="invalid-feedback d-block">
+                                                        {errors.Title}
+                                                    </div>
+                                                ) : null}
+                                            </FormGroup>
+                                        </div>
                                             <div className="col-sm-6 rowInput">
                                                 <FormGroup className="form-group has-float-label position-relative">
                                                     <Label>
@@ -223,19 +232,6 @@ class SendMessange extends Component {
                                                     {errors.Title && touched.Title ? (
                                                         <div className="invalid-feedback d-block">
                                                             {errors.Title}
-                                                        </div>
-                                                    ) : null}
-                                                </FormGroup>
-                                            </div>
-                                            <div className="col-sm-6 rowInput">
-                                                <FormGroup className="form-group has-float-label position-relative">
-                                                    <Label>
-                                                        <IntlMessages id="Rank" />
-                                                    </Label>
-                                                    <Field className="form-control" name="Rank" type="number"  />
-                                                    {errors.Rank && touched.Rank ? (
-                                                        <div className="invalid-feedback d-block">
-                                                            {errors.Rank}
                                                         </div>
                                                     ) : null}
                                                 </FormGroup>
@@ -259,47 +255,13 @@ class SendMessange extends Component {
 
                                         </div>
                                         <div className="w-100 d-flex ">
+
+
                                             <div className="col-6">
-                                                <div>
-                                                    <InputGroup className="mb-3">
-                                                        <InputGroupAddon addonType="prepend">Image:</InputGroupAddon>
-                                                        <CustomInput
-                                                            type="file"
-                                                            id="setIcon"
-                                                            name="setIcon"
-                                                            onChange={this.onSelectFile.bind(this)}
-                                                            label={this.state.imgIcon}
-                                                        />
-                                                    </InputGroup>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div className="float-left col-5  ">
-                                                {src && (
-                                                    <div className="">
-                                                        <ReactCrop
-                                                            src={src}
-                                                            crop={crop}
-                                                            onImageLoaded={this.onImageLoaded}
-                                                            onComplete={this.onCropComplete}
-                                                            onChange={this.onCropChange}
-                                                        />
-                                                    </div>
-
-                                                )}
-                                                {croppedImageUrl && (
-                                                    <div>
-                                                        <img alt="Crop" style={{ maxWidth: "100%" }} src={croppedImageUrl} />
-                                                    </div>
-                                                )}
+                                                <CropComponent label={'icon'} onCropImg={this.handelCrop}/>
                                             </div>
 
-                                        </div>
-
-
-
+                                    </div>
                                         <Button color="primary" type="submit" className="col-2 rowInput">
                                             Submit
                                         </Button>
