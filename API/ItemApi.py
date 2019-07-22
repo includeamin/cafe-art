@@ -150,13 +150,21 @@ def comment_on_item():
         return Tools.Result(False, ex.args)
 
 
-@item_route.route('/admin/item/comments/<item_id>', methods=['POST'])
+@item_route.route('/admin/item/comments/<item_id>', methods=['GET'])
 @login_required
 def get_comments_on_item(item_id):
     try:
         return Item.get_comments_on_item(item_id)
     except Exception as ex:
         return Tools.Result(False, ex.args)
+
+@item_route.route('/admin/item/comments', methods=['GET'])
+@login_required
+def get_all_comments():
+        try:
+                return Item.get_all_comments()
+        except Exception as ex:
+                return Tools.Result(False, ex.args)
 
 
 @item_route.route('/admin/comment/seen', methods=['POST'])

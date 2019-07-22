@@ -183,6 +183,17 @@ class Item:
         comments = item_object['Comments']
 
         return Tools.Result(True, Tools.dumps(comments))
+    
+    @staticmethod
+    def get_all_comments():
+        item_object = item_collection.find({}, {'Comments': 1})
+
+        comments = []
+        for item in item_object:
+            comments.append(item['Comments'])
+        
+        return Tools.Result(True, Tools.dumps(comments))
+
 
     @staticmethod
     def admin_saw_comment(comment_id):
