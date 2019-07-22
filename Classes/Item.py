@@ -5,7 +5,7 @@ from bson import ObjectId
 
 class Item:
 
-    def __init__(self, row_id, title, menu_image_url, item_image_url):
+    def __init__(self, row_id, title, price, menu_image_url, item_image_url):
         self.RowId = row_id
         self.Title = title
         self.MenuImageUrl = menu_image_url
@@ -14,11 +14,13 @@ class Item:
         self.Likes = []
         self.Comments = []
         self.Gallery = []
+        self.price = price
+        # TODO: manage price if necessary
 
     @staticmethod
-    def add_item(row_id, title, menu_image_url, item_image_url):
+    def add_item(row_id, title, price, menu_image_url, item_image_url):
 
-        item_collection.insert_one(Item(row_id, title, menu_image_url, item_image_url).__dict__)
+        item_collection.insert_one(Item(row_id, title, price, menu_image_url, item_image_url).__dict__)
 
     @staticmethod
     def delete_item(item_id):

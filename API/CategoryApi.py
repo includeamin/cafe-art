@@ -8,6 +8,7 @@ category_route = Blueprint("category_route", __name__, "template")
 
 
 @category_route.route('/categories', methods=['GET'])
+@login_required
 def get_categories():
     try:
         return Category.get_categories()
