@@ -4,6 +4,8 @@ import * as Yup from "yup";
 import axios from "axios";
 import ReactCrop from 'react-image-crop';
 import img2 from './../new/coffee.jpg'
+import * as Const from "../Const";
+
 
 
 import {
@@ -53,56 +55,90 @@ const SignupSchema = Yup.object().shape({
 class Categories extends Component {
     constructor(props) {
         super(props);
-        this.state={
-            src: null, crop: '',imgIcon:null,
-            src2: null, crop2: '',imgIcon2:null,
+        this.state = {
+            src: null, crop: '', imgIcon: null,
+            src2: null, crop2: '', imgIcon2: null,
         }
-          }
-
-
-
-
-
-
+    }
 
     onSubmit= e => {
-        // e.preventDefault();
-        // let {croppedImageUrl,croppedImageUrl2} = this.state;
-        // // console.log(this.state.src);
-        // console.log(croppedImageUrl);
-        // console.log(croppedImageUrl2);
-        // let file = 'ehsan';
-        // // base64StringtoFile(croppedImageUrl, file);
-        // // downloadBase64File(croppedImageUrl, file);
-        // let ext = extractImageFileExtensionFromBase64(croppedImageUrl);
-        // let ext2 = extractImageFileExtensionFromBase64(croppedImageUrl2);
-        // console.log(ext);
-        // console.log(ext2);
-        // console.log(ext);
-        // console.log(fileasbase64);
 
         let {crop2,crop}=this.state;
         console.log('crop: '+crop)
         console.log('crop2: '+crop2)
 
 
-
-        //
-        // const {imgSrc}  = this.state
-        // if (imgSrc) {
-        //     // const canvasRef = this.imagePreviewCanvasRef.current;
-        //
-        //     const {imgSrcExt,src} =  this.state;
-        //     const imageData64 = canvasRef.toDataURL('image/' + imgSrcExt);
-        //     const myFilename = "previewFile." + imgSrcExt;
-        //     // file to be uploaded
-        //     const myNewCroppedFile = base64StringtoFile(imageData64, myFilename);
-        //     console.log(myNewCroppedFile);
-        //     console.log(canvasRef);
-        //     downloadBase64File(imageData64, myFilename);
-        //     this.handleClearToDefault()
-        // }
     };
+
+    handleSubmit = (values, { setSubmitting }) => {
+        // this.setState({
+        //     loaderActive:true
+        // });
+        const payload = {
+            ...values,
+            // TypeKind: values.TypeKind.value
+            // Names: values.Names.value,
+        };
+        console.log(payload);
+        let {crop2,crop}=this.state;
+
+
+        let headers = {
+            'Token':`${Const.Token}`,
+            'Id': `${Const.ID}`
+        };
+        let BODY={'Title': payload.Title,
+            'RowId': payload.Rank,
+            'IconUrl': crop,
+            'ImageUrl': crop2
+        };
+        let form = new FormData();
+        form.append('Title', payload.Title);
+        form.append('RowId', payload.Rank);
+        form.append('IconUrl', crop);
+        form.append('ImageUrl', crop2);
+        // form.append('SKU', payload.SKU);
+        // form.append('Name', payload.Name);
+        axios.post(`${Const.Amin_URL}admin/categories/add` ,BODY, {headers:headers}).then(responsive=>
+        {
+            // this.setState({
+            //     loaderActive:false
+            // });
+            const {Description}=responsive.data;
+            if(Description === "d"){
+                NotificationManager.success(
+                    "congratulation",
+                    "your categories added",
+                    3000,
+                    null,
+                    null,
+                    "success"
+                );
+            }else {
+                NotificationManager.error(
+                    " new game currency didnt add",
+                    Description,
+                    3000,
+                    null,
+                    null,
+                    "success"
+                );
+            }
+
+            // let DES=JSON.parse(Description);
+            // this.props.inprogress(DES);x
+            console.log(Description)
+        }).catch(error=>{
+            // this.setState({
+            //     loaderActive:false
+            // });
+            console.log(error)});
+
+
+    };
+
+
+
     handelCrop = (src,crop,imgIcon) => {
 
         console.log(crop);
@@ -155,7 +191,7 @@ class Categories extends Component {
                                         // state: {}
                                     }}
                                     validationSchema={SignupSchema}
-                                    onSubmit={this.onSubmit.bind(this)}
+                                    onSubmit={this.handleSubmit.bind(this)}
                                 >
                                     {({
                                           handleSubmit,

@@ -28,6 +28,7 @@ import {base64StringtoFile,
     image64toCanvasRef} from './../../functions/Functions';
 import {AvFeedback, AvForm, AvGroup, AvInput} from "availity-reactstrap-validation";
 import CropComponent from "../../CropComponent";
+import * as Const from "../../Const";
 const imageMaxSize = 1000000000 ;// bytes
 const acceptedFileTypes = 'image/x-png, image/png, image/jpg, image/jpeg, image/gif';
 const acceptedFileTypesArray = acceptedFileTypes.split(",").map((item) => {return item.trim()});
@@ -53,86 +54,80 @@ class SendMessange extends Component {
 
         this.state={
             src: null, crop: '',imgIcon:null,
+
         }
     }
 
-
-    onSelectFile(e){
-        let file=e.target.files;
-        if (file && file.length > 0) {
-            const reader = new FileReader();
-            reader.addEventListener("load", () =>
-                this.setState({ src: reader.result,imgIcon:file[0].name })
-            );
-            reader.readAsDataURL(e.target.files[0]);
-        }
-    };
-
-    // If you setState the crop in here you should return false.
-    onImageLoaded = image => {
-        this.imageRef = image;
-    };
-
-    onCropComplete = crop => {
-        this.makeClientCrop(crop);
-    };
-
-    onCropChange = (crop, percentCrop) => {
-        // You could also use percentCrop:
-        // this.setState({ crop: percentCrop });
-        this.setState({ crop });
-    };
-
-    async makeClientCrop(crop) {
-        if (this.imageRef && crop.width && crop.height) {
-            const croppedImageUrl = await this.getCroppedImg(
-                this.imageRef,
-                crop,
-                "newFile.jpeg"
-            );
-            this.setState({ croppedImageUrl });
-        }
-    }
-
-    onSubmit= (values,e) => {
+    handleSubmit = (values, { setSubmitting }) => {
+        // this.setState({
+        //     loaderActive:true
+        // });
         const payload = {
             ...values,
+            // TypeKind: values.TypeKind.value
+            // Names: values.Names.value,
         };
-        console.log(values);
-        let {src,crop,imgIcon} = this.state;
-
-        // e.preventDefault();
-        // let {croppedImageUrl} = this.state;
-        // console.log(this.state.src);
-        // console.log(croppedImageUrl);
-        // console.log(croppedImageUrl2);
-        // let file = 'ehsan';
-        // base64StringtoFile(croppedImageUrl, file);
-        // downloadBase64File(croppedImageUrl, file);
-        // let ext = extractImageFileExtensionFromBase64(croppedImageUrl);
-        // let ext2 = extractImageFileExtensionFromBase64(croppedImageUrl2);
-        // console.log(ext);
-        // console.log(ext2);
-        // console.log(ext);
-        // console.log(fileasbase64);
+        console.log(payload);
+        let {crop}=this.state;
 
 
-        //
-        // const {imgSrc}  = this.state
-        // if (imgSrc) {
-        //     // const canvasRef = this.imagePreviewCanvasRef.current;
-        //
-        //     const {imgSrcExt,src} =  this.state;
-        //     const imageData64 = canvasRef.toDataURL('image/' + imgSrcExt);
-        //     const myFilename = "previewFile." + imgSrcExt;
-        //     // file to be uploaded
-        //     const myNewCroppedFile = base64StringtoFile(imageData64, myFilename);
-        //     console.log(myNewCroppedFile);
-        //     console.log(canvasRef);
-        //     downloadBase64File(imageData64, myFilename);
-        //     this.handleClearToDefault()
-        // }
+        let headers = {
+            'Token':`${Const.Token}`,
+            'Id': `${Const.ID}`
+        };
+        let BODY={'Title': payload.Title,
+            'RowId': payload.Rank,
+            'IconUrl': crop,
+            // 'ImageUrl': crop2
+        };
+        let form = new FormData();
+        form.append('Title', payload.Title);
+        form.append('RowId', payload.Rank);
+        form.append('IconUrl', crop);
+        // form.append('ImageUrl', crop2);
+        // form.append('SKU', payload.SKU);
+        // form.append('Name', payload.Name);
+        axios.post(`${Const.Amin_URL}admin/categories/add` ,BODY, {headers:headers}).then(responsive=>
+        {
+            // this.setState({
+            //     loaderActive:false
+            // });
+            const {Description}=responsive.data;
+            if(Description === "d"){
+                NotificationManager.success(
+                    "congratulation",
+                    "your categories added",
+                    3000,
+                    null,
+                    null,
+                    "success"
+                );
+            }else {
+                NotificationManager.error(
+                    " new game currency didnt add",
+                    Description,
+                    3000,
+                    null,
+                    null,
+                    "success"
+                );
+            }
+
+            // let DES=JSON.parse(Description);
+            // this.props.inprogress(DES);x
+            console.log(Description)
+        }).catch(error=>{
+            // this.setState({
+            //     loaderActive:false
+            // });
+            console.log(error)});
+
+
+    };
+    changefeild(value){
+        console.log(value)
     }
+
 
     handelCrop = (src,crop,imgIcon) => {
 
@@ -142,9 +137,9 @@ class SendMessange extends Component {
             src,crop,imgIcon
         });
 
-
     };
     render() {
+
         const { crop, croppedImageUrl, src } = this.state;
 
         return (
@@ -172,7 +167,7 @@ class SendMessange extends Component {
                                     // state: {}
                                 }}
                                 validationSchema={SignupSchema}
-                                onSubmit={this.onSubmit.bind(this)}
+                                onSubmit={this.handleSubmit.bind(this)}
                             >
                                 {({
                                       handleSubmit,
@@ -187,7 +182,7 @@ class SendMessange extends Component {
                                   }) => (
                                     <Form className="av-tooltip tooltip-label-bottom d-flex col-12 flex-column">
 
-                                            <div className="col-sm-12 mb-1">
+                                        <div className="col-sm-12 mb-1">
                                                 <FormGroup className="form-group has-float-label ">
                                                     <Label>
                                                         <IntlMessages id="TypeKind" />
@@ -198,6 +193,7 @@ class SendMessange extends Component {
                                                         value={values.TypeKind}
                                                         options={options}
                                                         onChange={setFieldValue}
+                                                        // onChange={this.changefeild.bind(this)}
                                                         onBlur={setFieldTouched}
                                                     />
                                                     {errors.TypeKind && touched.TypeKind ? (
@@ -207,7 +203,6 @@ class SendMessange extends Component {
                                                     ) : null}
                                                 </FormGroup>
                                             </div>
-
 
                                         <div className="w-100 d-flex ">
                                             <div className="col-sm-6 rowInput">
@@ -255,7 +250,6 @@ class SendMessange extends Component {
 
                                         </div>
                                         <div className="w-100 d-flex ">
-
 
                                             <div className="col-6">
                                                 <CropComponent label={'icon'} onCropImg={this.handelCrop}/>

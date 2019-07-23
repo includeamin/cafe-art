@@ -33,7 +33,7 @@ class CropComponent extends Component {
                 unit: "%",
                 width: 30,
                 aspect: 16 / 9
-            },imgIcon:null
+            },imgIcon:null,imgBlob:'',imgCropFile:''
         }
     }
 
@@ -111,7 +111,40 @@ class CropComponent extends Component {
             );
             this.setState({ croppedImageUrl });
             let{src,imgIcon}=this.state;
-            this.props.onCropImg(src,croppedImageUrl,imgIcon)
+
+            var reader = new FileReader();
+            reader.readAsDataURL(this.state.imgBlob);
+            // reader.onloadend = function() {
+            //     let base64data = reader.result;
+            //     this.setState({
+            //         imgCropFile:base64data
+            //     })
+            // }
+
+
+            reader.onloadend = function() {
+                let base64data = reader.result;
+                document.getElementById('images').src=base64data;
+
+                // document.getElementById('images').src=base64data
+                // console.log(base64data);
+
+                // console.log(myNewCroppedFile)
+                // this.setState({
+                //     imgCropFile:myNewCroppedFile
+                // })
+                // console.log(this.state.imgCropFile)
+                // let{src,imgIcon}=this.state;
+                // this.props.onCropImg(src,myNewCroppedFile,imgIcon)
+
+            };
+            let base64data= document.getElementById('images').src
+            // console.log(base64data)
+            // const myNewCroppedFile = base64StringtoFile(base64data,'arsenal');
+            // console.log(myNewCroppedFile) ;
+            // console.log(this.state.imgCropFile)
+
+            this.props.onCropImg(src,base64data,imgIcon)
         }
     }
 
@@ -142,6 +175,9 @@ class CropComponent extends Component {
                     console.error("Canvas is empty");
                     return;
                 }
+                this.setState({
+                    imgBlob:blob
+                })
                 blob.name = fileName;
                 window.URL.revokeObjectURL(this.fileUrl);
                 this.fileUrl = window.URL.createObjectURL(blob);
@@ -152,7 +188,7 @@ class CropComponent extends Component {
 
 
     render() {
-        const { crop, croppedImageUrl, src } = this.state;
+        const { crop, croppedImageUrl, src ,imgCropFile} = this.state;
         let{label}=this.props;
 
         return (
@@ -188,8 +224,10 @@ class CropComponent extends Component {
                         </div>
                     )}
                 </div>
+                <img src={imgCropFile} alt={'imags'} id='images' className='d-none' />
 
-                    {/*<button className="col-2 btn btn-warning" onClick={this.onSubmit.bind(this)} >submit</button>*/}
+
+                {/*<button className="col-2 btn btn-warning" onClick={this.onSubmit.bind(this)} >submit</button>*/}
 
             </div>
 
