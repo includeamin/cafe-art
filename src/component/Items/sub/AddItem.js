@@ -24,30 +24,25 @@ import {base64StringtoFile,
     downloadBase64File,
     extractImageFileExtensionFromBase64,
     image64toCanvasRef} from './../../functions/Functions';
+
+import {GetCategories} from './../../../URL/GET';
+
 import AutoSuggestEdit from "../AutoSuggestEdit";
+import CropComponent from "../../CropComponent";
+import * as Const from "../../Const";
+import Files from 'react-files'
+import MultiFiles from "../MultiFile/MultiFiles";
+
 const imageMaxSize = 1000000000 // bytes
 const acceptedFileTypes = 'image/x-png, image/png, image/jpg, image/jpeg, image/gif';
 const acceptedFileTypesArray = acceptedFileTypes.split(",").map((item) => {return item.trim()});
 
 const SignupSchema = Yup.object().shape({
     Title: Yup.string()
-        .required("Kill number is required!"),
-    Rank: Yup.number()
-        .required("MatchType is required!"),
-    // MatchName: Yup.string()
-    //     .required("MatchName is required!"),
-    // ImageUrl: Yup.string()
-    //     .required("MatchName is required!"),
-    // Scene: Yup.string()
-    //     .required("Scene is required!"),
-    // MatchTime: Yup.number()
-    //     .required("MatchTime number is required!"),
-    // Price: Yup.number()
-    //     .required("Price number is required!"),
-    // EXP: Yup.number()
-    //     .required("Price number is required!"),
-    // MaxPlayers: Yup.number()
-    //     .required("Price number is required!"),
+        .required("Title number is required!"),
+    Price: Yup.number()
+        .required("Price number is required!"),
+
 });
 
 class AddItem extends Component {
@@ -55,246 +50,221 @@ class AddItem extends Component {
         super(props);
 
         this.state={
-            src: null,
-            crop: {
-                unit: "%",
-                width: 30,
-                aspect: 16 / 9
-            },imgIcon:null,
-            src2: null,
-            crop2: {
-                unit: "%",
-                width: 30,
-                aspect: 16 / 9
-            },imgIcon2:null
+            src: null, crop: '', imgIcon: null,
+            src2: null, crop2: '', imgIcon2: null,suggest:null,fileName:null,
+            categories:[],option:[],files:[],categoriesList:{}
         }
     }
-
-    // handleOnCropChange = (crop) => {
-    //     this.setState({crop:crop})
-    // };
-    // handleOnCropComplete = (crop, pixelCrop) =>{
-    //     // console.log(crop, pixelCrop)
-    //     const canvasRef = this.imagePreviewCanvasRef.current
-    //     const {imgSrc}  = this.state
-    //     image64toCanvasRef(canvasRef, imgSrc, crop)
-    // };
-    // verifyFile = (files) => {
-    //     if (files && files.length > 0){
-    //         const currentFile = files[0]
-    //         const currentFileType = currentFile.type
-    //         const currentFileSize = currentFile.size
-    //         if(currentFileSize > imageMaxSize) {
-    //             alert("This file is not allowed. " + currentFileSize + " bytes is too large")
-    //             return false
-    //         }
-    //         if (!acceptedFileTypesArray.includes(currentFileType)){
-    //             alert("This file is not allowed. Only images are allowed.")
-    //             return false
-    //         }
-    //         return true
-    //     }
-    // };
-    // handleClearToDefault = event =>{
-    //     if (event) event.preventDefault()
-    //     const canvas = this.imagePreviewCanvasRef.current
-    //     const ctx = canvas.getContext('2d');
-    //     ctx.clearRect(0, 0, canvas.width, canvas.height)
-    //     this.setState({
-    //         imgSrc: null,
-    //         imgSrcExt: null,
-    //         crop: {
-    //             aspect: 1/1
-    //         }
-    //
-    //     })
-    //     this.fileInputRef.current.value = null
-    // }
-    // handleFileSelect = event => {
-    //     // console.log(event)
-    //     const files = event.target.files;
-    //     if (files && files.length > 0){
-    //         const isVerified = this.verifyFile(files);
-    //         if (isVerified){
-    //             // imageBase64Data
-    //             const currentFile = files[0];
-    //             const myFileItemReader = new FileReader();
-    //             myFileItemReader.addEventListener("load", ()=>{
-    //                 // console.log(myFileItemReader.result)
-    //                 const myResult = myFileItemReader.result;
-    //                 this.setState({
-    //                     imgSrc: myResult,
-    //                     imgSrcExt: extractImageFileExtensionFromBase64(myResult),
-    //                     imgIcon:currentFile.name
-    //                 })
-    //             }, false);
-    //             console.log(this.state.imgSrcExt);
-    //             console.log(this.state.imgSrcExt);
-    //
-    //             myFileItemReader.readAsDataURL(currentFile)
-    //
-    //         }
-    //     }
-    // };
-
-    onSelectFile(e){
-        let file=e.target.files;
-        if (file && file.length > 0) {
-            const reader = new FileReader();
-            reader.addEventListener("load", () =>
-                this.setState({ src: reader.result,imgIcon:file[0].name })
-            );
-
-            reader.readAsDataURL(e.target.files[0]);
-        }
-    };
-
-    // If you setState the crop in here you should return false.
-    onImageLoaded = image => {
-        this.imageRef = image;
-    };
-
-    onCropComplete = crop => {
-        this.makeClientCrop(crop);
-    };
-
-    onCropChange = (crop, percentCrop) => {
-        // You could also use percentCrop:
-        // this.setState({ crop: percentCrop });
-        this.setState({ crop });
-    };
-
-    async makeClientCrop(crop) {
-        if (this.imageRef && crop.width && crop.height) {
-            const croppedImageUrl = await this.getCroppedImg(
-                this.imageRef,
-                crop,
-                "newFile.jpeg"
-            );
-            this.setState({ croppedImageUrl });
-        }
-    }
-
-
-
-
-
-
-
-    onSelectFile2(e){
-        let file=e.target.files;
-        if (file && file.length > 0) {
-            const reader = new FileReader();
-            reader.addEventListener("load", () =>
-                this.setState({ src2: reader.result,imgIcon2:file[0].name })
-            );
-
-            reader.readAsDataURL(e.target.files[0]);
-        }
-    };
-
-    // If you setState the crop in here you should return false.
-    onImageLoaded2 = image2 => {
-        this.imageRef2 = image2;
-    };
-
-    onCropComplete2 = crop2 => {
-        this.makeClientCrop2(crop2);
-    };
-
-    onCropChange2 = (crop2, percentCrop) => {
-        // You could also use percentCrop:
-        // this.setState({ crop: percentCrop });
-        this.setState({ crop2 });
-    };
-
-    async makeClientCrop2(crop2) {
-        if (this.imageRef2 && crop2.width && crop2.height) {
-            const croppedImageUrl2 = await this.getCroppedImg(
-                this.imageRef2,
-                crop2,
-                "newFile2.jpeg"
-            );
-            this.setState({ croppedImageUrl2 });
-        }
-    }
-
-
-
-
-
-    onSubmit= e => {
-        // e.preventDefault();
-        let {croppedImageUrl,croppedImageUrl2} = this.state;
-        // console.log(this.state.src);
-        console.log(croppedImageUrl);
-        console.log(croppedImageUrl2);
-        let file = 'ehsan';
-        // base64StringtoFile(croppedImageUrl, file);
-        // downloadBase64File(croppedImageUrl, file);
-        let ext = extractImageFileExtensionFromBase64(croppedImageUrl);
-        let ext2 = extractImageFileExtensionFromBase64(croppedImageUrl2);
-        console.log(ext);
-        console.log(ext2);
-        // console.log(ext);
-        // console.log(fileasbase64);
-
-
+    componentDidMount(){
+        let headers = {
+            'Token':`${Const.Token}`,
+            'Id': `${Const.ID}`
+        };
+        // let categories=[
+        //     {RowId:1,Title:'صبحانه'},
+        //     {RowId:2,Title:'ناهار'},
+        //     {RowId:3,Title:'شام'},
+        //     {RowId:4,Title:'عصرانه'},
+        // ];
+        // let index;
         //
-        // const {imgSrc}  = this.state
-        // if (imgSrc) {
-        //     // const canvasRef = this.imagePreviewCanvasRef.current;
         //
-        //     const {imgSrcExt,src} =  this.state;
-        //     const imageData64 = canvasRef.toDataURL('image/' + imgSrcExt);
-        //     const myFilename = "previewFile." + imgSrcExt;
-        //     // file to be uploaded
-        //     const myNewCroppedFile = base64StringtoFile(imageData64, myFilename);
-        //     console.log(myNewCroppedFile);
-        //     console.log(canvasRef);
-        //     downloadBase64File(imageData64, myFilename);
-        //     this.handleClearToDefault()
+        // let  option=[];
+        // categories.map(item => {
+        //     option.push({name: item.Title})
+        // });
+        // console.log(option)
+        //
+        // let categoriesList = {};
+        //
+        // for (index in categories){
+        //     let id =categories[index].Title;
+        //     let Value =categories[index].RowId;
+        //     // dict[id] = Value;
+        //     categoriesList[Value] = id;
         // }
+        //
+        // this.setState({
+        //     categoriesList,categories,option
+        // })
+        // console.log(categoriesList);
+
+
+
+
+
+
+        axios.get(`${Const.Amin_URL}categories` , {headers:headers}).then(responsive=>
+        {
+            const {Description}=responsive.data;
+            console.log(Description);
+            let categories=JSON.parse(Description);
+            let index;
+
+
+            let  option=[];
+            categories.map(item => {
+                option.push({name: item.Title})
+            });
+            console.log(option)
+
+            let categoriesList = {};
+
+            for (index in categories){
+                let id =categories[index].Title;
+                let Value =categories[index].RowId;
+                // dict[id] = Value;
+                categoriesList[Value] = id;
+            }
+
+            this.setState({
+                categoriesList,categories,option
+            })
+            console.log(categoriesList);
+
+            // (5) [{…}, {…}, {…}, {…}, {…}]
+            // 0: {Created_at: "2019-07-23 13:32:25.951000", IconUrl: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD…zXSpG8piLRgVsK1UrflWo5VmkHoKkBUZFLVSqysUBmsoky//Z", ImageUrl: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD…gPpyreKSuIkpBSDkj2pxKiRyoj6ZrFBaQvnOcdzTSE/mWX//Z", RowId: 1, Title: "wfphki", …}
+            // 1: {Created_at: "2019-07-23 12:29:40.337000", IconUrl: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD…hNkggb1JX5JuFg8jXnKWpllamzggAj19R76zWazTUUHX/2Q==", ImageUrl: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD…lEz7gqrGu6y++Mwky6Y0srQwIiqV3kkXN/wB8ZiH5cSwE/9k=", RowId: 2, Title: "ناهار", …}
+            // 2: {Created_at: "2019-07-23 17:50:31.736000", IconUrl: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD…xSiQTxyR6U6v8lHpv/sI/vK/xpzrLtPcQQuT+kHprcjmf/9k=", ImageUrl: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD…AqawHlReHy48/woodXMy6lEqlEg8lG3xiONPfSbFZ9I//2Q==", RowId: 3, Title: "شام ", …}
+            // 3: {Created_at: "2019-07-23 13:35:42.297000", IconUrl: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD…1ZemuiKysqRpuFXalWfZP2SPoKl0Dt9Kysqdp+FW6v4l//9k=", ImageUrl: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD…xzCbn03v6DGY9y4XGowZ1G6ynTZWycZhEAkzUV5tBcUSK/9k=", RowId: 4, Title: "ناهار", …}
+            // 4: {Created_at: "2019-07-23 17:51:44.268000", IconUrl: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD…/AEA5UcGpSYSHBufGD0AAzUZr8afyooj8A+5qp7t10Cl//9k=", ImageUrl: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD…uOuqpNeozRpj3BSk4Us1xhU23G1ChQq5tvS6LK+7rz94r/9k=", RowId: 6, Title: "میان وعده", …}
+            // length: 5
+
+            // console.log(this.state.modes);
+
+        }).catch(error=>{console.log(error)});
+         console.log(this.state.categories)
+
     }
 
-    getCroppedImg(image, crop, fileName) {
-        const canvas = document.createElement("canvas");
-        const scaleX = image.naturalWidth / image.width;
-        const scaleY = image.naturalHeight / image.height;
-        canvas.width = crop.width;
-        canvas.height = crop.height;
-        const ctx = canvas.getContext("2d");
 
-        ctx.drawImage(
-            image,
-            crop.x * scaleX,
-            crop.y * scaleY,
-            crop.width * scaleX,
-            crop.height * scaleY,
-            0,
-            0,
-            crop.width,
-            crop.height
-        );
 
-        return new Promise((resolve, reject) => {
-            canvas.toBlob(blob => {
-                if (!blob) {
-                    //reject(new Error('Canvas is empty'));
-                    console.error("Canvas is empty");
-                    return;
-                }
-                blob.name = fileName;
-                window.URL.revokeObjectURL(this.fileUrl);
-                this.fileUrl = window.URL.createObjectURL(blob);
-                resolve(this.fileUrl);
-            }, "image/jpeg");
+
+
+
+
+    handelCrop = (src,crop,imgIcon) => {
+
+        // console.log(crop);
+
+        this.setState({
+            src,crop,imgIcon
         });
+
+    };
+    handelCrop2 = (src2,crop2,imgIcon2) => {
+
+        // console.log(crop2);
+
+        this.setState({
+            src2,crop2,imgIcon2
+        });
+
+
+    };
+    handelSuggestValue=(value)=>{
+        this.setState({suggest:value});
+    };
+    MultiFile(files){
+        this.setState({
+            files
+        })
+        // console.log(files)
     }
+    handleSubmit = (values, { setSubmitting }) => {
+        // this.setState({
+        //     loaderActive:true
+        // });
+        const payload = {
+            ...values,
+
+        };
+
+        console.log(payload);
+        let {crop2,crop,files,suggest,categoriesList}=this.state;
+        function getKeyByValue(object, value) {
+            return Object.keys(object).find(key => object[key] === value);
+        }
+        let itm=getKeyByValue(categoriesList,suggest);
+        console.log(itm);
+
+        let headers = {
+            'Token':`${Const.Token}`,
+            'Id': `${Const.ID}`
+        };
+
+        console.log('payload.Title:'+payload.Title+'payload.Price:'+payload.Price);
+
+        let BODY={'Title': payload.Title,
+            'RowId': suggest,
+            'Price':payload.Price,
+            'MenuImageUrl': crop,
+            'Gallery': files,
+            'ItemImageUrl': crop2
+        };
+        let form = new FormData();
+        form.append('Title', payload.Title);
+        form.append('RowId', payload.Rank);
+        form.append('IconUrl', crop);
+        form.append('ImageUrl', crop2);
+        // form.append('SKU', payload.SKU);
+        // form.append('Name', payload.Name);
+        axios.post(`${Const.Amin_URL}admin/item/add` ,BODY, {headers:headers}).then(responsive=>
+        {
+            // this.setState({
+            //     loaderActive:false
+            // });
+            const {Description}=responsive.data;
+            if(Description === "d"){
+                NotificationManager.success(
+                    "congratulation",
+                    "your categories added",
+                    3000,
+                    null,
+                    null,
+                    "success"
+                );
+            }else {
+                NotificationManager.error(
+                    " new game currency didnt add",
+                    Description,
+                    3000,
+                    null,
+                    null,
+                    "success"
+                );
+            }
+
+            // let DES=JSON.parse(Description);
+            // this.props.inprogress(DES);x
+            console.log(Description)
+        }).catch(error=>{
+            // this.setState({
+            //     loaderActive:false
+            // });
+            console.log(error)});
+
+
+
+
+
+        console.log('crop'+crop);
+        console.log('crop2'+crop2);
+
+        console.log('suggest'+suggest);
+        // console.log('files'+files[0]);
+        console.log('files'+files.length);
+        console.log('files'+files);
+    };
+
+
+
+
+
 
     render() {
-        const { crop, croppedImageUrl, src,crop2, croppedImageUrl2, src2 } = this.state;
-        const option=[{'name':'breakfast'},{'name':'dinner'},{'name':'lunch'},{'name':'hot drink'},{'name':'cold Drink'}];
+        const { crop, croppedImageUrl, src,crop2, croppedImageUrl2, src2 ,option} = this.state;
+        // const option=[{'name':'breakfast'},{'name':'dinner'},{'name':'lunch'},{'name':'hot drink'},{'name':'cold Drink'}];
 
         return (
 
@@ -310,19 +280,11 @@ class AddItem extends Component {
                             <Formik
                                 initialValues={{
 
-                                    Title: "",
-                                    Rank:"",
-                                    // ImageUrl:"TimeTrial",
-                                    // Scene:"city",
-                                    // Kill: 0,
-                                    // MatchTime: 190,
-                                    // Price: 245,
-                                    // EXP: 0,
-                                    // MaxPlayers: 2,
-                                    // state: {}
+                                    Title: "",Price:''
+
                                 }}
                                 validationSchema={SignupSchema}
-                                onSubmit={this.onSubmit.bind(this)}
+                                onSubmit={this.handleSubmit.bind(this)}
                             >
                                 {({
                                       handleSubmit,
@@ -337,7 +299,7 @@ class AddItem extends Component {
                                   }) => (
                                     <Form className="av-tooltip tooltip-label-bottom d-flex col-12 flex-column">
                                         <div className="w-100 d-flex ">
-                                            <div className="col-sm-6 rowInput">
+                                            <div className="col-sm-4 rowInput">
                                                 <FormGroup className="form-group has-float-label position-relative">
                                                     <Label>
                                                         <IntlMessages id="Title" />
@@ -350,7 +312,20 @@ class AddItem extends Component {
                                                     ) : null}
                                                 </FormGroup>
                                             </div>
-                                            <div className="col-sm-6 rowInput">
+                                            <div className="col-sm-4 rowInput">
+                                                <FormGroup className="form-group has-float-label position-relative">
+                                                    <Label>
+                                                        <IntlMessages id="Price" />
+                                                    </Label>
+                                                    <Field className="form-control" name="Price" type='number' />
+                                                    {errors.Price && touched.Price ? (
+                                                        <div className="invalid-feedback d-block">
+                                                            {errors.Price}
+                                                        </div>
+                                                    ) : null}
+                                                </FormGroup>
+                                            </div>
+                                            <div className="col-sm-4 rowInput">
                                                 <FormGroup className="form-group has-float-label position-relative">
                                                     <Label>
                                                         <IntlMessages id="Categories" />
@@ -358,83 +333,24 @@ class AddItem extends Component {
                                                     <AutoSuggestEdit
                                                         placeholder = {"type item name"}
                                                         data={option}
-                                                        // onChange={value => this.handelChange(this, value)}
-                                                        onChange={value => {this.setState({value})}}
+                                                        onChange={value => {this.handelSuggestValue(value)}}
+                                                        // onChange={value => {this.setState({value})}}
                                                     />
                                                 </FormGroup>
                                             </div>
                                         </div>
-                                        <div className="w-100 d-flex ">
 
-                                            <div className="col-6">
-                                                <div>
-                                                    <InputGroup className="mb-3">
-                                                        <InputGroupAddon addonType="prepend">Icon</InputGroupAddon>
-                                                        <CustomInput
-                                                            type="file"
-                                                            id="setIcon"
-                                                            name="setIcon"
-                                                            onChange={this.onSelectFile.bind(this)}
-                                                            label={this.state.imgIcon}
-                                                        />
-                                                    </InputGroup>
-                                                </div>
-
-                                            </div>
-                                            <div className="col-6">
-                                                <div>
-                                                    <InputGroup className="mb-3">
-                                                        <InputGroupAddon addonType="prepend">Image</InputGroupAddon>
-                                                        <CustomInput
-                                                            type="file"
-                                                            id="setIcon"
-                                                            name="setIcon"
-                                                            onChange={this.onSelectFile2.bind(this)}
-                                                            label={this.state.imgIcon2}
-                                                        />
-                                                    </InputGroup>
-                                                </div>
-
-                                            </div>
+                                        <div className="w-100 d-flex  ">
+                                         <MultiFiles MultiFile={this.MultiFile.bind(this)}/>
 
                                         </div>
-                                        <div>
-                                            <div className="float-left col-5  ">
-                                                {src && (
-                                                    <div className="">
-                                                        <ReactCrop
-                                                            src={src}
-                                                            crop={crop}
-                                                            onImageLoaded={this.onImageLoaded}
-                                                            onComplete={this.onCropComplete}
-                                                            onChange={this.onCropChange}
-                                                        />
-                                                    </div>
 
-                                                )}
-                                                {croppedImageUrl && (
-                                                    <div>
-                                                        <img alt="Crop" style={{ maxWidth: "100%" }} src={croppedImageUrl} />
-                                                    </div>
-                                                )}
+                                        <div className="w-100 d-flex ">
+                                            <div className="col-6">
+                                                <CropComponent label={'icon'} onCropImg={this.handelCrop}/>
                                             </div>
-                                            <div className="float-right col-5 ">
-                                                {src2 && (
-
-                                                    <ReactCrop
-                                                        src={src2}
-                                                        crop={crop2}
-                                                        onImageLoaded={this.onImageLoaded2}
-                                                        onComplete={this.onCropComplete2}
-                                                        onChange={this.onCropChange2}
-                                                    />
-
-                                                )}
-                                                {croppedImageUrl2&& (
-                                                    <div>
-                                                        <img alt="Crop2" style={{ maxWidth: "100%" }} src={croppedImageUrl2} />
-                                                    </div>
-                                                )}
+                                            <div  className="col-6">
+                                                <CropComponent label={'image'} onCropImg={this.handelCrop2}/>
                                             </div>
                                         </div>
 

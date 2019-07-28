@@ -53,11 +53,27 @@ const data = [
                 label: "show-Items",
                 to: "/app/items/showitem"
             },
-            // {
-            //     icon: "iconsminds-mail-photo",
-            //     label: "Show-Message",
-            //     to: "/app/Message/showmessage"
-            // },
+
+
+        ]
+    },
+    {
+        id: "Gallery",
+        icon: "iconsminds-shopping-cart",
+        label: "Gallery",
+        to: "/app/gallery",
+        subs: [
+            {
+                icon: "iconsminds-add-cart",
+                label: "add-galley",
+                to: "/app/gallery/addgallery"
+            },
+            {
+                icon: "iconsminds-checkout",
+                label: "show-galley",
+                to: "/app/gallery/showgallery"
+            },
+
 
         ]
     },

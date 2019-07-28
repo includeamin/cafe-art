@@ -149,7 +149,7 @@ class Categories extends Component {
 
 
     };
-    ;    handelCrop2 = (src2,crop2,imgIcon2) => {
+    handelCrop2 = (src2,crop2,imgIcon2) => {
 
         console.log(crop2);
 

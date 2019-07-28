@@ -75,9 +75,12 @@ class RowShowComments extends Component {
     }
 
     render() {
-        let{index}=this.props ;
+        let{index,Name,input}=this.props ;
         let {title,name,detail,data,emoji,item}=this.state;
-
+        console.log(input);
+        // "Comment": "this is comments",
+        //     "CommentId": "5d3da36669808adf0eb7ba61",
+        //     "Created_at": "2019-07-28 18:00:14.722000",
         return (
             <div className="col-12">
                 <Card>
@@ -86,18 +89,18 @@ class RowShowComments extends Component {
                  </div>
                     <CardBody>
                         <div className="d-flex">
-                            <div className="mr-auto" >
-                                <span>{name}: </span><h4 className="mb-4">{title}</h4>
-                            </div>
+                            {/*<div className="mr-auto" >*/}
+                                {/*<span>{name}: </span><h4 className="mb-4">{title}</h4>*/}
+                            {/*</div>*/}
                             <div >
-                                <span>item: </span><h4 className="mb-4">item</h4>
+                                <span>item: </span><h4 className="mb-4">{Name}</h4>
                             </div>
                         </div>
 
-                        <h6 className="mb-4 d-flex text-justify">{detail}</h6>
+                        <h6 className="mb-4 d-flex text-justify">{input.Comment}</h6>
                         <footer>
                             <p className="text-muted text-small mb-0 font-weight-light">
-                                {data}
+                                {input.Created_at.slice(0,10)}
                             </p>
                         </footer>
                     </CardBody>

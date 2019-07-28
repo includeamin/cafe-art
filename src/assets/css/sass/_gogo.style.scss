@@ -1275,6 +1275,12 @@ button {
 .br05 {
   border-radius: 0.5vw;
 }
+.files-gallery-item{
+  height: 10em;
+  width: 10em;
+  border-radius: 0.5vw;
+  margin:1em;
+}
 .fontSize17em {
   font-size: 1.7em;
 }
@@ -1433,6 +1439,12 @@ button {
   left: -7px;
   cursor: pointer;
 }
+
+.height30{
+  height: 30em;
+}
+
+
 .badge {
   padding: 0.55em 0.75em 0.6em 0.75em;
   font-size: 74%;
@@ -6609,4 +6621,38 @@ input:-webkit-autofill {
       height: 1370px !important;
     }
   }
+}
+
+
+.imagheight20vh{
+  height: 20vh;
+}
+.imagheight40vh{
+  height: 40vh;
+}
+
+.z-4 {
+  z-index: 4;
+}
+
+.z-5 {
+  z-index: 5;
+}
+
+.z-6 {
+  z-index: 6;
+}
+
+.z-20 {
+  z-index: 20;
+}
+
+.z-99 {
+  z-index: 99;
+}
+.calenderPersiona{
+  z-index: 99!important;
+  background: transparent !important;
+
+
 }

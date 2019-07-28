@@ -12,6 +12,7 @@ import blankPage from "./blank-page";
 import SendMessage from "../../component/Message/PushNotification";
 import Comments from "../../component/Comments/Comments";
 import Items from "../../component/Items/Items";
+import MainGallery from "../../component/Gallery/MainGallery";
 
 class App extends Component {
   render() {
@@ -23,6 +24,7 @@ class App extends Component {
           <Redirect exact from={`${match.url}/`} to={`${match.url}/dashboards`} />
           <Route path={`${match.url}/dashboards`} component={dashboards} />
             <Route path={`${match.url}/items`} component={Items} />
+            <Route path={`${match.url}/gallery`} component={MainGallery} />
           <Route path={`${match.url}/message`} component={SendMessage} />
           <Route path={`${match.url}/comments`} component={Comments} />
           <Route path={`${match.url}/applications`} component={applications} />

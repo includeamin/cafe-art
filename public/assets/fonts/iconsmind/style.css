@@ -6284,6 +6284,9 @@
 .imgheight{
     height: 10vh;
 }
+.imgheight5{
+	height: 5vh;
+}
 
 .imgpos{
 	position: absolute;
