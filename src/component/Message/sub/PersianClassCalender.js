@@ -29,7 +29,7 @@ class PersianClassCalender extends Component {
                 onFocus={onFocus} // necessary
                 onBlur={onBlur} // necessary
                 placeholder="تاریخ"
-                value={this.state.selectedDay ? `${this.state.selectedDay.day}/${this.state.selectedDay.month}`: ''}
+                value={this.state.selectedDay ? `${this.state.selectedDay.year}/${this.state.selectedDay.month}/${this.state.selectedDay.day}`: ''}
                 style={{
                     textAlign: 'center',
                     // padding: '1rem 1.2rem',
@@ -39,7 +39,7 @@ class PersianClassCalender extends Component {
                     // boxShadow: '0 1.5rem 2rem rgba(156, 136, 255, 0.2)',
                     color: '#9c88ff',
                     outline: 'none',
-                    width:'100%'
+                    // width:'100%'
                 }}
                 className="calenderPersiona w-100" // a styling class
             />
@@ -52,6 +52,7 @@ class PersianClassCalender extends Component {
                     selectedDay={selectedDay}
                     onChange={date => this.setSelectedDay(date)}
                     inputPlaceholder="انتخاب روز"
+                    color="primary"
                     renderInput={renderCustomInput}
                     // calendarClassName={}
                 />
