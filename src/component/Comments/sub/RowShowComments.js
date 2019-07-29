@@ -3,6 +3,9 @@ import FacebookEmoji from 'react-facebook-emoji';
 import IntlMessages from "../../../helpers/IntlMessages";
 import {  Card, CardBody , Button, Modal, ModalHeader, ModalBody, ModalFooter,} from "reactstrap";
 import {TweenMax} from "gsap/TweenMax";
+import * as Const from "../../Const";
+import axios from "axios";
+import NotificationManager from "../../../components/common/react-notifications/NotificationManager";
 
 var classNames = require('classnames');
 
@@ -18,7 +21,8 @@ class RowShowComments extends Component {
                 "Amet luctus venenatis lectus magna fringilla. Volutpat maecenas volutpat blandit aliquam etiam erat" +
                 " velit scelerisque in. Egestas egestas fringilla phasellus faucibus scelerisque eleifend. Sagittis orci a ",
             data:"97/6/2019",
-            emoji:"like"
+            emoji:"like",
+            seen:true
         }
     }
     componentDidMount(){
@@ -72,15 +76,67 @@ class RowShowComments extends Component {
                 });
             // code block
         }
+
+        this.setState({
+            seen:this.props.input.seen
+        })
+    }
+    checkedFunc(){
+
+
+        let headers = {
+            'Token':`${Const.Token}`,
+            'Id': `${Const.ID}`
+        };
+// console.log(this.props.input.CommentId)
+
+        let BODY={'CommentId': this.props.input.CommentId};
+
+
+        axios.post(`${Const.Amin_URL}admin/comment/seen` ,BODY, {headers:headers}).then(responsive=>
+        {
+            // this.setState({
+            //     loaderActive:false
+            // });
+            const {Description}=responsive.data;
+            if(Description === "d"){
+                this.setState(prevState => ({
+                    seen:!prevState.seen
+                }))
+                NotificationManager.success(
+                    "congratulation",
+                    "your categories added",
+                    3000,
+                    null,
+                    null,
+                    "success"
+                );
+            }else {
+                NotificationManager.error(
+                    " new game currency didnt add",
+                    Description,
+                    3000,
+                    null,
+                    null,
+                    "success"
+                );
+            }
+
+
+            console.log(Description)
+        }).catch(error=>{
+            // this.setState({
+            //     loaderActive:false
+            // });
+            console.log(error)});
+
     }
 
     render() {
         let{index,Name,input}=this.props ;
-        let {title,name,detail,data,emoji,item}=this.state;
+        let {title,name,detail,data,emoji,item,seen}=this.state;
         console.log(input);
-        // "Comment": "this is comments",
-        //     "CommentId": "5d3da36669808adf0eb7ba61",
-        //     "Created_at": "2019-07-28 18:00:14.722000",
+
         return (
             <div className="col-12">
                 <Card>
@@ -99,9 +155,14 @@ class RowShowComments extends Component {
 
                         <h6 className="mb-4 d-flex text-justify">{input.Comment}</h6>
                         <footer>
-                            <p className="text-muted text-small mb-0 font-weight-light">
+                            <p className="text-muted text-small mb-0 font-weight-light float-left">
                                 {input.Created_at.slice(0,10)}
                             </p>
+                            <div className='float-right'>
+                                {
+                                    seen?<button className='btn disabled' >مشاهده شده</button>:<button className='btn btn btn-success' onClick={this.checkedFunc.bind(this)}>مشاهده شود</button>
+                                }
+                            </div>
                         </footer>
                     </CardBody>
                 </Card>

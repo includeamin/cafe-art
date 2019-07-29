@@ -23,34 +23,6 @@ class SuggestionComponent extends Component {
             'Token':`${Const.Token}`,
             'Id': `${Const.ID}`
         };
-        // let categories=[
-        //         //     {RowId:1,Title:'صبحانه'},
-        //         //     {RowId:2,Title:'ناهار'},
-        //         //     {RowId:3,Title:'شام'},
-        //         //     {RowId:4,Title:'عصرانه'},
-        //         // ];
-        //         // let index;
-        //         //
-        //         //
-        //         // let  option=[];
-        //         // categories.map(item => {
-        //         //     option.push({name: item.Title})
-        //         // });
-        //         // console.log(option)
-        //         //
-        //         // let categoriesList = {};
-        //         //
-        //         // for (index in categories){
-        //         //     let id =categories[index].Title;
-        //         //     let Value =categories[index].RowId;
-        //         //     // dict[id] = Value;
-        //         //     categoriesList[Value] = id;
-        //         // }
-        //         //
-        //         // this.setState({
-        //         //     categoriesList,categories,option
-        //         // })
-        //         // console.log(categoriesList);
 
         axios.get(`${Const.Amin_URL}admin/items` , {headers:headers}).then(responsive=>
         {

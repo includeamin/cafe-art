@@ -5,13 +5,15 @@ import Breadcrumb from "../../../containers/navs/Breadcrumb";
 import IntlMessages from "../../../helpers/IntlMessages";
 import ReactSiemaCarousel from "../../../components/ReactSiema/ReactSiemaCarousel";
 import data from "../../../data/carouselItems";
+import LiItemGallery from "./LiItemGallery";
 
-const BasicCarouselItem = ({ title, img, detail }) => {
+const BasicCarouselItem = (item) => {
+    // console.log(item);
     return (
         <div className="pr-3 pl-3">
             <Card className="flex-row">
                 <div className="w-100 position-relative">
-                    <img className="card-img-left br05" src={img} alt={title} />
+                    <img className="card-img-left br05" src={item} alt={item} />
                 </div>
             </Card>
         </div>
@@ -19,7 +21,22 @@ const BasicCarouselItem = ({ title, img, detail }) => {
 };
 
 class CarouselEdite extends Component {
+    constructor(props) {
+        super(props);
+        this.state={
+            data:null
+        }
+    }
+
+    componentDidMount(){
+        // this.setState({
+        //     data:this.props.data
+        // })
+    }
     render() {
+        // console.log(this.props.data);
+        // let{data}=this.state;
+
         return (
             <Row className='mt-2'>
                 <Colxx xxs="12" className="pl-0 pr-0 mb-5">
@@ -31,13 +48,15 @@ class CarouselEdite extends Component {
                         }}
                         loop={false}
                     >
-                        {data.map(item => {
+                        {
+                            this.props.data?
+                                this.props.data.map((item,index) => {
                             return (
-                                <div key={item.id}>
-                                    <BasicCarouselItem {...item} />
+                                <div key={index}>
+                                    <LiItemGallery item={item} />
                                 </div>
                             );
-                        })}
+                        }):''}
                     </ReactSiemaCarousel>
                 </Colxx>
             </Row>

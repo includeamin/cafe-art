@@ -1,6 +1,14 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom'
 import Files from 'react-files'
+// import FormGroup from "reactstrap/src/FormGroup";
+// import Label from "reactstrap/src/Label";
+import IntlMessages from "../../../helpers/IntlMessages";
+import {Field} from "formik";
+import {
+    FormGroup,
+    Label,
+} from "reactstrap";
 class MultiFiles extends Component {
     constructor (props) {
         super(props)
@@ -73,28 +81,36 @@ class MultiFiles extends Component {
     render() {
         return (
 
-            <div>
-                <h1>Example 2 - Gallery</h1>
-                <Files
-                    ref='files'
-                    className='files-dropzone-gallery'
-                    onChange={this.onFilesChange}
-                    onError={this.onFilesError}
-                    accepts={['image/*']}
-                    multiple
-                    clickable={true}
-                >
-                    {
-                        this.state.files.length > 0
-                            ? <div className='files-gallery'>
-                                {this.state.files.map((file) =>
-                                    <img className='files-gallery-item' src={file.preview.url} key={file.id} />
-                                )}
-                            </div>
-                            : <div>Drop images here</div>
-                    }
-                </Files>
-                <button onClick={this.filesRemoveAll}>Remove All Files</button>
+            <div >
+
+                <FormGroup className="form-group has-float-label position-relative">
+                    <Label>
+                        <IntlMessages id="gallery" />
+                    </Label>
+                    <Files
+                        ref='files'
+                        className='form-control'
+                        onChange={this.onFilesChange}
+                        onError={this.onFilesError}
+                        accepts={['image/*']}
+                        multiple
+                        clickable={true}
+                        dragable={true}
+                    >
+                        {
+                            this.state.files.length > 0
+                                ? <div className='files-gallery'>
+                                    {this.state.files.map((file) =>
+                                        <img className='files-gallery-item' src={file.preview.url} key={file.id} />
+                                    )}
+                                </div>
+                                : <div>کلیک کنید! </div>
+                        }
+                    </Files>
+                    <div className='btn btn-danger mt-2 col-2' onClick={this.filesRemoveAll}>پاک کردن عکس ها  </div>
+                </FormGroup>
+                {/*<h1>عکس های گالری خود را وارد کنید</h1>*/}
+
             </div>
 
 

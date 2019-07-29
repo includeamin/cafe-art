@@ -220,7 +220,7 @@ class SendEvent extends Component {
                                                     <Label>
                                                         <IntlMessages id="date" />
                                                     </Label>
-                                                    <div >
+                                                    <div  >
                                                         {/*<PersianCalender GetData={this.GetData.bind(this)}/>*/}
                                                         <PersianClassCalender GetData={this.GetData.bind(this)}/>
                                                     </div>

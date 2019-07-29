@@ -7,7 +7,7 @@ class SendComponent extends Component {
     constructor(props) {
         super(props);
         this.state={
-            changeFeild:false
+            changeFeild:true
         }
     }
 

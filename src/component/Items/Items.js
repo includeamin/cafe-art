@@ -13,7 +13,6 @@ const Items = ({ match }) => (
             <Route path={`${match.url}/showitem`} component={ShowItem} />
             {/*<Route path={`${match.url}/showmessage`} component={ShowMessage} />*/}
             <Redirect to="/error" />
-
         </Switch>
     </div>
 );

@@ -32,6 +32,7 @@ import CropComponent from "../../CropComponent";
 import * as Const from "../../Const";
 import Files from 'react-files'
 import MultiFiles from "../MultiFile/MultiFiles";
+import DropzoneExample from "../../../containers/forms/DropzoneExample";
 
 const imageMaxSize = 1000000000 // bytes
 const acceptedFileTypes = 'image/x-png, image/png, image/jpg, image/jpeg, image/gif';
@@ -274,7 +275,7 @@ class AddItem extends Component {
                     <Card>
                         <CardBody>
                             <CardTitle>
-                                <IntlMessages id="Game-Mode" />
+                                <IntlMessages id="Add-item" />
                             </CardTitle>
 
                             <Formik
@@ -341,7 +342,9 @@ class AddItem extends Component {
                                         </div>
 
                                         <div className="w-100 d-flex  ">
-                                         <MultiFiles MultiFile={this.MultiFile.bind(this)}/>
+                                            <CardBody>
+                                                    <MultiFiles MultiFile={this.MultiFile.bind(this)}/>
+                                            </CardBody>
 
                                         </div>
 
