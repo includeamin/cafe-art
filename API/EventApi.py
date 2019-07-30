@@ -39,8 +39,6 @@ def delete_event():
 
 @event_route.route('/admin/event', methods=['GET'])
 @login_required
-@json_body_required
-@check_form_json_key
 def get_events():
     try:
         return Event.get_events()

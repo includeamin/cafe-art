@@ -1,11 +1,11 @@
 from Database.DB import item_collection
 from Classes.Tools import Tools
 from bson import ObjectId
-
+from datetime import datetime
 
 class Item:
 
-    def __init__(self, row_id, title, price, menu_image_url, item_image_url):
+    def __init__(self, row_id, title, price, menu_image_url, item_image_url, gallery):
         self.RowId = row_id
         self.Title = title
         self.MenuImageUrl = menu_image_url
@@ -13,14 +13,27 @@ class Item:
         self.LikesCount = 0
         self.Likes = []
         self.Comments = []
-        self.Gallery = []
+        self.Gallery = gallery
         self.price = price
         # TODO: manage price if necessary
 
     @staticmethod
-    def add_item(row_id, title, price, menu_image_url, item_image_url):
+    def add_item(row_id, title, price, menu_image_url, item_image_url, gallery):
 
-        item_collection.insert_one(Item(row_id, title, price, menu_image_url, item_image_url).__dict__)
+        gallery_objects = []
+        for item in gallery:
+            gallery_objects.append({
+                'ImageUrl': item,
+                'Likes': [],
+                'LikesCount': 0,
+                'Id': ObjectId()
+            })
+
+        item_collection.insert_one(Item(
+            row_id, title, price, menu_image_url, item_image_url, gallery_objects).__dict__)
+
+        return Tools.Result(True, 'd')
+
 
     @staticmethod
     def delete_item(item_id):
@@ -34,17 +47,23 @@ class Item:
         return Tools.Result(True, 'd')
 
     @staticmethod
-    def add_image_gallery(item_id, image_url):
+    def add_image_gallery(item_id, gallery):
+
+        gallery_objects = []
+        for item in gallery:
+            gallery_objects.append({
+                'ImageUrl': item,
+                'Likes': [],
+                'LikesCount': 0,
+                'Id': ObjectId()
+            })
 
         item_collection.update_one(
             {'_id': ObjectId(item_id)},
             {
                 '$push': {
                     'Gallery': {
-                        'ImageUrl': image_url,
-                        'Likes': [],
-                        'LikesCount': 0,
-                        'Id': ObjectId()
+                        '$each': gallery_objects
                     }
                 }
             }
@@ -82,6 +101,19 @@ class Item:
     @staticmethod
     def get_items(row_id):
         items_object = item_collection.find({'RowId': row_id})
+
+        items = []
+        for item in items_object:
+            items.append(item)
+
+        if len(items) == 0:
+            return Tools.Result(False, Tools.errors('INF'))
+
+        return Tools.Result(True, Tools.dumps(items))
+
+    @staticmethod
+    def get_all_items():
+        items_object = item_collection.find({})
 
         items = []
         for item in items_object:
@@ -143,17 +175,17 @@ class Item:
 
     @staticmethod
     def comment_on_item(item_id, user_id, comment, rate):
-
+        
         valid = item_collection.find_one({'_id': ObjectId(item_id)}) is not None
 
         if not valid:
             return Tools.Result(False, Tools.errors('INF'))
 
-        # make sure user did not comment on the item before
-        commented_before = item_collection.find_one({'_id': ObjectId(item_id), 'Comments.UserId': user_id}) is not None
+        # # make sure user did not comment on the item before
+        # commented_before = item_collection.find_one({'_id': ObjectId(item_id), 'Comments.UserId': user_id}) is not None
 
-        if commented_before:
-            return Tools.Result(False, Tools.errors('IAE'))
+        # if commented_before:
+        #     return Tools.Result(False, Tools.errors('IAE'))
 
         # update the comments
         item_collection.update_one(
@@ -161,11 +193,12 @@ class Item:
             {
                 '$push': {
                     'Comments': {
-                        'CommentId': ObjectId,
+                        'CommentId': ObjectId(),
                         'UserId': user_id,
                         'Comment': comment,
                         'Rate': rate,
-                        'Seen': False
+                        'Seen': False,
+                        'Created_at': datetime.now()
                     }
                 }
             }
@@ -212,6 +245,8 @@ class Item:
             },
             array_filters=[{'elem.CommentId': ObjectId(comment_id)}]
         )
+
+        return Tools.Result(True, 'd')
 
     @staticmethod
     def like_image_gallery(item_id, user_id, gallery_image_id):

@@ -18,6 +18,8 @@ class Event:
     def add_event(title, image_url, description, date, price, capacity):
         event_collection.insert_one(Event(title, image_url, description, date, price, capacity).__dict__)
 
+        return Tools.Result(True, 'd')
+
     @staticmethod
     def get_events():
         event_object = event_collection.find({})

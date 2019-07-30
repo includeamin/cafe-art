@@ -16,10 +16,24 @@ def get_items(row_id):
         return Tools.Result(False, ex.args)
 
 
+@item_route.route('/admin/test', methods=['GET'])
+@login_required
+def test():
+        return Tools.Result(True, 'test')
+        
+@item_route.route('/admin/items', methods=['GET'])
+@login_required
+def get_all_items():
+    try:
+        return Item.get_all_items()
+    except Exception as ex:
+        return Tools.Result(False, ex.args)
+
+
 @item_route.route('/admin/item/add', methods=['POST'])
 @login_required
 @json_body_required
-@check_form_json_key(['RowId', 'Title', 'Price', 'MenuImageUrl', 'ItemImageUrl'])
+@check_form_json_key(['RowId', 'Title', 'Price', 'MenuImageUrl', 'ItemImageUrl', 'Gallery'])
 def add_item():
     try:
         data = request.get_json()
@@ -28,6 +42,7 @@ def add_item():
                              data['Price'],
                              data['MenuImageUrl'],
                              data['ItemImageUrl'],
+                             data['Gallery']
                              )
     except Exception as ex:
         return Tools.Result(False, ex.args)
@@ -48,12 +63,12 @@ def delete_item():
 @item_route.route('/admin/item/gallery/image', methods=['POST'])
 @login_required
 @json_body_required
-@check_form_json_key(['ItemId', 'ImageUrl'])
+@check_form_json_key(['ItemId', 'Gallery'])
 def add_image_gallery():
     try:
         data = request.get_json()
-        Item.add_image_gallery(data['ItemId'],
-                               data['ImageUrl'])
+        return Item.add_image_gallery(data['ItemId'],
+                               data['Gallery'])
     except Exception as ex:
         return Tools.Result(False, ex.args)
 
@@ -88,7 +103,7 @@ def like_item():
     try:
         data = request.get_json()
         return Item.like_item(data['ItemId'],
-                              request.headers['UserId'])
+                              request.headers['Id'])
     except Exception as ex:
         return Tools.Result(False, ex.args)
 
@@ -96,12 +111,12 @@ def like_item():
 @item_route.route('/item/unlike', methods=['POST'])
 @login_required
 @json_body_required
-@check_form_json_key(['ItemId', 'UserId'])
+@check_form_json_key(['ItemId'])
 def unlike_item():
     try:
         data = request.get_json()
         return Item.unlike_item(data['ItemId'],
-                                data['UserId'])
+                                request.headers['Id'])
     except Exception as ex:
         return Tools.Result(False, ex.args)
 
@@ -114,7 +129,7 @@ def like_image_gallery():
     try:
         data = request.get_json()
         return Item.like_image_gallery(data['ItemId'],
-                                       request.headers['UserId'],
+                                       request.headers['Id'],
                                        data['GalleryImageId'])
     except Exception as ex:
         return Tools.Result(False, ex.args)
@@ -128,7 +143,7 @@ def unlike_image_gallery():
     try:
         data = request.get_json()
         return Item.unlike_image_gallery(data['ItemId'],
-                                         request.headers['UserId'],
+                                         request.headers['Id'],
                                          data['GalleryImageId'])
     except Exception as ex:
         return Tools.Result(False, ex.args)
@@ -142,11 +157,13 @@ def comment_on_item():
     try:
         data = request.get_json()
         return Item.comment_on_item(data['ItemId'],
-                                    request.headers['UserId'],
+                                    request.headers['Id'],
                                     data['Comment'],
                                     data['Rate'],
                                     )
     except Exception as ex:
+        import traceback
+        traceback.print_exc()
         return Tools.Result(False, ex.args)
 
 
@@ -158,13 +175,14 @@ def get_comments_on_item(item_id):
     except Exception as ex:
         return Tools.Result(False, ex.args)
 
+
 @item_route.route('/admin/item/comments', methods=['GET'])
 @login_required
 def get_all_comments():
-        try:
-                return Item.get_all_comments()
-        except Exception as ex:
-                return Tools.Result(False, ex.args)
+    try:
+        return Item.get_all_comments()
+    except Exception as ex:
+        return Tools.Result(False, ex.args)
 
 
 @item_route.route('/admin/comment/seen', methods=['POST'])

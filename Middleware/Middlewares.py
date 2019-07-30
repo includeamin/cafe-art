@@ -125,7 +125,7 @@ def check_form_json_key(key_list:list):
 
             if request.get_json() is None:
                 return Result(False, Error("FR"))
-
+            
             not_exist_key = []
             for key in key_list:
                 if key in request.get_json():
