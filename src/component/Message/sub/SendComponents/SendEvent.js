@@ -159,7 +159,7 @@ class SendEvent extends Component {
         const { crop, croppedImageUrl, src } = this.state;
 
         return (
-            <Row className="mb-4" style={{fontSize:16+'px'}}>
+            <Row className="mb-4" style={{fontSize:16+'px'}} dir='rtl'>
                 <Colxx xxs="12">
                     <Card>
                         <CardBody>
@@ -205,7 +205,7 @@ class SendEvent extends Component {
                                             <div className="col-sm-6 rowInput">
                                                 <FormGroup className="form-group has-float-label position-relative">
                                                     <Label>
-                                                        <IntlMessages id="Title" />
+                                                        <IntlMessages id="عنوان" />
                                                     </Label>
                                                     <Field className="form-control" name="Title"  />
                                                     {errors.Title && touched.Title ? (
@@ -216,9 +216,9 @@ class SendEvent extends Component {
                                                 </FormGroup>
                                             </div>
                                             <div className="col-sm-6 rowInput">
-                                                <FormGroup className="form-group has-float-label position-relative">
+                                                <FormGroup className=" has-float-label position-relative">
                                                     <Label>
-                                                        <IntlMessages id="date" />
+                                                        <IntlMessages id="تاریخ" />
                                                     </Label>
                                                     <div  >
                                                         {/*<PersianCalender GetData={this.GetData.bind(this)}/>*/}
@@ -238,7 +238,7 @@ class SendEvent extends Component {
                                             <div className="col-sm-6 rowInput">
                                                 <FormGroup className="form-group has-float-label position-relative">
                                                     <Label>
-                                                        <IntlMessages id="price" />
+                                                        <IntlMessages id="قیمت" />
                                                     </Label>
                                                     <Field className="form-control" name="price" type='number'  />
                                                     {errors.price && touched.price ? (
@@ -251,7 +251,7 @@ class SendEvent extends Component {
                                             <div className="col-sm-6 rowInput">
                                                 <FormGroup className="form-group has-float-label position-relative">
                                                     <Label>
-                                                        <IntlMessages id="capacity" />
+                                                        <IntlMessages id="ظرفیت" />
                                                     </Label>
                                                     <Field className="form-control" name="capacity" type='number'  />
                                                     {errors.capacity && touched.capacity ? (
@@ -268,7 +268,7 @@ class SendEvent extends Component {
                                             <div className="col-sm-12 rowInput">
                                                 <FormGroup className="form-group has-float-label position-relative">
                                                     <Label>
-                                                        <IntlMessages id="Description" />
+                                                        <IntlMessages id="توضیحات" />
                                                     </Label>
                                                     <Field className="form-control" name="Description" component="textarea" rows="6" />
                                                     {errors.Description && touched.Description ? (
@@ -283,12 +283,12 @@ class SendEvent extends Component {
                                         <div className="w-100 d-flex ">
 
                                             <div className="col-6">
-                                                <CropComponent label={'icon'} onCropImg={this.handelCrop}/>
+                                                <CropComponent label={'آیکون'} onCropImg={this.handelCrop}/>
                                             </div>
 
                                         </div>
                                         <Button color="primary" type="submit" className="col-2 rowInput">
-                                            Submit
+                                            ارسال
                                         </Button>
                                     </Form>
                                 )}

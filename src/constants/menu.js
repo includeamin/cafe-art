@@ -2,17 +2,17 @@ const data = [
   {
     id: "Categories",
     icon: "iconsminds-shop-4",
-    label: "menu.dashboards",
+    label: "دسته بندی",
     to: "/app/dashboards",
     subs: [
       {
         icon: "iconsminds-add",
-        label: "Add-Categories",
+        label: "اضافه کردن دسته بندی",
         to: "/app/dashboards/addcategories"
       },
         {
             icon: "simple-icon-eye",
-            label: "Show-Categories",
+            label: "مشاهده دسته بندی",
             to: "/app/dashboards/showcategories"
         },
         {
@@ -40,17 +40,17 @@ const data = [
     {
         id: "Items",
         icon: "iconsminds-shopping-cart",
-        label: "Items",
+        label: "اقلام",
         to: "/app/items",
         subs: [
             {
                 icon: "iconsminds-add-cart",
-                label: "add-Items",
+                label: "اضافه کردن اقلام",
                 to: "/app/items/additem"
             },
             {
                 icon: "iconsminds-checkout",
-                label: "show-Items",
+                label: "مشاهده اقلام",
                 to: "/app/items/showitem"
             },
 
@@ -59,18 +59,18 @@ const data = [
     },
     {
         id: "Gallery",
-        icon: "iconsminds-shopping-cart",
-        label: "Gallery",
+        icon: "iconsminds-photo",
+        label: "گالری",
         to: "/app/gallery",
         subs: [
             {
-                icon: "iconsminds-add-cart",
-                label: "add-galley",
+                icon: "iconsminds-mail-gallery",
+                label: "اضافه کردن گالری",
                 to: "/app/gallery/addgallery"
             },
             {
-                icon: "iconsminds-checkout",
-                label: "show-galley",
+                icon: "iconsminds-preview",
+                label: "مشاهده گالری",
                 to: "/app/gallery/showgallery"
             },
 
@@ -80,22 +80,22 @@ const data = [
     {
         id: "Notification",
         icon: "simple-icon-speech",
-        label: "notification",
+        label: "اعلان ها",
         to: "/app/message",
         subs: [
             {
                 icon: "iconsminds-mail-add--",
-                label: "Send-notification",
+                label: "فرستادن اعلانها",
                 to: "/app/Message/sendmessage"
             },
             {
                 icon: "iconsminds-mail-photo",
-                label: "Show-Message",
+                label: "مشاهده عکس ها  ",
                 to: "/app/Message/showmessage"
             },
             {
                 icon: "iconsminds-mail-photo",
-                label: "Show-Events",
+                label: "مشاهده رخدادها",
                 to: "/app/Message/showevents"
             },
 
@@ -105,12 +105,12 @@ const data = [
     {
         id: "Comments",
         icon: "iconsminds-friendster",
-        label: "Comments",
+        label: "نظرات",
         to: "/app/comments",
         subs: [
             {
                 icon: "iconsminds-mail-photo",
-                label: "show-comments",
+                label: "مشاهده نظرات",
                 to: "/app/comments/showcomments"
             },
             // {

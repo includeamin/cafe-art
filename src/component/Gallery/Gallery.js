@@ -150,12 +150,12 @@ class Gallery extends Component {
         return (
             <div>
                 <form >
-                    <div className='col-7 offset-3'>
-                        <SuggestionComponent label='itemList' GetSuggestValue={this.GetSuggestValue.bind(this)}/>
+                    <div className='col-7 offset-3 fontFamimily13vw'>
+                        <SuggestionComponent label='نوع ایتم را انتخاب کنید' GetSuggestValue={this.GetSuggestValue.bind(this)}/>
                     </div>
                     <MultiFiles MultiFile={this.handelMultiFiles.bind(this)} />
                     <Button color="primary" type="submit" className="col-2 rowInput mt-2" onClick={this.handelSubmit.bind(this)}>
-                        Submit
+                        ارسال
                     </Button>
                 </form>
 

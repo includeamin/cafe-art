@@ -168,12 +168,12 @@ class Categories extends Component {
         return (
 
                 // this.state.loaderActive? <div className="d-flex justify-content-center loaderImg "><img src={loader} alt={loader}/></div>:
-                <Row className="mb-4" style={{fontSize:16+'px'}}>
+                <Row className="mb-4" style={{fontSize:18+'px'}} dir='rtl'>
                     <Colxx xxs="12">
                         <Card>
                             <CardBody>
-                                <CardTitle>
-                                    <IntlMessages id="Game-Mode" />
+                                <CardTitle className='float-right'>
+                                    <IntlMessages id="اضافه کردن دسته بندی جدید" />
                                 </CardTitle>
 
                                 <Formik
@@ -209,7 +209,7 @@ class Categories extends Component {
                                                 <div className="col-sm-6 rowInput">
                                                     <FormGroup className="form-group has-float-label position-relative">
                                                         <Label>
-                                                            <IntlMessages id="Title" />
+                                                            <IntlMessages id="عنوان" />
                                                         </Label>
                                                         <Field className="form-control" name="Title"  />
                                                         {errors.Title && touched.Title ? (
@@ -222,7 +222,7 @@ class Categories extends Component {
                                                 <div className="col-sm-6 rowInput">
                                                     <FormGroup className="form-group has-float-label position-relative">
                                                         <Label>
-                                                            <IntlMessages id="Rank" />
+                                                            <IntlMessages id="رتبه" />
                                                         </Label>
                                                         <Field className="form-control" name="Rank" type="number"  />
                                                         {errors.Rank && touched.Rank ? (
@@ -238,10 +238,10 @@ class Categories extends Component {
 
                                                 <div className="w-100 d-flex ">
                                                     <div className="col-6">
-                                                        <CropComponent label={'icon'} onCropImg={this.handelCrop}/>
+                                                        <CropComponent label={'آیکون'} onCropImg={this.handelCrop}/>
                                                     </div>
                                                     <div  className="col-6">
-                                                        <CropComponent label={'image'} onCropImg={this.handelCrop2}/>
+                                                        <CropComponent label={'عکس'} onCropImg={this.handelCrop2}/>
                                                     </div>
                                                 </div>
                                             </div>
@@ -249,7 +249,7 @@ class Categories extends Component {
 
 
                                             <Button color="primary" type="submit" className="col-2 rowInput">
-                                                Submit
+                                                ارسال
                                             </Button>
                                         </Form>
                                     )}

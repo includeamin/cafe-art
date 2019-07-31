@@ -81,7 +81,7 @@ export default class AutoSuggestEdit extends React.Component {
                 inputProps={inputProps}
                 theme={{
                     container: "autosuggest",
-                    input: "form-control",
+                    input: "form-control fontSizeInputText",
                     inputOpen: "react-autosuggest__input--open",
                     suggestionsContainer: "react-autosuggest__suggestions-container",
                     suggestionsContainerOpen:

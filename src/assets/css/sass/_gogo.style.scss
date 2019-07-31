@@ -377,6 +377,9 @@ p {
 .text-large {
   font-size: 1.9rem !important;
 }
+.text-medium {
+  font-size: 1.4rem !important;
+}
 
 .text-one {
   font-size: 1rem !important;
@@ -1436,6 +1439,14 @@ button {
   font-size: 1em;
   position: absolute;
   top: 85%;
+  left: -7px;
+  cursor: pointer;
+}
+.deleteBadge2 {
+  padding: 0.55em 0.75em 0.6em 0.75em;
+  font-size: 1em;
+  position: absolute;
+  top: 90%;
   left: -7px;
   cursor: pointer;
 }
@@ -6091,10 +6102,12 @@ input:-webkit-autofill {
   font-size: 90%;
   opacity: 1;
   top: -0.4em;
-  left: 0.75rem;
+  //left: 0.75rem;
+  right:2.2em ;
+  //left: 2.2em;
   z-index: 3;
   line-height: 1;
-  padding: 0 1px;
+  padding: 0 3px;
 }
 
 .has-float-label label::after,
@@ -6624,11 +6637,26 @@ input:-webkit-autofill {
 }
 
 
+.imagheight15vh{
+ min-height: 15vh;
+}
 .imagheight20vh{
-  height: 20vh;
+  height: 20vh !important;
 }
 .imagheight40vh{
   height: 40vh;
+}
+.fontFamimily13vw{
+  font-size: 1.3em;
+}
+.fontFamimily11em{
+  font-size: 1.1em;
+}
+.fontFamimily9em{
+  font-size: 0.9em;
+}
+.fontSizeInputText{
+  font-size: 19px;
 }
 
 .z-4 {
@@ -6653,6 +6681,4 @@ input:-webkit-autofill {
 .calenderPersiona{
   z-index: 99!important;
   background: transparent !important;
-
-
 }

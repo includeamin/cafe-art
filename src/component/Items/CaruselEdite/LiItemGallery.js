@@ -6,10 +6,10 @@ class LiItemGallery extends Component {
         let{item}=this.props;
         // console.log(item)
         return (
-            <div className="pr-3 pl-3">
+            <div className="pr-3 pl-3 ">
                 <Card className="flex-row">
-                    <div className="w-100 position-relative">
-                        <img className="card-img-left br05" src={item} alt={item} />
+                    <div className="w-100 position-relative imagheight40vh">
+                        <img className="card-img-left br05" src={item.ImageUrl} alt={item} />
                     </div>
                 </Card>
             </div>

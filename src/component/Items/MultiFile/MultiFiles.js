@@ -81,15 +81,15 @@ class MultiFiles extends Component {
     render() {
         return (
 
-            <div >
+            <div className='w-100' dir='rtl'>
 
-                <FormGroup className="form-group has-float-label position-relative">
+                <FormGroup className="form-group has-float-label position-relative " >
                     <Label>
-                        <IntlMessages id="gallery" />
+                        <IntlMessages id="گالری" />
                     </Label>
                     <Files
                         ref='files'
-                        className='form-control'
+                        className='form-control fontSizeInputText'
                         onChange={this.onFilesChange}
                         onError={this.onFilesError}
                         accepts={['image/*']}
@@ -104,10 +104,10 @@ class MultiFiles extends Component {
                                         <img className='files-gallery-item' src={file.preview.url} key={file.id} />
                                     )}
                                 </div>
-                                : <div>کلیک کنید! </div>
+                                : <div className='d-flex justify-content-start'>کلیک کنید! </div>
                         }
                     </Files>
-                    <div className='btn btn-danger mt-2 col-2' onClick={this.filesRemoveAll}>پاک کردن عکس ها  </div>
+                    <div className='btn btn-danger mt-2 col-2 text-small float-right' onClick={this.filesRemoveAll}>پاک کردن عکس ها  </div>
                 </FormGroup>
                 {/*<h1>عکس های گالری خود را وارد کنید</h1>*/}
 

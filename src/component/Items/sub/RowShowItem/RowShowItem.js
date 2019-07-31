@@ -10,7 +10,7 @@ import * as Const from "../../../Const";
 import axios from "axios";
 import NotificationManager from "../../../../components/common/react-notifications/NotificationManager";
 // import ReactSiema from "./../../../../components/ReactSiema/lib";
-
+import {formatNumber} from './../../../functions/Functions'
 var classNames = require('classnames');
 
 // Gallery: (2) [{…}, {…}]
@@ -76,7 +76,13 @@ class RowShowItem extends Component {
                     null,
                     "success"
                 );
-                setTimeout(function(){ window.location.reload(); }, 3000);
+
+                const $el = document.getElementById(`${ItemId}`);
+                const duration = 2;
+                const from = { opacity: 0};
+                TweenMax.to($el, duration, from);
+                this.toggle()
+                // setTimeout(function(){ window.location.reload(); }, 3000);
 
             }else {
                 NotificationManager.error(
@@ -95,6 +101,7 @@ class RowShowItem extends Component {
             //     loaderActive:false
             // });
             console.log(error)});
+
     }
 
     render() {
@@ -102,17 +109,18 @@ class RowShowItem extends Component {
         let { title, Rank,data,comment,like}=this.state;
         let {index , input}=this.props;
         console.log(input._id);
+
         // console.log(index)
 
         // let {index , img}=this.props;
         return (
-            <div className='w-100'>
+            <div className='w-100' id={input._id} dir='rtl' >
                 <Card>
-                    <div className=' d-flex justify-content-between w-100  mt-2 col-12'>
+                    <div className=' d-flex justify-content-between w-100  mt-2 col-12 '>
 
                         <div className='col-6'>
                             <div className='d-flex justify-content-center mt-3'>
-                                <IntlMessages id='Icon'/>
+                                <IntlMessages id='آیکون'/>
                             </div>
                             <img
                                 src={input.ItemImageUrl}
@@ -123,7 +131,7 @@ class RowShowItem extends Component {
 
                         <div className='col-6'>
                             <div className='d-flex justify-content-center mt-3'>
-                                <IntlMessages id='Image'/>
+                                <IntlMessages id='عکس'/>
                             </div>
                             <img
                                 src={input.MenuImageUrl}
@@ -139,25 +147,25 @@ class RowShowItem extends Component {
 
                     <CardBody>
                         <div className="col-12 d-flex ">
-                            <div className="col-6">
-                                <RowShowShow label={"title"} value={input.Title} />
+                            <div className="col-6  fontFamimily9em">
+                                <RowShowShow label={"عنوان"} value={input.Title} />
                             </div>
-                            <div className="col-6">
-                                <RowShowShow label={"categories"} value={input.RowId} />
+                            <div className="col-6 fontFamimily9em ">
+                                <RowShowShow label={"دسته بندی"} value={input.RowId} />
                             </div>
                         </div>
-                        <div className="col-12 d-flex mt-2">
+                        <div className="col-12 d-flex mt-2 fontFamimily9em">
                             <div className="col-6">
-                                <RowShowShow label={"comment"} value={input.Comments?input.Comments.length:0} />
+                                <RowShowShow label={"نظرات"} value={input.Comments?input.Comments.length:0} />
                             </div>
 
-                            <div className="col-6">
-                                <RowShowShow label={"like"} value={input.LikesCount} />
+                            <div className="col-6 fontFamimily9em">
+                                <RowShowShow label={"پسندیدن"} value={input.LikesCount} />
                             </div>
                         </div>
                         <div className="col-12 d-flex mt-2">
-                            <div className="col-6">
-                                <RowShowShow label={"price"} value={input.price} />
+                            <div className="col-12 fontFamimily9em">
+                                <RowShowShow label={"قیمت"} value={formatNumber(input.price)} />
                             </div>
 
 
@@ -170,31 +178,31 @@ class RowShowItem extends Component {
                             {/*</p>*/}
                         {/*</footer>*/}
                         <span
-                            className=' badge-danger deleteBadge ' onClick={this.toggle}
+                            className=' badge-danger deleteBadge2' onClick={this.toggle}
                             // className={`badge badge-danger badge-${
                             //     'theme-2'
                             //     } position-absolute ${
                             //     "badge-top-left-4"
                             //     }`}
                         >
-                  delete
+                  پاک کردن
                 </span>
                     </CardBody>
 
                 </Card>
-                <Modal isOpen={this.state.modal} toggle={this.toggle}>
+                <Modal isOpen={this.state.modal} toggle={this.toggle} dir='rtl'>
                     <ModalHeader toggle={this.toggle}>
-                        <IntlMessages id="Delete Item" />
+                        <IntlMessages id="دیلیت کردن آیتم" />
                     </ModalHeader>
                     <ModalBody>
-                        Are You Really fucking sure ?
+                        آیا شما مطمئن هستین ؟
                     </ModalBody>
                     <ModalFooter>
                         <Button color="primary" onClick={this.DeleteItem.bind(this)}>
-                            Delete Item
+                            پاک کردن
                         </Button>{" "}
                         <Button color="secondary" onClick={this.toggle}>
-                            Cancel
+                            کنسل
                         </Button>
                     </ModalFooter>
                 </Modal>

@@ -12,8 +12,8 @@ const BasicCarouselItem = (item) => {
     return (
         <div className="pr-3 pl-3">
             <Card className="flex-row">
-                <div className="w-100 position-relative">
-                    <img className="card-img-left br05" src={item} alt={item} />
+                <div className="w-100 position-relative imagheight20vh">
+                    <img className="card-img-left br05 " src={item} alt={item} />
                 </div>
             </Card>
         </div>
@@ -38,7 +38,7 @@ class CarouselEdite extends Component {
         // let{data}=this.state;
 
         return (
-            <Row className='mt-2'>
+            <Row className='mt-2' dir='ltr'>
                 <Colxx xxs="12" className="pl-0 pr-0 mb-5">
                     <ReactSiemaCarousel
                         perPage={{

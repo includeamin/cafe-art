@@ -22,7 +22,7 @@ class RowShowComments extends Component {
                 " velit scelerisque in. Egestas egestas fringilla phasellus faucibus scelerisque eleifend. Sagittis orci a ",
             data:"97/6/2019",
             emoji:"like",
-            seen:true
+            seen:null
         }
     }
     componentDidMount(){
@@ -30,31 +30,34 @@ class RowShowComments extends Component {
         switch(index) {
             case 1:
                 this.setState({
-                    emoji:"love"
+                    emoji:"sad"
+
+                    // emoji:"love"
                 });
                 // code block
                 break;
             case 2:
                 this.setState({
-                    emoji:"wow"
+                    emoji:"yay"
                 });
                 // code block
                 break;
             case 3:
                 this.setState({
-                    emoji:"yay"
+                    emoji:"wow"
+
                 });
                 // code block
                 break;
             case 4:
                 this.setState({
-                    emoji:"angry"
+                    emoji:"haha"
                 });
                 // code block
                 break;
             case 5:
                 this.setState({
-                    emoji:"haha"
+                    emoji:"love"
                 });
                 // code block
                 break;
@@ -66,7 +69,9 @@ class RowShowComments extends Component {
                 break;
             case 0:
                 this.setState({
-                    emoji:"sad"
+                    emoji:"angry"
+
+                    // emoji:"sad"
                 });
                 // code block
                 break;
@@ -78,7 +83,7 @@ class RowShowComments extends Component {
         }
 
         this.setState({
-            seen:this.props.input.seen
+            seen:this.props.input.Seen
         })
     }
     checkedFunc(){
@@ -135,7 +140,8 @@ class RowShowComments extends Component {
     render() {
         let{index,Name,input}=this.props ;
         let {title,name,detail,data,emoji,item,seen}=this.state;
-        console.log(input);
+        // console.log(input);
+        // console.log(seen);
 
         return (
             <div className="col-12">

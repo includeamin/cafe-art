@@ -75,7 +75,7 @@ class SuggestionComponent extends Component {
         let {label}=this.props;
         return (
             <div className="w-100 rowInput">
-                <FormGroup className="form-group has-float-label position-relative">
+                <FormGroup className="form-group has-float-label position-relative ">
                     <Label>
                         <IntlMessages id={label} />
                     </Label>

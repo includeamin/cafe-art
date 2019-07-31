@@ -225,8 +225,6 @@ class CropComponent extends Component {
                     )}
                 </div>
                 <img src={imgCropFile} alt={'imags'} id='images' className='d-none' />
-
-
                 {/*<button className="col-2 btn btn-warning" onClick={this.onSubmit.bind(this)} >submit</button>*/}
 
             </div>

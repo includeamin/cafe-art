@@ -6,6 +6,8 @@ import RowShowShow from "../../RowShowShow";
 import * as Const from "../../Const";
 import axios from "axios";
 import NotificationManager from "../../../components/common/react-notifications/NotificationManager";
+import {gregorian_to_jalali
+} from './../../functions/Functions';
 
 var classNames = require('classnames');
 
@@ -15,7 +17,7 @@ class RowShowCategories extends Component {
         this.state={
             title:"title",
             Rank: 1,
-            data:"97/8/7",
+            newDateCreate:null,
             // comment:25,
             // like:27,
             modal:false,
@@ -33,37 +35,16 @@ class RowShowCategories extends Component {
             modal: !prevState.modal
         }));
     };
-    handelHover(){
-        let liClasses = classNames({
-            'card-img-top': true,
-            'hoverImg': !this.state.imgHover
-        });
 
-        this.setState(prevState => ({
-            hoverImg:!prevState.hoverImg,liClasses
-        }));
-
-
-        // console.log(this.state.hoverImg);
-        let {index}=this.props;
-        let button=document.getElementById(`button ${index}`);
-        TweenMax.to(button,0.5,{css:{ left:'40%',top:'30%',scale:3}});
-    }
-    handelHoveOut(){
-        let liClasses = classNames({
-            'card-img-top': true,
-            'hoverImg': this.state.imgHover
-            // 'hoverImg': true
-        });
-
-        let {index}=this.props;
-        let button=document.getElementById(`button ${index}`);
-        this.setState(prevState => ({
-            hoverImg:!prevState.hoverImg,
-            liClasses
-        }));
-        // console.log(this.state.hoverImg);
-        TweenMax.to(button,0.5,{css:{left:'0%',top:'0%',scale:1}});
+    componentDidMount() {
+        let {Created_at}=this.props.input;
+        let Date=Created_at.slice(0,10);
+        let array = Date.split("-");
+        let ss=gregorian_to_jalali(array[0],array[1],array[2]);
+        let newDateCreate=ss.join("-");
+        this.setState({
+            newDateCreate
+        })
     }
     handleDelete(){
 
@@ -95,7 +76,12 @@ class RowShowCategories extends Component {
                     null,
                     "success"
                 );
-                setTimeout(function(){ window.location.reload(); }, 3000);
+                const $el = document.getElementById(`${RowId}`);
+                const duration = 2;
+                const from = { opacity: 0};
+                TweenMax.to($el, duration, from);
+                this.toggle()
+                // setTimeout(function(){ window.location.reload(); }, 3000);
 
             }else {
                 NotificationManager.error(
@@ -121,16 +107,13 @@ class RowShowCategories extends Component {
 
     render() {
 
-        // _id: "5d36bd0e6606551d8f9c236c"
         let { Title, RowId,IconUrl,ImageUrl,Created_at}=this.props.input;
-        // let Date=this.props.input.Created_at
-        // console.log(Date);
-
+        let{newDateCreate}=this.state;
         console.log(this.props.input.RowId);
 
-        let {index }=this.props;
+        let {index}=this.props;
         return (
-            <div className='w-100'>
+            <div className='w-100' id={RowId}>
                 <Card>
                     <div className='d-flex justify-content-around mt-2 col-12'>
                         <div className='col-6'>
@@ -169,8 +152,7 @@ class RowShowCategories extends Component {
                                 <RowShowShow label={"Rank"} value={RowId} />
                             </div>
                             <div className="col-12">
-                                <RowShowShow label={"Date"} value={Created_at
-                                } />
+                                <RowShowShow label={"Date"} value={newDateCreate} />
                             </div>
                         </div>
 
