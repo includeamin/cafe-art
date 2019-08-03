@@ -5,6 +5,8 @@ import NotificationManager from "../../../components/common/react-notifications/
 import IntlMessages from "../../../helpers/IntlMessages";
 
 import {  Card, CardBody , Button, Modal, ModalHeader, ModalBody, ModalFooter,} from "reactstrap";
+import DeleteModal from "../../DeleteModal";
+import {TweenMax} from "gsap/TweenMax";
 
 class LiShowGallery extends Component {
     constructor(props) {
@@ -44,6 +46,7 @@ class LiShowGallery extends Component {
             // this.setState({
             //     loaderActive:false
             // });
+
             const {Description}=responsive.data;
 
             if(Description === "d"){
@@ -55,7 +58,14 @@ class LiShowGallery extends Component {
                     null,
                     "success"
                 );
-                setTimeout(function(){ window.location.reload(); }, 3000);
+                let id=this.props.id;
+
+                const $el = document.getElementById(`${id}`);
+                const duration = 2;
+                const from = { opacity: 0};
+                TweenMax.to($el, duration, from);
+                this.toggle();
+                // setTimeout(function(){ window.location.reload(); }, 3000);
 
             }else {
                 NotificationManager.error(
@@ -79,11 +89,13 @@ class LiShowGallery extends Component {
     }
 
     render() {
-        let {src,index,classname}=this.props;
+        let {src,index,classname,id}=this.props;
+        // console.log(id);
         return (
-            <div className=''>
+            <div className='br05' id={id}>
                 <Card className={classname}>
-                <img src={src} alt={index} className='imagheight40vh' />
+                {/*<img src={src} alt={index} className='imagheight40vh' />*/}
+                <img src={src} alt={index}  className='w-100 h-100' />
                 <span
                     className=' badge-danger deleteBadge' onClick={this.toggle}
                     // className={`badge badge-danger badge-${
@@ -92,27 +104,10 @@ class LiShowGallery extends Component {
                     //     "badge-top-left-4"
                     //     }`}
                 >
-                  delete
+                  حذف
                 </span>
                 </Card>
-
-                <Modal isOpen={this.state.modal} toggle={this.toggle}>
-                    <ModalHeader toggle={this.toggle}>
-                        <IntlMessages id="Delete Item" />
-                    </ModalHeader>
-                    <ModalBody>
-                        Are You Really fucking sure ?
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button color="primary" onClick={ this.handleDelete.bind(this)}>
-                            Delete Item
-                        </Button>{" "}
-                        <Button color="secondary" onClick={this.toggle}>
-                            Cancel
-                        </Button>
-                    </ModalFooter>
-                </Modal>
-
+                <DeleteModal modal={this.state.modal} toggle={this.toggle} handleDelete={ this.handleDelete.bind(this)} header={'حذف عکس از گالری'}/>
             </div>
         );
     }

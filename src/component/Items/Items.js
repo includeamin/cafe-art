@@ -4,12 +4,13 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import ShowComments from "../Comments/sub/ShowComments";
 import AddItem from "./sub/AddItem";
 import ShowItem from "./sub/ShowItem";
+import TwoStepAddItem from "./twoStepAddItem/TwoStepAddItem";
 
 const Items = ({ match }) => (
     <div className="dashboard-wrapper">
         <Switch>
             <Redirect exact from={`${match.url}/`} to={`${match.url}/additem`} />
-            <Route path={`${match.url}/additem`} component={AddItem} />
+            <Route path={`${match.url}/additem`} component={TwoStepAddItem} />
             <Route path={`${match.url}/showitem`} component={ShowItem} />
             {/*<Route path={`${match.url}/showmessage`} component={ShowMessage} />*/}
             <Redirect to="/error" />

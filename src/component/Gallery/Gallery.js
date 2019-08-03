@@ -69,6 +69,7 @@ class Gallery extends Component {
         })
 
     }
+
     handelSubmit(e){
         e.preventDefault();
 

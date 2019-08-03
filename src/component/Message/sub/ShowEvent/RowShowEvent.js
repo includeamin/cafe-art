@@ -7,6 +7,7 @@ import RowShowShow from "../../../RowShowShow";
 import * as Const from "../../../Const";
 import axios from "axios";
 import NotificationManager from "../../../../components/common/react-notifications/NotificationManager";
+import DeleteModal from "../../../DeleteModal";
 
 var classNames = require('classnames');
 
@@ -102,8 +103,14 @@ class RowShowEvent extends Component {
                     null,
                     "success"
                 );
-                setTimeout(function(){ window.location.reload(); }, 3000);
+                // setTimeout(function(){ window.location.reload(); }, 3000);
+                let id=this.props.input._id;
 
+                const $el = document.getElementById(`${id}`);
+                const duration = 2;
+                const from = { opacity: 0};
+                TweenMax.to($el, duration, from);
+                this.toggle();
             }else {
                 NotificationManager.error(
                     " new game currency didnt add",
@@ -132,7 +139,7 @@ class RowShowEvent extends Component {
         let {index }=this.props;
 
         return (
-            <div className="col-12">
+            <div className="col-12" dir='rtl' id={_id}>
                 <Card>
                     <div onMouseEnter={this.handelHover.bind(this)} onMouseLeave={this.handelHoveOut.bind(this)} className="position-relative">
                         {/*<div className="position-absolute card-top-buttons" onClick={this.toggle}>*/}
@@ -152,7 +159,7 @@ class RowShowEvent extends Component {
                             className={liClasses}
                         />
                         <div >
-                            <Button outline color={"white"} className="trashIconBox position-absolute   "  onClick={this.toggle}
+                            <Button outline color={"white"} className="trashIconBox position-absolute"  onClick={this.toggle}
                                     id={`button ${index}`}>
                                 <i className="simple-icon-trash"/>
                             </Button>
@@ -182,21 +189,21 @@ class RowShowEvent extends Component {
 
                     <CardBody>
 
-                        <div className="col-12 d-flex">
-                            <div className="col-12">
-                                <RowShowShow label={"title"} value={Title}/>
+                        <div className="w-100 d-flex">
+                            <div className="w-100 fontFamili12 marginZeroRL">
+                                <RowShowShow label={"عنوان"} value={Title}/>
                             </div>
                         </div>
-                        <div className="col-12 d-flex mt-3" >
-                            <div className="col-6" >
-                                <RowShowShow label={"Capacity"} value={Capacity}/>
+                        <div className="w-100 d-flex mt-3" >
+                            <div className="col-6  fontFamili12 paddingZero" >
+                                <RowShowShow label={"ظرفیت"} value={Capacity}/>
                             </div>
-                            <div className="col-6">
-                                <RowShowShow label={"Price"} value={Price}/>
+                            <div className="col-6  fontFamili12 paddingZero">
+                                <RowShowShow label={"قیمت"} value={Price}/>
                             </div>
                         </div>
-                        <div className="col-12 d-flex mt-3" >
-                            <h6 className="mb-4 d-flex text-justify col-12" dir='rtl'>{Description}</h6>
+                        <div className="w-100 d-flex mt-3" >
+                            <h6 className="mb-4 d-flex text-justify w-100" dir='rtl'>{Description}</h6>
                         </div>
                         <footer>
                             <p className="text-muted text-small mb-0 font-weight-light">
@@ -205,22 +212,23 @@ class RowShowEvent extends Component {
                         </footer>
                     </CardBody>
                 </Card>
-                <Modal isOpen={this.state.modal} toggle={this.toggle}>
-                    <ModalHeader toggle={this.toggle}>
-                        <IntlMessages id="Delete Item" />
-                    </ModalHeader>
-                    <ModalBody>
-                        Are You Really fucking sure ?
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button color="primary" onClick={this.DeleteItem.bind(this)}>
-                            Delete Item
-                        </Button>{" "}
-                        <Button color="secondary" onClick={this.toggle}>
-                            Cancel
-                        </Button>
-                    </ModalFooter>
-                </Modal>
+                <DeleteModal toggle={this.toggle} handleDelete={this.DeleteItem.bind(this)} modal={this.state.modal} header={'حذف رخداد'}/>
+                {/*<Modal isOpen={this.state.modal} toggle={this.toggle}>*/}
+                    {/*<ModalHeader toggle={this.toggle}>*/}
+                        {/*<IntlMessages id="Delete Item" />*/}
+                    {/*</ModalHeader>*/}
+                    {/*<ModalBody>*/}
+                        {/*Are You Really fucking sure ?*/}
+                    {/*</ModalBody>*/}
+                    {/*<ModalFooter>*/}
+                        {/*<Button color="primary" onClick={this.DeleteItem.bind(this)}>*/}
+                            {/*Delete Item*/}
+                        {/*</Button>{" "}*/}
+                        {/*<Button color="secondary" onClick={this.toggle}>*/}
+                            {/*Cancel*/}
+                        {/*</Button>*/}
+                    {/*</ModalFooter>*/}
+                {/*</Modal>*/}
 
             </div>
 

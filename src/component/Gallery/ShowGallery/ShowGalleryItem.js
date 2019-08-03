@@ -29,7 +29,7 @@ class ShowGalleryItem extends Component {
         axios.get(`${Const.Amin_URL}item/gallery/${ID}` , {headers:headers}).then(responsive=>
         {
             const {Description}=responsive.data;
-            console.log(Description);
+            // console.log(Description);
             this.setState({
                 Description:JSON.parse(Description)
             })
@@ -64,9 +64,9 @@ class ShowGalleryItem extends Component {
         let{Description,id}=this.state;
         console.log(Description)
         return (
-            <div className=' ' >
+            <div className='br05 ' >
                 {Description?Description.map((todo ,index)=><LiShowGallery id={todo.Id} key={index} index={index} src={todo.ImageUrl}  itemId={id} classname=' col-sm-12 col-md-4 col-lg-3 mt-3 float-left mr-2'/>  ):""}
-
+                {/*{Description?Description.map((todo ,index)=><LiShowGallery id={todo.Id} key={index} index={index} src={todo.ImageUrl}  itemId={id} classname='  mt-3 float-left mr-2'/>  ):""}*/}
             </div>
         );
     }

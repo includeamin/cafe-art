@@ -26,14 +26,12 @@ class ShowGallery extends Component {
         return (
             <div>
                 <div className='col-7 offset-3'>
-                    <SuggestionComponent label='itemList' GetSuggestValue={this.GetSuggestValue.bind(this)}/>
+                    <SuggestionComponent label='انتخاب آیتم' GetSuggestValue={this.GetSuggestValue.bind(this)}/>
                 </div>
 
                     <div>
                         <ShowGalleryItem ID={id} Name={itemName}/>
                     </div>
-
-
 
             </div>
         );

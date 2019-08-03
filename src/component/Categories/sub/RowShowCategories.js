@@ -8,6 +8,7 @@ import axios from "axios";
 import NotificationManager from "../../../components/common/react-notifications/NotificationManager";
 import {gregorian_to_jalali
 } from './../../functions/Functions';
+import DeleteModal from "../../DeleteModal";
 
 var classNames = require('classnames');
 
@@ -113,12 +114,12 @@ class RowShowCategories extends Component {
 
         let {index}=this.props;
         return (
-            <div className='w-100' id={RowId}>
+            <div className='w-100' id={RowId} dir='rtl'>
                 <Card>
                     <div className='d-flex justify-content-around mt-2 col-12'>
                         <div className='col-6'>
                             <div  className='d-flex justify-content-center mt-3'>
-                                <IntlMessages id='image'/>
+                                <IntlMessages id='عکس'/>
                             </div>
                             <img
                                 src={IconUrl}
@@ -132,7 +133,7 @@ class RowShowCategories extends Component {
 
                         <div className='col-6'>
                             <div  className='d-flex justify-content-center mt-3'>
-                                <IntlMessages id='Icon'/>
+                                <IntlMessages id='آیکون'/>
                             </div>
                             <img
                                 src={ImageUrl}
@@ -146,13 +147,13 @@ class RowShowCategories extends Component {
                     <CardBody>
                         <div className="col-12 ">
                             <div className="col-12">
-                                <RowShowShow label={"title"} value={Title} />
+                                <RowShowShow label={"عنوان"} value={Title} />
                             </div>
                             <div className="col-12">
-                                <RowShowShow label={"Rank"} value={RowId} />
+                                <RowShowShow label={"رتبه"} value={RowId} />
                             </div>
                             <div className="col-12">
-                                <RowShowShow label={"Date"} value={newDateCreate} />
+                                <RowShowShow label={"تاریخ"} value={newDateCreate} />
                             </div>
                         </div>
 
@@ -170,25 +171,11 @@ class RowShowCategories extends Component {
                         //     "badge-top-left-4"
                         //     }`}
                     >
-                  delete
+                  حذف
                 </span>
                 </Card>
-                <Modal isOpen={this.state.modal} toggle={this.toggle}>
-                    <ModalHeader toggle={this.toggle}>
-                        <IntlMessages id="Delete Item" />
-                    </ModalHeader>
-                    <ModalBody>
-                        Are You Really fucking sure ?
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button color="primary" onClick={ this.handleDelete.bind(this)}>
-                            Delete Item
-                        </Button>{" "}
-                        <Button color="secondary" onClick={this.toggle}>
-                            Cancel
-                        </Button>
-                    </ModalFooter>
-                </Modal>
+                <DeleteModal modal={this.state.modal} toggle={this.toggle} handleDelete={ this.handleDelete.bind(this)} header={'حذف دسته بندی'}/>
+
             </div>
         );
     }

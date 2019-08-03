@@ -11,6 +11,7 @@ import axios from "axios";
 import NotificationManager from "../../../../components/common/react-notifications/NotificationManager";
 // import ReactSiema from "./../../../../components/ReactSiema/lib";
 import {formatNumber} from './../../../functions/Functions'
+import DeleteModal from "../../../DeleteModal";
 var classNames = require('classnames');
 
 // Gallery: (2) [{…}, {…}]
@@ -190,22 +191,24 @@ class RowShowItem extends Component {
                     </CardBody>
 
                 </Card>
-                <Modal isOpen={this.state.modal} toggle={this.toggle} dir='rtl'>
-                    <ModalHeader toggle={this.toggle}>
-                        <IntlMessages id="دیلیت کردن آیتم" />
-                    </ModalHeader>
-                    <ModalBody>
-                        آیا شما مطمئن هستین ؟
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button color="primary" onClick={this.DeleteItem.bind(this)}>
-                            پاک کردن
-                        </Button>{" "}
-                        <Button color="secondary" onClick={this.toggle}>
-                            کنسل
-                        </Button>
-                    </ModalFooter>
-                </Modal>
+                <DeleteModal modal={this.state.modal} toggle={this.toggle} handleDelete={this.DeleteItem.bind(this)} header={'حذف آیتم'}/>
+
+                {/*<Modal isOpen={this.state.modal} toggle={this.toggle} dir='rtl'>*/}
+                    {/*<ModalHeader toggle={this.toggle}>*/}
+                        {/*<IntlMessages id="حذف آیتم" />*/}
+                    {/*</ModalHeader>*/}
+                    {/*<ModalBody>*/}
+                        {/*آیا شما مطمئن هستین ؟*/}
+                    {/*</ModalBody>*/}
+                    {/*<ModalFooter>*/}
+                        {/*<Button color="primary" onClick={this.DeleteItem.bind(this)}>*/}
+                            {/*پاک کردن*/}
+                        {/*</Button>{" "}*/}
+                        {/*<Button color="secondary" onClick={this.toggle}>*/}
+                            {/*کنسل*/}
+                        {/*</Button>*/}
+                    {/*</ModalFooter>*/}
+                {/*</Modal>*/}
             </div>
         );
     }

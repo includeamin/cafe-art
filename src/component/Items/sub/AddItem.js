@@ -137,13 +137,6 @@ class AddItem extends Component {
          console.log(this.state.categories)
 
     }
-
-
-
-
-
-
-
     handelCrop = (src,crop,imgIcon) => {
 
         // console.log(crop);
@@ -215,8 +208,10 @@ class AddItem extends Component {
             // this.setState({
             //     loaderActive:false
             // });
-            const {Description}=responsive.data;
-            if(Description === "d"){
+            const {Description,State}=responsive.data;
+            let DES=JSON.parse(Description);
+
+            if(State){
                 NotificationManager.success(
                     "congratulation",
                     "your categories added",
@@ -225,6 +220,12 @@ class AddItem extends Component {
                     null,
                     "success"
                 );
+                // "_id": "<pymongo.results.InsertOneResult object at 0x7f359c638b08>",
+                //     "name": "we"
+
+                console.log('id: '+DES._id);
+                console.log('name: '+DES.name);
+                this.props.handelGoTwoStep2(DES._id,DES.name);
             }else {
                 NotificationManager.error(
                     " new game currency didnt add",
@@ -257,12 +258,6 @@ class AddItem extends Component {
         console.log('files'+files.length);
         console.log('files'+files);
     };
-
-
-
-
-
-
     render() {
         const { crop, croppedImageUrl, src,crop2, croppedImageUrl2, src2 ,option} = this.state;
         // const option=[{'name':'breakfast'},{'name':'dinner'},{'name':'lunch'},{'name':'hot drink'},{'name':'cold Drink'}];
@@ -342,12 +337,9 @@ class AddItem extends Component {
                                             </div>
                                         </div>
 
-                                        <div className="col-12 d-flex  ">
-                                            {/*<CardBody>*/}
-                                                    <MultiFiles MultiFile={this.MultiFile.bind(this)}/>
-                                            {/*</CardBody>*/}
-
-                                        </div>
+                                        {/*<div className="col-12 d-flex  ">*/}
+                                                    {/*<MultiFiles MultiFile={this.MultiFile.bind(this)}/>*/}
+                                        {/*</div>*/}
 
                                         <div className="w-100 d-flex mt-3 ">
                                             <div className="col-6">
