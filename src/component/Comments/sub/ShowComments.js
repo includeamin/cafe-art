@@ -15,7 +15,7 @@ import axios from "axios";
 import {Colxx} from "../../../components/common/CustomBootstrap";
 
 import IntlMessages from "../../../helpers/IntlMessages";
-import ListComments from "./ListComments";
+import ListComments from "./NewComments/ListComments";
 
 
 class ShowComments extends Component {
@@ -62,7 +62,8 @@ class ShowComments extends Component {
                             <CardTitle>
                                 <IntlMessages id="collapse.accordion" />
                             </CardTitle>
-                            {Description?Description.map((todo ,index)=><ListComments key={index} input={todo} index={todo.Rate} Name={Name} img={breakfast}/>):""}
+                            <ListComments Description={Description} Name={Name}/>
+                            {/*{Description?Description.map((todo ,index)=><ListComments key={index} input={todo} index={todo.Rate} Name={Name} img={breakfast}/>):""}*/}
                         </CardBody>
                     </Card>
                 </Colxx>

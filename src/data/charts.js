@@ -149,7 +149,7 @@ export const pieChartData = {
       data: [15, 25, 20]
     }
   ]
-}
+};
 
 export const doughnutChartData = {
   labels: ['Cakes', 'Cupcakes', 'Desserts'],

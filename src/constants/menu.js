@@ -113,6 +113,11 @@ const data = [
                 label: "مشاهده نظرات",
                 to: "/app/comments/showcomments"
             },
+            {
+                icon: "iconsminds-mail-photo",
+                label: "مشاهده نمودار",
+                to: "/app/comments/commentschart"
+            },
             // {
             //     icon: "iconsminds-mail-photo",
             //     label: "Show-Message",
