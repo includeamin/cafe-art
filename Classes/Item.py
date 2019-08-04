@@ -333,10 +333,33 @@ class Item:
 
         return Tools.Result(True, 'd')
 
-# for i in range(20):
-#     Item.add_item(i, 'item_' + str(i), 'image_url_' + str(i), 'menu_image_url_' + str(i))
-# print(Item.get_items(22))
-# print(Item.like_item('5d2da0b7d74b103f12d75ddd', 'user1'))
-# print(Item.add_image_gallery('5d2da0b7d74b103f12d75ddd', 'gallery_image_2'))
-# print(Item.like_image_gallery('5d2da0b7d74b103f12d75ddd', 'user3', '5d2dab88ee45a03b1372040d'))
-# print(Item.get_gallery_images('5d2da0b7d74b103f12d75ddd'))
+
+    @staticmethod
+    def get_rate_distribution(item_id):
+        print('Called')
+        item_object = item_collection.find_one(
+            {'_id': ObjectId(item_id)}, {'Comments': 1})
+
+        if item_object is None:
+            return Tools.Result(False, Tools.errors('INF'))
+
+        comments = item_object['Comments']
+
+        total = len(comments)
+        rates = {
+            '0': 0,
+            '1': 0,
+            '2': 0,
+            '3': 0,
+            '4': 0,
+            '5': 0,
+            '6': 0
+        }
+
+        for comment in comments:
+            rates[str(comment['Rate'])] += 1
+
+        return Tools.Result(True, Tools.dumps({
+            'Total': total,
+            'Rates': rates
+        }))

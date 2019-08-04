@@ -184,6 +184,15 @@ def get_all_comments():
     except Exception as ex:
         return Tools.Result(False, ex.args)
 
+@item_route.route('/admin/statistics/item/<item_id>')
+@login_required
+def get_rate_distribution(item_id):
+        try:
+                return Item.get_rate_distribution(item_id)
+        except Exception as ex:
+                import traceback
+                traceback.print_exc()
+                return Tools.Result(False, ex.args)
 
 @item_route.route('/admin/comment/seen', methods=['POST'])
 @login_required
