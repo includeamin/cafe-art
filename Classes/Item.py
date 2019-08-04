@@ -29,10 +29,13 @@ class Item:
                 'Id': ObjectId()
             })
 
-        item_collection.insert_one(Item(
+        result = item_collection.insert_one(Item(
             row_id, title, price, menu_image_url, item_image_url, gallery_objects).__dict__)
 
-        return Tools.Result(True, 'd')
+        return Tools.Result(True, Tools.dumps({
+            '_id': result.inserted_id,
+            'name': title
+        }))
 
 
     @staticmethod
