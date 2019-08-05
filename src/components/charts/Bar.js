@@ -26,6 +26,8 @@ export default class Bar extends React.Component {
 
   render() {
     const { data, shadow } = this.props;
+    console.log('sssssss');
+    console.log(data);
     return (
       <ChartComponent
         ref={ref => (this.chart_instance = ref && ref.chart_instance)}

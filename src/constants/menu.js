@@ -115,14 +115,14 @@ const data = [
             },
             {
                 icon: "iconsminds-mail-photo",
-                label: "مشاهده نمودار",
+                label: "مشاهده نمودار ایتم",
                 to: "/app/comments/commentschart"
             },
-            // {
-            //     icon: "iconsminds-mail-photo",
-            //     label: "Show-Message",
-            //     to: "/app/Message/showmessage"
-            // },
+            {
+                icon: "iconsminds-mail-photo",
+                label: "مشاهده نمودار دسته بندی",
+                to: "/app/comments/categorieschart"
+            },
 
         ]
     },

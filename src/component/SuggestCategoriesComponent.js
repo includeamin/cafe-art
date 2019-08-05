@@ -3,17 +3,18 @@ import {
     FormGroup,
     Label,
 } from "reactstrap";
-import IntlMessages from "../../helpers/IntlMessages";
-import AutoSuggestEdit from "./AutoSuggestEdit";
-import * as Const from "../Const";
+import IntlMessages from "../helpers/IntlMessages";
+import * as Const from "./Const";
 import axios from "axios";
+import AutoSuggestEdit from "./Items/AutoSuggestEdit";
 
-class SuggestionComponent extends Component {
+
+class SuggestCategoriesComponent extends Component {
     constructor(props) {
         super(props);
 
         this.state={
-               categories:[],option:[],files:[],categoriesList:{},suggest:[],
+            categories:[],option:[],files:[],categoriesList:{},suggest:[],
         }
     }
     componentDidMount(){
@@ -22,13 +23,12 @@ class SuggestionComponent extends Component {
             'Id': `${Const.ID}`
         };
 
-        axios.get(`${Const.Amin_URL}admin/items` , {headers:headers}).then(responsive=>
+        axios.get(`${Const.Amin_URL}categories` , {headers:headers}).then(responsive=>
         {
             const {Description}=responsive.data;
-            // console.log(Description);
+            console.log(Description);
             let categories=JSON.parse(Description);
             let index;
-
 
             let  option=[];
             categories.map(item => {
@@ -40,7 +40,7 @@ class SuggestionComponent extends Component {
 
             for (index in categories){
                 let id =categories[index].Title;
-                let Value =categories[index]._id;
+                let Value =categories[index].RowId;
                 // dict[id] = Value;
                 categoriesList[Value] = id;
             }
@@ -54,6 +54,7 @@ class SuggestionComponent extends Component {
         console.log(this.state.categories)
 
     }
+
     handelSuggestValue=(value)=>{
         this.setState({suggest:value});
 
@@ -89,4 +90,4 @@ class SuggestionComponent extends Component {
     }
 }
 
-export default SuggestionComponent;
+export default SuggestCategoriesComponent;

@@ -164,7 +164,7 @@ export const barChartOptions = {
           beginAtZero: true,
           stepSize: 100,
           min: 0,
-          max: 10,
+          max: 6,
           padding: 20
         }
       }

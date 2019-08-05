@@ -17,7 +17,7 @@ import {
 } from "../../../components/charts";
 import * as Const from "../../Const";
 import axios from "axios";
-import {barChartData} from "../../../data/charts";
+import {barChartData, doughnutChartData} from "../../../data/charts";
 const colors = ThemeColors()
 
 // const v=['angry','sad','yay','wow','haha','love','like'];
@@ -137,10 +137,10 @@ class Chart extends Component {
             // console.log(Push);
             for(i=0;i<7;i++){
                 // data.push(Rates[i])
-                console.log(Push)
-                let news=Number(darsad[i])+Push
-                console.log(news)
-                percents.push(news.toString())
+                console.log(Push);
+                let news=Number(darsad[i])+Push;
+                console.log(news);
+                percents.push(news.toString());
             }
             this.setState({
                 data,Rates,percents
@@ -158,20 +158,25 @@ class Chart extends Component {
         console.log(percents);
 
          const pieChartData = {
-            // labels: ['angry','sad','yay','wow','haha','love','like'],
-            labels: ['0','1','2','3','4','5','6'],
+            labels: ['angry','sad','yay','wow','haha','love','like'],
+            // labels: ['0','1','2','3','4','5','6'],پ
+            //  backgroundColor: "rgba(87, 106, 61, 0.1)"
+            //  borderColor: "#576a3d"
+        // #2a93d5
+
+
             datasets: [
                 {
                     label: '',
-                    borderColor: [colors.themeColor1, colors.themeColor2, colors.themeColor3,colors.themeColor4, colors.themeColor5, colors.themeColor6,colors.themeColor2],
+                    borderColor: ["#2a93d5", "#ad8c1b", "#c43d4b","#104978", "#5a5a5a", colors.themeColor6,"#922c88"],
                     backgroundColor: [
-                        colors.themeColor1_10,
-                        colors.themeColor2_10,
-                        colors.themeColor3_10,
-                        colors.themeColor4_10,
-                        colors.themeColor5_10,
+                        "rgba(42, 147, 213, 0.1)",
+                        "rgba(173, 140, 23, 0.1)",
+                        "rgba(196, 61, 75, 0.1)",
+                        "rgba(16, 73, 120, 0.1)",
+                        "rgba(90, 90, 90, 0.1)",
                         colors.themeColor6_10,
-                        colors.themeColor2_10,
+                        "rgba(146, 34, 146, 0.1)",
                     ],
                     borderWidth: 2,
                     data: this.state.data
@@ -255,8 +260,8 @@ class Chart extends Component {
                                                 <IntlMessages id="charts.shadow" />
                                             </CardSubtitle>
                                             <div className="chart-container">
-                                                {Rates? <BarChart shadow data={barChartData} /> :''}
-
+                                                {/*{Rates? <BarChart shadow data={barChartData} /> :''}*/}
+                                                <DoughnutChart shadow data={pieChartData} />
                                                 {/*<PieChart shadow data={pieChartData} />*/}
                                             </div>
                                         </Colxx>
