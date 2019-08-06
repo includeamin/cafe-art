@@ -169,16 +169,22 @@ class CommentsRow extends Component {
                     onClick={() => toggleAccordion(index)}
                     aria-expanded={accordion}
                 >
+                    {/*<FormikCustomCheckbox*/}
+                    {/*name="checkboxCustomSingle"*/}
+                    {/*value={seen}*/}
+                    {/*label=""*/}
+                    {/*onChange={() => seen}*/}
+                    {/*onBlur={() => seen}*/}
+                    {/*/>*/}
 
-                    <span className='d-flex align-content-center ' onClick={this.checkedFunc.bind(this)}>
-                        {<FormikCustomCheckbox
-                            name="checkboxCustomSingle"
-                            value={seen}
-                            label=""
-                            onChange={() => seen}
-                            onBlur={() => seen}
-                        />}
+                    <span className='d-flex align-content-center white ' onClick={this.checkedFunc.bind(this)}>
+                        {
 
+                            seen?<span className='dot-unselect mr-3'></span>:<span className='dot-select mr-2'></span>
+
+
+
+                        }
                         {Name}
                         <span className="d-flex ml-auto ">
                         <FacebookEmoji type={emoji} size="xs"/>

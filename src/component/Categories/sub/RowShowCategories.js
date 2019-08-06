@@ -9,6 +9,9 @@ import NotificationManager from "../../../components/common/react-notifications/
 import {gregorian_to_jalali
 } from './../../functions/Functions';
 import DeleteModal from "../../DeleteModal";
+import RowEditItem from "../../Items/sub/RowShowItem/RowEditItem";
+import AddGalleryItem from "../../Items/twoStepAddItem/AddGalleryItem";
+import RoweditCategories from "./RoweditCategories";
 
 var classNames = require('classnames');
 
@@ -18,7 +21,7 @@ class RowShowCategories extends Component {
         this.state={
             title:"title",
             Rank: 1,
-            newDateCreate:null,
+            newDateCreate:null,edit:true,
             // comment:25,
             // like:27,
             modal:false,
@@ -105,78 +108,118 @@ class RowShowCategories extends Component {
             console.log(error)});
         // console.log();
     }
+    handelEdit(){
+        this.setState(prevState => ({
+            edit:!prevState.edit
+        }))
+        let id='editComponent';
+        const $el = document.getElementById(`${id}`);
+        // console.log($el)
+        const duration = 2;
+        const from = { opacity: 0};
+        TweenMax.to($el, duration, from);
+        // setTimeout(() => {
+        //     $el.remove();
+        // }, 2000)
+
+    }
+
+    GetBackToMain(value){
+        console.log('value:  '+value)
+        if (value === true){
+            console.log('we edit some fechture');
+            window.location.reload()
+
+        } else {
+            this.setState({
+                edit:true
+            })
+            console.log('we didnt edit some fechture');
+        }
+    }
 
     render() {
 
         let { Title, RowId,IconUrl,ImageUrl,Created_at}=this.props.input;
-        let{newDateCreate}=this.state;
+        let{newDateCreate,edit}=this.state;
         console.log(this.props.input.RowId);
+        console.log(this.props.input._id);
 
         let {index}=this.props;
         return (
-            <div className='w-100' id={RowId} dir='rtl'>
-                <Card>
-                    <div className='d-flex justify-content-around mt-2 col-12'>
-                        <div className='col-6'>
-                            <div  className='d-flex justify-content-center mt-3'>
-                                <IntlMessages id='عکس'/>
-                            </div>
-                            <img
-                                src={IconUrl}
-                                alt={index}
-                                className='w-100 br05 m-2 imgHeight20vh'
-                            />
+            <div>
+                {
+                    edit === true ?
+                        <div className='w-100' id={RowId} dir='rtl'>
+                            <Card>
+                                <div className='d-flex justify-content-around mt-2 col-12'>
+                                    <div className='col-6'>
+                                        <div className='d-flex justify-content-center mt-3'>
+                                            <IntlMessages id='عکس'/>
+                                        </div>
+                                        <img
+                                            src={IconUrl}
+                                            alt={index}
+                                            className='w-100 br05 m-2 imgHeight20vh'
+                                        />
 
 
+                                    </div>
+
+                                    <div className='col-6'>
+                                        <div className='d-flex justify-content-center mt-3'>
+                                            <IntlMessages id='آیکون'/>
+                                        </div>
+                                        <img
+                                            src={ImageUrl}
+                                            alt={index}
+                                            className='w-100 br05 m-2 imgHeight20vh'
+                                        />
+
+                                    </div>
+                                </div>
+                                <div className='clearfix'></div>
+                                <CardBody>
+                                    <div className="col-12 ">
+                                        <div className="col-12">
+                                            <RowShowShow label={"عنوان"} value={Title}/>
+                                        </div>
+                                        <div className="col-12">
+                                            <RowShowShow label={"رتبه"} value={RowId}/>
+                                        </div>
+                                        <div className="col-12">
+                                            <RowShowShow label={"تاریخ"} value={newDateCreate}/>
+                                        </div>
+                                    </div>
+
+                                    {/*<footer>*/}
+                                    {/*<p className="text-muted text-small mb-0 font-weight-light float-right ">*/}
+                                    {/*{Created_at}*/}
+                                    {/*</p>*/}
+                                    {/*</footer>*/}
+                                </CardBody>
+                                <span className=' badge-danger deleteBadge' onClick={this.toggle}>حذف</span>
+                                <span className=' badge-warning editBadge2' onClick={this.handelEdit.bind(this)}>
+                                         ویرایش
+                                    </span>
+                            </Card>
+                            <DeleteModal modal={this.state.modal} toggle={this.toggle}
+                                         handleDelete={this.handleDelete.bind(this)} header={'حذف دسته بندی'}/>
 
                         </div>
+                        :
+                        <div className='w-100' id='editComponent'>
+                            <RoweditCategories Title={Title} Rank={RowId} id={this.props.input._id}
 
-                        <div className='col-6'>
-                            <div  className='d-flex justify-content-center mt-3'>
-                                <IntlMessages id='آیکون'/>
-                            </div>
-                            <img
-                                src={ImageUrl}
-                                alt={index}
-                                className='w-100 br05 m-2 imgHeight20vh'
-                            />
+                                         GetBackToMain={this.GetBackToMain.bind(this)}/>
 
                         </div>
-                    </div>
-                    <div className='clearfix'></div>
-                    <CardBody>
-                        <div className="col-12 ">
-                            <div className="col-12">
-                                <RowShowShow label={"عنوان"} value={Title} />
-                            </div>
-                            <div className="col-12">
-                                <RowShowShow label={"رتبه"} value={RowId} />
-                            </div>
-                            <div className="col-12">
-                                <RowShowShow label={"تاریخ"} value={newDateCreate} />
-                            </div>
-                        </div>
-
-                        {/*<footer>*/}
-                            {/*<p className="text-muted text-small mb-0 font-weight-light float-right ">*/}
-                                {/*{Created_at}*/}
-                            {/*</p>*/}
-                        {/*</footer>*/}
-                    </CardBody>
-                    <span
-                        className=' badge-danger deleteBadge' onClick={this.toggle}
-                        // className={`badge badge-danger badge-${
-                        //     'theme-2'
-                        //     } position-absolute ${
-                        //     "badge-top-left-4"
-                        //     }`}
-                    >
-                  حذف
-                </span>
-                </Card>
-                <DeleteModal modal={this.state.modal} toggle={this.toggle} handleDelete={ this.handleDelete.bind(this)} header={'حذف دسته بندی'}/>
-
+                }
             </div>
+
+
+
+
         );
     }
 }

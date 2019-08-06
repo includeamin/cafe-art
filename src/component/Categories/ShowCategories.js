@@ -41,7 +41,7 @@ class ShowCategories extends Component {
         return (
             <div className="w-100 ">
                 <Row>
-                    {modes!==null?modes.map((todo ,index)=><div className="col-sm-12 col-md-4 col-lg-3 mt-3" key={index}><RowShowCategories key={index} input={todo} index={index} img={breakfast}/></div> ):""}
+                    {modes!==null?modes.map((todo ,index)=><div className="col-sm-12 col-md-4 mt-3" key={index}><RowShowCategories key={index} input={todo} index={index} img={breakfast}/></div> ):""}
                 </Row>
             </div>
 

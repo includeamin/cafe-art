@@ -12,6 +12,9 @@ import NotificationManager from "../../../../components/common/react-notificatio
 // import ReactSiema from "./../../../../components/ReactSiema/lib";
 import {formatNumber} from './../../../functions/Functions'
 import DeleteModal from "../../../DeleteModal";
+import RowEditItem from "./RowEditItem";
+import AddItem from "../AddItem";
+import AddGalleryItem from "../../twoStepAddItem/AddGalleryItem";
 var classNames = require('classnames');
 
 // Gallery: (2) [{…}, {…}]
@@ -29,11 +32,11 @@ class RowShowItem extends Component {
         this.state={
             title:"title",
             Rank: 1,
-            data:"97/8/7",
-            comment:10,
-            like:27,
+            price:'',
+            edit:true,
             modal:false,
             imgHover:false,
+            step1:true,id:null,itemName:null,
             liClasses:classNames({
                 // 'border-0': true,
                 'col-5': true,
@@ -41,8 +44,16 @@ class RowShowItem extends Component {
             })
         }
     }
+    componentDidMount(){
+        let{Title,price,RowId}=this.props.input;
+        this.setState({
+            title:Title,
+            Rank:RowId,
+            price
+        })
+    }
     toggle = () => {
-        console.log("toggel");
+        // console.log("toggel");
         this.setState(prevState => ({
             modal: !prevState.modal
         }));
@@ -51,7 +62,7 @@ class RowShowItem extends Component {
         let {_id}=this.props.input;
 
         let ItemId=_id;
-        console.log(ItemId);
+        // console.log(ItemId);
 
         let headers = {
             'Token': `${Const.Token}`,
@@ -104,10 +115,48 @@ class RowShowItem extends Component {
             console.log(error)});
 
     }
+    handelEdit(){
+        this.setState(prevState => ({
+           edit:!prevState.edit
+        }))
+        let id='editComponent';
+        const $el = document.getElementById(`${id}`);
+        // console.log($el)
+        const duration = 2;
+        const from = { opacity: 0};
+        TweenMax.to($el, duration, from);
+        // setTimeout(() => {
+        //     $el.remove();
+        // }, 2000)
+
+    }
+    handelGoTwoStep2(item,value){
+        this.setState({
+            id:item,
+            itemName:value,
+            step1:false
+        });
+        // console.log("we are in step two")
+        // console.log(item);
+        // console.log(value);
+    }
+    GetBackToMain(value){
+        console.log('value:  '+value)
+        if (value === true){
+            console.log('we edit some fechture');
+            window.location.reload()
+
+        } else {
+            this.setState({
+                edit:true
+            })
+            console.log('we didnt edit some fechture');
+        }
+    }
 
     render() {
-
-        let { title, Rank,data,comment,like}=this.state;
+        // id:null,itemName:null,
+        let { title,Rank,edit,price,id,itemName}=this.state;
         let {index , input}=this.props;
         console.log(input._id);
 
@@ -115,101 +164,93 @@ class RowShowItem extends Component {
 
         // let {index , img}=this.props;
         return (
-            <div className='w-100' id={input._id} dir='rtl' >
-                <Card>
-                    <div className=' d-flex justify-content-between w-100  mt-2 col-12 '>
+            <div>
+                {
+                    edit===true ?
+                        <div className='w-100' id={input._id} dir='rtl' >
+                            <Card>
+                                <div className=' d-flex justify-content-between w-100  mt-2 col-12 '>
 
-                        <div className='col-6'>
-                            <div className='d-flex justify-content-center mt-3'>
-                                <IntlMessages id='آیکون'/>
-                            </div>
-                            <img
-                                src={input.ItemImageUrl}
-                                alt={index}
-                                className='w-100 br05 m-2 imgHeight20vh '
-                            />
+                                    <div className='col-6'>
+                                        <div className='d-flex justify-content-center mt-3'>
+                                            <IntlMessages id='آیکون'/>
+                                        </div>
+                                        <img
+                                            src={input.ItemImageUrl}
+                                            alt={index}
+                                            className='w-100 br05 m-2 imgHeight20vh '
+                                        />
+                                    </div>
+
+                                    <div className='col-6'>
+                                        <div className='d-flex justify-content-center mt-3'>
+                                            <IntlMessages id='عکس'/>
+                                        </div>
+                                        <img
+                                            src={input.MenuImageUrl}
+                                            alt={index}
+                                            className='w-100 br05 m-2 imgHeight20vh '
+                                        />
+                                    </div>
+
+                                </div>
+
+
+                                <div className='clearfix'></div>
+
+                                <CardBody>
+                                    <div className="col-12 d-flex ">
+                                        <div className="col-6  fontFamimily9em">
+                                            <RowShowShow label={"عنوان"} value={input.Title} />
+                                        </div>
+                                        <div className="col-6 fontFamimily9em ">
+                                            <RowShowShow label={"دسته بندی"} value={input.RowId} />
+                                        </div>
+                                    </div>
+                                    <div className="col-12 d-flex mt-2 fontFamimily9em">
+                                        <div className="col-6">
+                                            <RowShowShow label={"نظرات"} value={input.Comments?input.Comments.length:0} />
+                                        </div>
+
+                                        <div className="col-6 fontFamimily9em">
+                                            <RowShowShow label={"پسندیدن"} value={input.LikesCount} />
+                                        </div>
+                                    </div>
+                                    <div className="col-12 d-flex mt-2">
+                                        <div className="col-12 fontFamimily9em">
+                                            <RowShowShow label={"قیمت"} value={formatNumber(input.price)} />
+                                        </div>
+
+
+                                    </div>
+                                    <CarouselEdite  data={input.Gallery}/>
+
+                                    <span className=' badge-danger deleteBadge2' onClick={this.toggle}>
+                                         پاک کردن
+                                    </span>
+                                    <span className=' badge-warning editBadge2' onClick={this.handelEdit.bind(this)}>
+                                         ویرایش
+                                    </span>
+                                </CardBody>
+
+                            </Card>
+                            <DeleteModal modal={this.state.modal} toggle={this.toggle} handleDelete={this.DeleteItem.bind(this)} header={'حذف آیتم'}/>
+
+
+                        </div> :
+
+                        <div className='w-100' id='editComponent'>
+                            <RowEditItem Title={title} RowId={Rank} price={price} id={input._id}
+                                               handelGoTwoStep2={this.handelGoTwoStep2.bind(this)}  GetBackToMain={this.GetBackToMain.bind(this)}/>
+                         <AddGalleryItem id={input._id} itemName={input.Title}/>
+
                         </div>
 
-                        <div className='col-6'>
-                            <div className='d-flex justify-content-center mt-3'>
-                                <IntlMessages id='عکس'/>
-                            </div>
-                            <img
-                                src={input.MenuImageUrl}
-                                alt={index}
-                                className='w-100 br05 m-2 imgHeight20vh '
-                            />
-                        </div>
-
-                    </div>
-
-
-                    <div className='clearfix'></div>
-
-                    <CardBody>
-                        <div className="col-12 d-flex ">
-                            <div className="col-6  fontFamimily9em">
-                                <RowShowShow label={"عنوان"} value={input.Title} />
-                            </div>
-                            <div className="col-6 fontFamimily9em ">
-                                <RowShowShow label={"دسته بندی"} value={input.RowId} />
-                            </div>
-                        </div>
-                        <div className="col-12 d-flex mt-2 fontFamimily9em">
-                            <div className="col-6">
-                                <RowShowShow label={"نظرات"} value={input.Comments?input.Comments.length:0} />
-                            </div>
-
-                            <div className="col-6 fontFamimily9em">
-                                <RowShowShow label={"پسندیدن"} value={input.LikesCount} />
-                            </div>
-                        </div>
-                        <div className="col-12 d-flex mt-2">
-                            <div className="col-12 fontFamimily9em">
-                                <RowShowShow label={"قیمت"} value={formatNumber(input.price)} />
-                            </div>
-
-
-                        </div>
-                        <CarouselEdite  data={input.Gallery}/>
-
-                        {/*<footer>*/}
-                            {/*<p className="text-muted text-small mb-0 font-weight-light">*/}
-                                {/*{data}*/}
-                            {/*</p>*/}
-                        {/*</footer>*/}
-                        <span
-                            className=' badge-danger deleteBadge2' onClick={this.toggle}
-                            // className={`badge badge-danger badge-${
-                            //     'theme-2'
-                            //     } position-absolute ${
-                            //     "badge-top-left-4"
-                            //     }`}
-                        >
-                  پاک کردن
-                </span>
-                    </CardBody>
-
-                </Card>
-                <DeleteModal modal={this.state.modal} toggle={this.toggle} handleDelete={this.DeleteItem.bind(this)} header={'حذف آیتم'}/>
-
-                {/*<Modal isOpen={this.state.modal} toggle={this.toggle} dir='rtl'>*/}
-                    {/*<ModalHeader toggle={this.toggle}>*/}
-                        {/*<IntlMessages id="حذف آیتم" />*/}
-                    {/*</ModalHeader>*/}
-                    {/*<ModalBody>*/}
-                        {/*آیا شما مطمئن هستین ؟*/}
-                    {/*</ModalBody>*/}
-                    {/*<ModalFooter>*/}
-                        {/*<Button color="primary" onClick={this.DeleteItem.bind(this)}>*/}
-                            {/*پاک کردن*/}
-                        {/*</Button>{" "}*/}
-                        {/*<Button color="secondary" onClick={this.toggle}>*/}
-                            {/*کنسل*/}
-                        {/*</Button>*/}
-                    {/*</ModalFooter>*/}
-                {/*</Modal>*/}
+                }
             </div>
+
+
+
         );
     }
 }

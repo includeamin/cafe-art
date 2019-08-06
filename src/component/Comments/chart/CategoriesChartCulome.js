@@ -125,7 +125,6 @@ class CategoriesChartCulome extends Component {
                                             </CardSubtitle>
                                             <div className="chart-container">
                                                 <BarChart shadow data={barChartData} />
-
                                                 {/*<PieChart shadow data={pieChartData} />*/}
                                             </div>
                                         </Colxx>

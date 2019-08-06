@@ -60,7 +60,6 @@ class Categories extends Component {
             src2: null, crop2: '', imgIcon2: null,
         }
     }
-
     onSubmit= e => {
 
         let {crop2,crop}=this.state;
@@ -69,7 +68,26 @@ class Categories extends Component {
 
 
     };
+    handelCrop = (src,crop,imgIcon) => {
 
+        console.log(crop);
+
+        this.setState({
+            src,crop,imgIcon
+        });
+
+
+    };
+    handelCrop2 = (src2,crop2,imgIcon2) => {
+
+        console.log(crop2);
+
+        this.setState({
+            src2,crop2,imgIcon2
+        });
+
+
+    };
     handleSubmit = (values, { setSubmitting }) => {
         // this.setState({
         //     loaderActive:true
@@ -136,31 +154,6 @@ class Categories extends Component {
 
 
     };
-
-
-
-    handelCrop = (src,crop,imgIcon) => {
-
-        console.log(crop);
-
-        this.setState({
-            src,crop,imgIcon
-        });
-
-
-    };
-    handelCrop2 = (src2,crop2,imgIcon2) => {
-
-        console.log(crop2);
-
-        this.setState({
-            src2,crop2,imgIcon2
-        });
-
-
-    };
-
-
 
     render() {
         const { crop, croppedImageUrl, src,crop2, croppedImageUrl2, src2 } = this.state;

@@ -1,7 +1,12 @@
 import React, {Component} from 'react';
-import { Formik, Form, Field } from "formik";
-import * as Yup from "yup";
+import * as Const from "../../../Const";
 import axios from "axios";
+import NotificationManager from "../../../../components/common/react-notifications/NotificationManager";
+import {Colxx} from "../../../../components/common/CustomBootstrap";
+import IntlMessages from "../../../../helpers/IntlMessages";
+import {Field, Form, Formik} from "formik";
+import AutoSuggestEdit from "../../AutoSuggestEdit";
+import CropComponent from "../../../CropComponent";
 
 import {
     Row,
@@ -10,34 +15,10 @@ import {
     FormGroup,
     Label,
     Button,
-    CardTitle
+    CardTitle,CustomInput,InputGroupAddon,InputGroup
 } from "reactstrap";
-import IntlMessages from "./../../../helpers/IntlMessages";
-import {Colxx} from "../../../components/common/CustomBootstrap";
-import NotificationManager from "../../../components/common/react-notifications/NotificationManager";
-
-import {GetCategories} from './../../../URL/GET';
-import CropComponent from "../../CropComponent";
-import * as Const from "../../Const";
-import SuggestCategoriesComponent from "../../SuggestCategoriesComponent";
-
-// import {FormikCustomRadioGroup} from "../../../containers/form-validations/FormikFields";
-
-// import {TweenMax} from "gsap/TweenMax";
-// import {base64StringtoFile,
-//     downloadBase64File,
-//     extractImageFileExtensionFromBase64,
-//     image64toCanvasRef} from './../../functions/Functions';
-// import AutoSuggestEdit from "../AutoSuggestEdit";
-// import Files from 'react-files'
-// import MultiFiles from "../MultiFile/MultiFiles";
-// import DropzoneExample from "../../../containers/forms/DropzoneExample";
-
-
-// const imageMaxSize = 1000000000 // bytes
-// const acceptedFileTypes = 'image/x-png, image/png, image/jpg, image/jpeg, image/gif';
-// const acceptedFileTypesArray = acceptedFileTypes.split(",").map((item) => {return item.trim()});
-
+import * as Yup from "yup";
+import SuggestCategoriesComponent from "../../../SuggestCategoriesComponent";
 const SignupSchema = Yup.object().shape({
     Title: Yup.string()
         .required("Title number is required!"),
@@ -46,17 +27,23 @@ const SignupSchema = Yup.object().shape({
 
 });
 
-class AddItem extends Component {
+class RowEditItem extends Component {
     constructor(props) {
         super(props);
 
         this.state={
-            src: null, crop: '', imgIcon: null,
-            src2: null, crop2: '', imgIcon2: null,suggest:null,fileName:null,
+            src: null, crop:null, imgIcon: null,
+            src2: null, crop2: null, imgIcon2: null,suggest:null,fileName:null,
             categories:[],option:[],files:[],categoriesList:{}, categoriesId:null,
-            categoriesName:null
+            categoriesName:null,itemId:null,isEdit:false
 
         }
+    }
+    componentDidMount(){
+        this.setState({
+            itemId:this.props.id
+        })
+        // console.log("id"+this.props.id)
     }
 
     handelCrop = (src,crop,imgIcon) => {
@@ -89,6 +76,8 @@ class AddItem extends Component {
     }
 
     handleSubmit = (values, { setSubmitting }) => {
+
+        // console.log('submit')
         // this.setState({
         //     loaderActive:true
         // });
@@ -97,51 +86,57 @@ class AddItem extends Component {
 
         };
 
-        console.log(payload);
-        let {crop2,crop,files,suggest,categoriesId,categoriesName}=this.state;
+        // console.log(payload);
+        let {crop2,crop,files,suggest,categoriesId,categoriesName,itemId}=this.state;
+        let ItemId=this.props.id;
+
         let headers = {
             'Token':`${Const.Token}`,
             'Id': `${Const.ID}`
         };
 
-        console.log('payload.Title:'+payload.Title+'payload.Price:'+payload.Price);
+        // console.log('payload.Title:'+payload.Title+'payload.Price:'+payload.Price);
 
         let BODY={'Title': payload.Title,
             'RowId': categoriesId,
             'CategoryName':categoriesName,
             'Price':payload.Price,
             'MenuImageUrl': crop,
-            'Gallery': files,
+            'ItemId': itemId,
             'ItemImageUrl': crop2
         };
+        console.log(BODY)
 
-        axios.post(`${Const.Amin_URL}admin/item/add` ,BODY, {headers:headers}).then(responsive=>
+        axios.post(`${Const.Amin_URL}admin/item/modify` ,BODY, {headers:headers}).then(responsive=>
         {
             // this.setState({
             //     loaderActive:false
             // });
             const {Description,State}=responsive.data;
-            let DES=JSON.parse(Description);
+            // let DES=JSON.parse(Description);
 
             if(State){
                 NotificationManager.success(
-                    "congratulation",
-                    "your categories added",
+                    "موفق شدید!",
+                    "به روز رسانی آیتم با موفقیت ثبت شد",
                     3000,
                     null,
                     null,
                     "success"
                 );
+                this.setState({
+                    isEdit:true
+                })
 
-                this.props.handelGoTwoStep2(DES._id,DES.name);
+                // this.props.handelGoTwoStep2(DES._id,DES.name);
             }else {
                 NotificationManager.error(
-                    " new game currency didnt add",
+                    " عملیات ناموفق!",
                     Description,
                     3000,
                     null,
                     null,
-                    "success"
+                    "error"
                 );
             }
 
@@ -154,8 +149,12 @@ class AddItem extends Component {
             // });
             console.log(error)});
     };
+    handelBack(){
+        let {isEdit}=this.state
+        this.props.GetBackToMain(isEdit)
+    }
     render() {
-        const { crop, croppedImageUrl, src,crop2, croppedImageUrl2, src2 ,option} = this.state;
+        const { crop, croppedImageUrl, src,crop2, croppedImageUrl2, src2 ,option,isEdit} = this.state;
         // const option=[{'name':'breakfast'},{'name':'dinner'},{'name':'lunch'},{'name':'hot drink'},{'name':'cold Drink'}];
 
         return (
@@ -171,9 +170,7 @@ class AddItem extends Component {
 
                             <Formik
                                 initialValues={{
-
-                                    Title: "",Price:''
-
+                                    Title: this.props.Title,Price:this.props.price
                                 }}
                                 validationSchema={SignupSchema}
                                 onSubmit={this.handleSubmit.bind(this)}
@@ -219,9 +216,10 @@ class AddItem extends Component {
                                             </div>
                                             <div className="col-sm-4 rowInput">
                                                 <SuggestCategoriesComponent label='itemList' GetSuggestValue={this.GetSuggestValue.bind(this)}/>
-
                                             </div>
                                         </div>
+
+
                                         <div className="w-100 d-flex mt-3 ">
                                             <div className="col-6">
                                                 <CropComponent label={'آیکون'} onCropImg={this.handelCrop}/>
@@ -231,9 +229,15 @@ class AddItem extends Component {
                                             </div>
                                         </div>
 
-                                        <Button color="primary" type="submit" className="col-2 rowInput">
-                                            ارسال
-                                        </Button>
+                                        <div className='d-flex w-100 mt-3'>
+                                            <Button color="primary" type="submit" className="col-3 rowInput">
+                                                ارسال
+                                            </Button>
+
+                                            <Button  className="col-3  btn-warning mr-auto  br05 d-flex justify-content-center align-items-center" onClick={this.handelBack.bind(this)}>
+                                                برگشت
+                                            </Button>
+                                        </div>
                                     </Form>
                                 )}
                             </Formik>
@@ -251,4 +255,4 @@ class AddItem extends Component {
     }
 }
 
-export default AddItem;
+export default RowEditItem;

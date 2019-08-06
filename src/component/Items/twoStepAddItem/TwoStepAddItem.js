@@ -21,12 +21,7 @@ class TwoStepAddItem extends Component {
         console.log(item);
         console.log(value);
     }
-    // handelGoTwoStep2(){
-    //
-    //     this.setState({
-    //         step1:false
-    //     })
-    // }
+
 
 
     render() {
@@ -35,7 +30,6 @@ class TwoStepAddItem extends Component {
             <div>
                 {
                     step1?<AddItem handelGoTwoStep2={this.handelGoTwoStep2.bind(this)} />:<AddGalleryItem id={id} itemName={itemName}/>
-
                 }
             </div>
         );

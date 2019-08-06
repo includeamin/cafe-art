@@ -26,7 +26,7 @@ class SuggestCategoriesComponent extends Component {
         axios.get(`${Const.Amin_URL}categories` , {headers:headers}).then(responsive=>
         {
             const {Description}=responsive.data;
-            console.log(Description);
+            // console.log(Description);
             let categories=JSON.parse(Description);
             let index;
 
@@ -34,7 +34,7 @@ class SuggestCategoriesComponent extends Component {
             categories.map(item => {
                 option.push({name: item.Title})
             });
-            console.log(option)
+            // console.log(option)
 
             let categoriesList = {};
 
