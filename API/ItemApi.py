@@ -19,8 +19,9 @@ def get_items(row_id):
 @item_route.route('/admin/test', methods=['GET'])
 @login_required
 def test():
-        return Tools.Result(True, 'test')
-        
+    return Tools.Result(True, 'test')
+
+
 @item_route.route('/admin/items', methods=['GET'])
 @login_required
 def get_all_items():
@@ -48,6 +49,24 @@ def add_item():
         return Tools.Result(False, ex.args)
 
 
+@item_route.route('/admin/item/modify', methods=['POST'])
+@login_required
+@json_body_required
+@check_form_json_key(['ItemId', 'RowId', 'Title', 'Price', 'MenuImageUrl', 'ItemImageUrl'])
+def modify_item():
+    try:
+        data = request.get_json()
+        return Item.modify_item(data['ItemId'],
+                                data['RowId'],
+                                data['Title'],
+                                data['Price'],
+                                data['MenuImageUrl'],
+                                data['ItemImageUrl']
+                                )
+    except Exception as ex:
+        return Tools.Result(False, ex.args)
+
+
 @item_route.route('/admin/item/delete', methods=['POST'])
 @login_required
 @json_body_required
@@ -68,7 +87,7 @@ def add_image_gallery():
     try:
         data = request.get_json()
         return Item.add_image_gallery(data['ItemId'],
-                               data['Gallery'])
+                                      data['Gallery'])
     except Exception as ex:
         return Tools.Result(False, ex.args)
 
@@ -184,15 +203,28 @@ def get_all_comments():
     except Exception as ex:
         return Tools.Result(False, ex.args)
 
+
 @item_route.route('/admin/statistics/item/<item_id>')
 @login_required
 def get_rate_distribution(item_id):
-        try:
-                return Item.get_rate_distribution(item_id)
-        except Exception as ex:
-                import traceback
-                traceback.print_exc()
-                return Tools.Result(False, ex.args)
+    try:
+        return Item.get_rate_distribution(item_id)
+    except Exception as ex:
+        import traceback
+        traceback.print_exc()
+        return Tools.Result(False, ex.args)
+
+
+@item_route.route('/admin/statistics/category/<category_id>')
+@login_required
+def get_average_rate(category_id):
+    try:
+        return Item.get_average_rate(category_id)
+    except Exception as ex:
+        import traceback
+        traceback.print_exc()
+        return Tools.Result(False, ex.args)
+
 
 @item_route.route('/admin/comment/seen', methods=['POST'])
 @login_required

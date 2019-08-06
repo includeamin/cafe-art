@@ -3,6 +3,7 @@ from Classes.Tools import Tools
 from bson import ObjectId
 from datetime import datetime
 
+
 class Item:
 
     def __init__(self, row_id, title, price, menu_image_url, item_image_url, gallery):
@@ -37,10 +38,43 @@ class Item:
             'name': title
         }))
 
+    @staticmethod
+    def modify_item(item_id, row_id=None, title=None, price=None, menu_image_url=None, item_image_url=None):
+
+        # make sure at least on attribute is not null
+        if row_id is None and title is None and price is None and menu_image_url is None and item_image_url is None:
+            return Tools.Result(False, Tools.errors('NA'))
+
+        valid = item_collection.find_one({'_id': ObjectId(item_id)}, {'_id': 1}) is not None
+
+        if not valid:
+            return Tools.Result(False, Tools.errors('INF'))
+
+        updating_values = {}
+        if title is not None:
+            updating_values['Title'] = title
+        if row_id is not None:
+            updating_values['RowId'] = row_id
+        if price is not None:
+            updating_values['Price'] = price
+        if menu_image_url is not None:
+            updating_values['MenuImageUrl'] = menu_image_url
+        if item_image_url is not None:
+            updating_values['ItemImageUrl'] = item_image_url
+
+
+        item_collection.update_one(
+            {'_id': ObjectId(item_id)},
+            {
+                '$set': {**updating_values}
+            }
+        )
+        
 
     @staticmethod
     def delete_item(item_id):
-        valid = item_collection.find_one({'_id': ObjectId(item_id)}) is not None
+        valid = item_collection.find_one(
+            {'_id': ObjectId(item_id)}) is not None
 
         if not valid:
             return Tools.Result(False, Tools.errors('INF'))
@@ -94,7 +128,8 @@ class Item:
 
     @staticmethod
     def get_gallery_images(item_id):
-        item = item_collection.find_one({'_id': ObjectId(item_id)}, {'Gallery': 1})
+        item = item_collection.find_one(
+            {'_id': ObjectId(item_id)}, {'Gallery': 1})
 
         if item is None:
             return Tools.Result(False, Tools.errors('INF'))
@@ -130,13 +165,15 @@ class Item:
     @staticmethod
     def like_item(item_id, user_id):
 
-        valid = item_collection.find_one({'_id': ObjectId(item_id)}) is not None
+        valid = item_collection.find_one(
+            {'_id': ObjectId(item_id)}) is not None
 
         if not valid:
             return Tools.Result(False, Tools.errors('INF'))
 
         # make sure user did not liked the item before
-        liked_before = item_collection.find_one({'_id': ObjectId(item_id), 'Likes.UserId': user_id}) is not None
+        liked_before = item_collection.find_one(
+            {'_id': ObjectId(item_id), 'Likes.UserId': user_id}) is not None
 
         if liked_before:
             return Tools.Result(False, Tools.errors('IAE'))
@@ -154,13 +191,15 @@ class Item:
 
     @staticmethod
     def unlike_item(item_id, user_id):
-        valid = item_collection.find_one({'_id': ObjectId(item_id)}) is not None
+        valid = item_collection.find_one(
+            {'_id': ObjectId(item_id)}) is not None
 
         if not valid:
             return Tools.Result(False, Tools.errors('INF'))
 
         # make sure user did not liked the item before
-        liked_before = item_collection.find_one({'_id': ObjectId(item_id), 'Likes.UserId': user_id}) is not None
+        liked_before = item_collection.find_one(
+            {'_id': ObjectId(item_id), 'Likes.UserId': user_id}) is not None
 
         if not liked_before:
             return Tools.Result(False, Tools.errors('INF'))
@@ -178,8 +217,9 @@ class Item:
 
     @staticmethod
     def comment_on_item(item_id, user_id, comment, rate):
-        
-        valid = item_collection.find_one({'_id': ObjectId(item_id)}) is not None
+
+        valid = item_collection.find_one(
+            {'_id': ObjectId(item_id)}) is not None
 
         if not valid:
             return Tools.Result(False, Tools.errors('INF'))
@@ -211,7 +251,8 @@ class Item:
 
     @staticmethod
     def get_comments_on_item(item_id):
-        item_object = item_collection.find_one({'_id': ObjectId(item_id)}, {'Comments': 1})
+        item_object = item_collection.find_one(
+            {'_id': ObjectId(item_id)}, {'Comments': 1})
 
         if item_object is None:
             return Tools.Result(False, Tools.errors('INF'))
@@ -219,7 +260,7 @@ class Item:
         comments = item_object['Comments']
 
         return Tools.Result(True, Tools.dumps(comments))
-    
+
     @staticmethod
     def get_all_comments():
         item_object = item_collection.find({}, {'Comments': 1})
@@ -227,14 +268,14 @@ class Item:
         comments = []
         for item in item_object:
             comments.append(item['Comments'])
-        
-        return Tools.Result(True, Tools.dumps(comments))
 
+        return Tools.Result(True, Tools.dumps(comments))
 
     @staticmethod
     def admin_saw_comment(comment_id):
 
-        valid = item_collection.find_one({'Comments.CommentId': ObjectId(comment_id)}, {'_id': 1}) is not None
+        valid = item_collection.find_one(
+            {'Comments.CommentId': ObjectId(comment_id)}, {'_id': 1}) is not None
 
         if not valid:
             return Tools.Result(False, Tools.errors('INF'))
@@ -253,7 +294,8 @@ class Item:
 
     @staticmethod
     def like_image_gallery(item_id, user_id, gallery_image_id):
-        valid = item_collection.find_one({'_id': ObjectId(item_id)}) is not None
+        valid = item_collection.find_one(
+            {'_id': ObjectId(item_id)}) is not None
 
         if not valid:
             return Tools.Result(False, Tools.errors('INF'))
@@ -292,7 +334,8 @@ class Item:
 
     @staticmethod
     def unlike_image_gallery(item_id, user_id, gallery_image_id):
-        valid = item_collection.find_one({'_id': ObjectId(item_id)}) is not None
+        valid = item_collection.find_one(
+            {'_id': ObjectId(item_id)}) is not None
 
         if not valid:
             return Tools.Result(False, Tools.errors('INF'))
@@ -333,10 +376,8 @@ class Item:
 
         return Tools.Result(True, 'd')
 
-
     @staticmethod
     def get_rate_distribution(item_id):
-        print('Called')
         item_object = item_collection.find_one(
             {'_id': ObjectId(item_id)}, {'Comments': 1})
 
@@ -363,3 +404,28 @@ class Item:
             'Total': total,
             'Rates': rates
         }))
+
+    @staticmethod
+    def get_average_rate(row_id):
+        items = item_collection.find(
+            {'RowId': row_id}, {'Comments': 1, 'Title': 1})
+
+        if items is None:
+            return Tools.Result(False, Tools.errors('INF'))
+
+        items_arr = []
+        for item in items:
+            items_arr.append(item)
+
+        items_rate_arr = {}
+        for item in items_arr:
+            sum_ = 0
+            total = len(item['Comments'])
+            if total == 0:
+                continue
+            for comment in item['Comments']:
+                sum_ += comment['Rate']
+            items_rate_arr[item['Title']] = sum_/total
+
+        return Tools.Result(True, Tools.dumps(items_rate_arr))
+
