@@ -32,6 +32,23 @@ def add_category():
         return Tools.Result(False, ex.args)
 
 
+@category_route.route('/admin/categories/modify', methods=['POST'])
+@login_required
+@json_body_required
+@check_form_json_key(['CategoryId'])
+def modify_category():
+    try:
+        data = request.get_json()
+        return Category.modify_category(data['CategoryId'],
+                                        data['RowId'] if 'RowId' in data else None,
+                                        data['Title'] if 'Title' in data else None,
+                                        data['IconUrl'] if 'IconUrl' in data else None,
+                                        data['ImageUrl'] if 'ImageUrl' in data else None
+                                        )
+    except Exception as ex:
+        return Tools.Result(False, ex.args)
+
+
 @category_route.route('/admin/categories/delete', methods=['POST'])
 @login_required
 @json_body_required

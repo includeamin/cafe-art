@@ -6,8 +6,9 @@ from datetime import datetime
 
 class Item:
 
-    def __init__(self, row_id, title, price, menu_image_url, item_image_url, gallery):
+    def __init__(self, row_id, category_name, title, price, menu_image_url, item_image_url, gallery):
         self.RowId = row_id
+        self.CategoryName = category_name
         self.Title = title
         self.MenuImageUrl = menu_image_url
         self.ItemImageUrl = item_image_url
@@ -16,10 +17,9 @@ class Item:
         self.Comments = []
         self.Gallery = gallery
         self.price = price
-        # TODO: manage price if necessary
 
     @staticmethod
-    def add_item(row_id, title, price, menu_image_url, item_image_url, gallery):
+    def add_item(row_id, category_name, title, price, menu_image_url, item_image_url, gallery):
 
         gallery_objects = []
         for item in gallery:
@@ -31,7 +31,7 @@ class Item:
             })
 
         result = item_collection.insert_one(Item(
-            row_id, title, price, menu_image_url, item_image_url, gallery_objects).__dict__)
+            row_id, category_name, title, price, menu_image_url, item_image_url, gallery_objects).__dict__)
 
         return Tools.Result(True, Tools.dumps({
             '_id': result.inserted_id,
@@ -39,10 +39,13 @@ class Item:
         }))
 
     @staticmethod
-    def modify_item(item_id, row_id=None, title=None, price=None, menu_image_url=None, item_image_url=None):
+    def modify_item(item_id, row_id=None, category_name=None, title=None, price=None, menu_image_url=None, item_image_url=None):
 
         # make sure at least on attribute is not null
-        if row_id is None and title is None and price is None and menu_image_url is None and item_image_url is None:
+        if row_id is None and category_name is None and title is None and price is None and menu_image_url is None and item_image_url is None:
+            return Tools.Result(False, Tools.errors('NA'))
+
+        if (row_id is None and category_name is not None) or (row_id is not None and category_name is None):
             return Tools.Result(False, Tools.errors('NA'))
 
         valid = item_collection.find_one({'_id': ObjectId(item_id)}, {'_id': 1}) is not None
@@ -55,6 +58,7 @@ class Item:
             updating_values['Title'] = title
         if row_id is not None:
             updating_values['RowId'] = row_id
+            updating_values['CategoryName'] = category_name
         if price is not None:
             updating_values['Price'] = price
         if menu_image_url is not None:
@@ -70,6 +74,7 @@ class Item:
             }
         )
         
+        return Tools.Result(True, 'd')
 
     @staticmethod
     def delete_item(item_id):

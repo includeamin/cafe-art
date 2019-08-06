@@ -39,6 +39,7 @@ def add_item():
     try:
         data = request.get_json()
         return Item.add_item(data['RowId'],
+                             data['CategoryName'],
                              data['Title'],
                              data['Price'],
                              data['MenuImageUrl'],
@@ -52,16 +53,18 @@ def add_item():
 @item_route.route('/admin/item/modify', methods=['POST'])
 @login_required
 @json_body_required
-@check_form_json_key(['ItemId', 'RowId', 'Title', 'Price', 'MenuImageUrl', 'ItemImageUrl'])
+@check_form_json_key(['ItemId'])
 def modify_item():
     try:
         data = request.get_json()
+
         return Item.modify_item(data['ItemId'],
-                                data['RowId'],
-                                data['Title'],
-                                data['Price'],
-                                data['MenuImageUrl'],
-                                data['ItemImageUrl']
+                                data['RowId'] if 'RowId' in data else None,
+                                data['CategoryName'] if 'CategoryName' in data else None,
+                                data['Title'] if 'Title' in data else None,
+                                data['Price'] if 'Price' in data else None,
+                                data['MenuImageUrl'] if 'MenuImageUrl' in data else None,
+                                data['ItemImageUrl'] if 'ItemImageUrl' in data else None
                                 )
     except Exception as ex:
         return Tools.Result(False, ex.args)
