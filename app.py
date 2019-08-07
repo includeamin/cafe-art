@@ -4,12 +4,14 @@ from flask_cors import CORS
 from API.CategoryApi import category_route
 from API.ItemApi import item_route
 from API.EventApi import event_route
+from API.AdminApi import admin_route
 
 app = Flask(__name__)
 
 app.register_blueprint(category_route)
 app.register_blueprint(item_route)
 app.register_blueprint(event_route)
+app.register_blueprint(admin_route)
 
 CORS(app)
 

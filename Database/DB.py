@@ -37,7 +37,8 @@ else:
         "UserCollection": "User",
         "Category": "Category",
         "Item": "Item",
-        "Event": "Event"
+        "Event": "Event",
+        "Admin": "Admin"
     }
 
 mongodb = pymongo.MongoClient(url)
@@ -46,3 +47,4 @@ UserDb = database[configs["UserCollection"]]
 category_collection = database[configs['Category']]
 item_collection = database[configs['Item']]
 event_collection = database[configs['Event']]
+admin_collection = database[configs['Admin']]

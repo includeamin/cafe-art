@@ -4,5 +4,6 @@
   "UserCollection": "User",
   "Category": "Category",
   "Item": "Item",
-  "Event": "Event"
+  "Event": "Event",
+  "Admin": "Admin"
 }
