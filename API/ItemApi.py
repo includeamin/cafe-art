@@ -229,6 +229,17 @@ def get_average_rate(category_id):
         return Tools.Result(False, ex.args)
 
 
+@item_route.route('/admin/statistics/item/top')
+@login_required
+def get_top_items():
+    try:
+        return Item.get_top_items()
+    except Exception as ex:
+        import traceback
+        traceback.print_exc()
+        return Tools.Result(False, ex.args)
+
+
 @item_route.route('/admin/comment/seen', methods=['POST'])
 @login_required
 @json_body_required

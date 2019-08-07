@@ -4,6 +4,7 @@ from Classes.Bridge import gen_token_authentication
 from cryptography.fernet import Fernet
 from bson import ObjectId
 
+
 class Admin:
 
     def __init__(self):
@@ -11,22 +12,50 @@ class Admin:
         self.LastName = None
         self.UserName = None
         self.Password = None
+        self.Key = None
+
+    @staticmethod
+    def register_admin():
+
+        firstname = 'admin'
+        lastname = 'admin'
+        username = 'admin'
+        password = 'admin'
+
+        key = Fernet.generate_key()
+        fernet = Fernet(key)
+
+        admin_collection.insert_one({
+            'UserName': username,
+            'Password': fernet.encrypt(password.encode()),
+            'FirstName': firstname,
+            'LastName': lastname,
+            'Key': key
+        })
+
+        return True
 
     @staticmethod
     def login(username, password):
         # make sure admin with specified username exists
-        admin_object = admin_collection.find_one({'UserName': username}, {'Password': 1})
+        admin_object = admin_collection.find_one(
+            {'UserName': username}, {'Password': 1})
 
         if admin_object is None:
             return Tools.Result(False, Tools.errors('INF'))
-        
-        fernet = Fernet(admin_object['_id'])
 
-        decrypted_password = fernet.decrypt(admin_object['Password'])
+        hash_key = str(admin_object['Key'])[2:-1]
+
+        encrypted_password = str(admin_object['Password'])[2:-1].encode()
+
+        cipher_suite = Fernet(hash_key)
+
+        decrypted_password = str(
+            cipher_suite.decrypt(encrypted_password))[2:-1]
 
         if decrypted_password != password:
             return Tools.Result(False, 'NA')
-        
+
         token = gen_token_authentication(admin_object['_id'])
 
         if token is False:
@@ -46,13 +75,15 @@ class Admin:
             return Tools.Result(False, Tools.errors('NA'))
 
         # make sure admin exists
-        exists = admin_collection.find_one({'_id': ObjectId(admin_id)},{'_id': 1}) is not None
+        exists = admin_collection.find_one(
+            {'_id': ObjectId(admin_id)}, {'_id': 1}) is not None
 
         if not exists:
             return Tools.Result(False, Tools.errors('INF'))
 
         # make sure specified username is unique
-        unique = admin_collection.find_one({'_id': ObjectId(admin_id)}, {'_id': 1}) is None
+        unique = admin_collection.find_one(
+            {'_id': ObjectId(admin_id)}, {'_id': 1}) is None
 
         if not unique:
             return Tools.Result(False, Tools.errors('NA'))
@@ -78,19 +109,25 @@ class Admin:
     def reset_password(admin_id, prev_password, new_password):
 
         # make sure admin exists
-        admin_object = admin_collection.find_one({'_id': ObjectId(admin_id)}, {'_id': 1})
+        admin_object = admin_collection.find_one(
+            {'_id': ObjectId(admin_id)}, {'_id': 1})
 
         if admin_object is None:
             return Tools.Result(False, Tools.errors('INF'))
 
-        fernet = Fernet(admin_object['_id'])
+        hash_key = str(admin_object['Key'])[2:-1]
 
-        decrypted_password = fernet.decrypt(admin_object['Password'])
+
+        encrypted_password = str(admin_object['Password'])[2:-1].encode()
+
+        cipher_suite = Fernet(hash_key)
+
+        decrypted_password = str(cipher_suite.decrypt(encrypted_password))[2:-1]
 
         if decrypted_password != prev_password:
             return Tools.Result(False, 'NA')
 
-        encrypted_password = fernet.encrypt(new_password)
+        encrypted_password = cipher_suite.encrypt(new_password)
 
         admin_collection.update_one(
             {'_id': ObjectId(admin_id)},

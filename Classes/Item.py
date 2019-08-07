@@ -2,6 +2,7 @@ from Database.DB import item_collection
 from Classes.Tools import Tools
 from bson import ObjectId
 from datetime import datetime
+from operator import itemgetter
 
 
 class Item:
@@ -48,7 +49,8 @@ class Item:
         if (row_id is None and category_name is not None) or (row_id is not None and category_name is None):
             return Tools.Result(False, Tools.errors('NA'))
 
-        valid = item_collection.find_one({'_id': ObjectId(item_id)}, {'_id': 1}) is not None
+        valid = item_collection.find_one(
+            {'_id': ObjectId(item_id)}, {'_id': 1}) is not None
 
         if not valid:
             return Tools.Result(False, Tools.errors('INF'))
@@ -66,14 +68,13 @@ class Item:
         if item_image_url is not None:
             updating_values['ItemImageUrl'] = item_image_url
 
-
         item_collection.update_one(
             {'_id': ObjectId(item_id)},
             {
                 '$set': {**updating_values}
             }
         )
-        
+
         return Tools.Result(True, 'd')
 
     @staticmethod
@@ -434,3 +435,35 @@ class Item:
 
         return Tools.Result(True, Tools.dumps(items_rate_arr))
 
+    @staticmethod
+    def get_top_items():
+        items = item_collection.find({}, {'Comments': 1, 'Title': 1, 'ItemImageUrl': 1})
+
+        if items is None:
+            return Tools.Result(False, Tools.errors('INF'))
+
+        items_arr = []
+        for item in items:
+            items_arr.append(item)
+
+        items_rate_arr = []
+        for item in items_arr:
+            sum_ = 0
+            total = len(item['Comments'])
+            if total == 0:
+                continue
+            for comment in item['Comments']:
+                sum_ += comment['Rate']
+            
+            items_arr.append({
+                'Title': item['Title'],
+                'AverageRate': sum_/total,
+                'Image': item['ItemImageUrl']
+            })
+        
+        # sort items based on average rate
+        sorted_items = sorted(items_rate_arr, key=itemgetter('AverageRate'), reverse=True)
+
+        upper_bound = min(5, len(items_rate_arr))
+
+        return Tools.Result(True, Tools.dumps(sorted_items[:upper_bound]))
