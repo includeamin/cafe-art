@@ -194,7 +194,7 @@ class CropComponent extends Component {
         return (
             <div>
                     <div  className=' w-100'>
-                        <InputGroup className="mb-3 ">
+                        <InputGroup className="mb-3  ">
                             <InputGroupAddon addonType="prepend">{label}</InputGroupAddon>
                             <CustomInput
                                 type="file"
@@ -202,6 +202,7 @@ class CropComponent extends Component {
                                 name={label}
                                 onChange={this.onSelectFile.bind(this)}
                                 label={this.state.imgIcon}
+                                className='fontFamimily11em'
                             />
                         </InputGroup>
                         {/*<input type="file" onChange={this.onSelectFile} />*/}
