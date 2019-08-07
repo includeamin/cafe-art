@@ -10,8 +10,8 @@ class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: "demo@gogo.com",
-      password: "gogo123"
+      email: "",
+      password: ""
     };
   }
   onUserLogin() {
@@ -19,6 +19,12 @@ class Login extends Component {
       this.props.loginUser(this.state, this.props.history);
     }
   }
+    handelChange(event){
+    let {name,value}=event.target;
+           this.setState({
+            [name]:value
+        })
+    }
 
   render() {
     return (
@@ -46,14 +52,15 @@ class Login extends Component {
               </CardTitle>
               <Form>
                 <Label className="form-group has-float-label mb-4">
-                  <Input type="email" defaultValue={this.state.email} />
-                  <IntlMessages id="user.email" />
+                  <Input type="text" name='email' value={this.state.email} onChange={this.handelChange.bind(this)}/>
+                  <IntlMessages id="user Name" />
                 </Label>
                 <Label className="form-group has-float-label mb-4">
-                  <Input type="password" />
+                  <Input type="password"  name='password' onChange={this.handelChange.bind(this)} value={this.state.password}/>
                   <IntlMessages
                     id="user.password"
-                    defaultValue={this.state.password}
+                    // defaultValue={this.state.password}
+
                   />
                 </Label>
                 <div className="d-flex justify-content-between align-items-center">

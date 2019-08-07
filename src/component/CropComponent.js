@@ -202,7 +202,7 @@ class CropComponent extends Component {
                                 name={label}
                                 onChange={this.onSelectFile.bind(this)}
                                 label={this.state.imgIcon}
-                                className='fontFamimily11em'
+                                className=''
                             />
                         </InputGroup>
                         {/*<input type="file" onChange={this.onSelectFile} />*/}

@@ -11,29 +11,141 @@ import {
     loginUserSuccess,
     registerUserSuccess
 } from './actions';
+import axios from "axios";
+import * as Const from "../../component/Const";
 
-const loginWithEmailPasswordAsync = async (email, password) =>
-    await auth.signInWithEmailAndPassword(email, password)
-        .then(authUser => authUser)
-        .catch(error => error);
+// function LoginCustomCafeArt(email, password){
+//     console.log(email)
+//     console.log(password)
+//     let BODY={'UserName ':email,
+//         'Password': password,
+//     };
+//     axios.post(`${Const.Amin_URL}admin/login`,BODY ).then(responsive=>
+//     {
+//         const {Description}=responsive.data;
+//         console.log(Description);
+//         return(Description)
+//     }).catch(error=>{console.log(error)
+//     return error
+//     });
+//
+// }
+
+const loginWithEmailPasswordAsync = async (email, password) =>{
+    console.log(email);
+    console.log(password);
+    let BODY={'UserName':email,
+        'Password': password,
+    };
+    // axios.post(`${Const.Amin_URL}admin/login`,BODY ).then(responsive=>
+    // {
+    //     const {Description}=responsive.data;
+    //     console.log(Description);
+    //     return(JSON.parse(Description) )
+    // }).catch(error=>{console.log(error)
+    //     return error
+    // });
+    const data = await axios.post(`${Const.Amin_URL}admin/login`,BODY )
+
+
+    // {code: "auth/user-not-found", message: "There is no user record corresponding to this identifier. The user may have been deleted."}
 
 
 
-function* loginWithEmailPassword({ payload }) {
-    const { email, password } = payload.user;
-    const { history } = payload;
-    try {
-        const loginUser = yield call(loginWithEmailPasswordAsync, email, password);
-        if (!loginUser.message) {
-            localStorage.setItem('user_id', loginUser.user.uid);
-            yield put(loginUserSuccess(loginUser));
-            history.push('/');
-        } else {
-            console.log('login failed :', loginUser.message)
-        }
-    } catch (error) {
-        console.log('login error : ', error)
+    //
+    // await auth.signInWithEmailAndPassword(email, password)
+    // //
+    // //
+    // // await LoginCustomCafeArt(email, password)
+    //     // .then(authUser => authUser)
+        .then(function(authUser) {
+            let {Description,State}=authUser.data;
+
+            // console.log(authUser.data)
+            // console.log(JSON.parse(Description))
+            console.log(Description);
+            if (State){
+                let ma={code: Description.ID, message: Description.Token}
+                return ma
+            }else{
+                let ma={code: 'dasjfhdskjfhdkjs', message: Description}
+                return ma
+            }
+
+        })
+        // .catch(error => error);
+        .catch(function(error) {
+            console.log(error)
+           var errorCode = error.code;
+           var errorMessage = error.message;
+           console.log(errorCode) ;
+           console.log(errorMessage) ;
+           if (errorCode === 'auth/wrong-password') {
+                 // alert('Wrong password.');
+              } else {
+                 // alert(errorMessage);
+              }
+          console.log(error);
+         });;
+
+};
+
+
+
+
+
+
+// function* loginWithEmailPassword({ payload }) {
+//     const { email, password } = payload.user;
+//     // console.log(payload.user);
+//     const { history } = payload;
+//     try {
+//         const loginUser = yield call(loginWithEmailPasswordAsync, email, password);
+//         console.log(loginUser);
+//         if (!loginUser.message) {
+//             // localStorage.setItem('user_id', loginUser.user.uid);
+//             localStorage.setItem('user_id', loginUser.Id);
+//             localStorage.setItem('user_Token', loginUser.Token);
+//             // yield put(loginUserSuccess(loginUser));
+//             history.push('/');
+//         } else {
+//             // console.log('login failed :', loginUser.message)
+//             console.log('login failed :', loginUser)
+//         }
+//     } catch (error) {
+//         console.log('login error : ', error)
+//     }
+// }
+function setitem(Id,Token) {
+    localStorage.setItem('user_id',Id);
+    localStorage.setItem('user_Token',Token);
+
+
+
+    if (localStorage.getItem('user_Token')) {
+        console.log('we can set localstorage ')
+        return true
+    } else {
+        return false
     }
+}
+
+async  function loginWithEmailPassword({ payload }) {
+        const { email, password } = payload.user;
+        const { history } = payload;
+    let BODY={'UserName':email,
+        'Password': password,
+    };
+    const data = await axios.post(`${Const.Amin_URL}admin/login`,BODY );
+    const Description = JSON.parse(data.data.Description) ;
+    const oprator=await setitem(Description.Id,Description.Token);
+    if (oprator) {
+        console.log('we are in ')
+        history.push('/')
+    }else {
+        console.log('fuck!!')
+    }
+    console.log(Description);
 }
 
 const registerWithEmailPasswordAsync = async (email, password) =>
