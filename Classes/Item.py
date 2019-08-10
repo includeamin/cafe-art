@@ -17,7 +17,7 @@ class Item:
         self.Likes = []
         self.Comments = []
         self.Gallery = gallery
-        self.price = price
+        self.Price = price
 
     @staticmethod
     def add_item(row_id, category_name, title, price, menu_image_url, item_image_url, gallery):
@@ -438,7 +438,7 @@ class Item:
     @staticmethod
     def get_top_items():
         items = item_collection.find({}, {'Comments': 1, 'Title': 1, 'ItemImageUrl': 1})
-
+        
         if items is None:
             return Tools.Result(False, Tools.errors('INF'))
 
@@ -455,10 +455,11 @@ class Item:
             for comment in item['Comments']:
                 sum_ += comment['Rate']
             
-            items_arr.append({
+            items_rate_arr.append({
                 'Title': item['Title'],
                 'AverageRate': sum_/total,
-                'Image': item['ItemImageUrl']
+                'Image': item['ItemImageUrl'],
+                'Total': total
             })
         
         # sort items based on average rate
@@ -467,3 +468,30 @@ class Item:
         upper_bound = min(5, len(items_rate_arr))
 
         return Tools.Result(True, Tools.dumps(sorted_items[:upper_bound]))
+
+    @staticmethod
+    def comments_seen():
+        items = item_collection.find({}, {'Comments': 1})
+
+        if items is None:
+            return Tools.Result(False, Tools.errors('INF'))
+
+        items_arr = []
+        for item in items:
+            items_arr.append(item)
+        
+        total = 0
+        seen = 0
+        for item in items_arr:
+            total += len(item['Comments'])
+            if total == 0:
+                continue
+            for comment in item['Comments']:
+                seen += 1 if comment['Seen'] is True else 0
+            
+        response = {
+            'Seen': seen,
+            'Total': total
+        }
+
+        return Tools.Result(True, Tools.dumps(response))

@@ -28,11 +28,20 @@ def logout():
         return Tools.Result(False, ex.args)
 
 
+@admin_route.route('/admin/info', methods=['GET'])
+@login_required
+def get_info():
+    try:
+        return Admin.get_info(request.headers['Id'])
+    except Exception as ex:
+        return Tools.Result(False, ex.args)
+
 @admin_route.route('/admin/info/update', methods=['POST'])
 @login_required
-@json_body_required
 def update_info():
     try:
+        print(str(request.get_json()))
+        return Tools.Result(True, 'd')
         data = request.get_json()
         return Admin.update_info(request.headers['Id'],
                                  data['Username'] if 'Username' in data else None,

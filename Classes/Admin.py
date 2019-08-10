@@ -89,6 +89,17 @@ class Admin:
             return Tools.Result(False, result)
 
     @staticmethod
+    def get_info(admin_id):
+            # make sure admin exists
+        info = admin_collection.find_one({'_id': ObjectId(admin_id)})
+
+        if info is None:
+            return Tools.Result(False, Tools.errors('INF'))
+
+        return Tools.Result(True, Tools.dumps(info))
+
+        
+    @staticmethod
     def update_info(admin_id, username=None, firstname=None, lastname=None):
 
         if username is None and firstname is None and lastname is None:
@@ -103,7 +114,7 @@ class Admin:
 
         # make sure specified username is unique
         unique = admin_collection.find_one(
-            {'_id': ObjectId(admin_id)}, {'_id': 1}) is None
+            {'UserName': username}, {'_id': 1}) is None
 
         if not unique:
             return Tools.Result(False, Tools.errors('NA'))

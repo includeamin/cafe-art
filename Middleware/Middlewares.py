@@ -28,6 +28,7 @@ def login_required(f):
         except:
             return Result(False, Error('TINE'))
         if not is_auth(request.headers["Id"], request.headers["Token"]):
+            print(request.headers["Id"], request.headers["Token"])
             return Result(False, Error("ACCD"))
         return f(*args, **kwargs)
 

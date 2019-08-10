@@ -240,6 +240,17 @@ def get_top_items():
         return Tools.Result(False, ex.args)
 
 
+
+@item_route.route('/admin/statistics/comment/seen')
+@login_required
+def comments_seen():
+    try:
+        return Item.comments_seen()
+    except Exception as ex:
+        import traceback
+        traceback.print_exc()
+        return Tools.Result(False, ex.args)
+
 @item_route.route('/admin/comment/seen', methods=['POST'])
 @login_required
 @json_body_required
