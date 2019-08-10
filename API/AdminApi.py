@@ -13,8 +13,17 @@ admin_route = Blueprint("admin_route", __name__, "template")
 def login():
     try:
         data = request.get_json()
-        return Admin.login(data['Username'],
+        return Admin.login(data['UserName'],
                            data['Password'])
+    except Exception as ex:
+        return Tools.Result(False, ex.args)
+
+
+@admin_route.route('/admin/logout', methods=['POST'])
+def logout():
+    try:
+        return Admin.logout(request.headers['Id'],
+                            request.headers['Token'])
     except Exception as ex:
         return Tools.Result(False, ex.args)
 

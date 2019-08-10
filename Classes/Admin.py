@@ -1,6 +1,6 @@
 from Database.DB import admin_collection
 from Classes.Tools import Tools
-from Classes.Bridge import gen_token_authentication
+from Classes.Bridge import gen_token_authentication, invalidate_token
 from cryptography.fernet import Fernet
 from bson import ObjectId
 
@@ -39,7 +39,7 @@ class Admin:
     def login(username, password):
         # make sure admin with specified username exists
         admin_object = admin_collection.find_one(
-            {'UserName': username}, {'Password': 1})
+            {'UserName': username}, {'Password': 1, 'Key': 1})
 
         if admin_object is None:
             return Tools.Result(False, Tools.errors('INF'))
@@ -67,6 +67,26 @@ class Admin:
         }
 
         return Tools.Result(True, Tools.dumps(response))
+
+    @staticmethod
+    def logout(admin_id, token):
+
+        # make sure admin id exists in database
+        admin_object = admin_collection.find_one(
+            {'_id': ObjectId(admin_id)},
+            {'_id': 1}
+        )
+
+        if admin_object is None:
+            return Tools.Result(False, Tools.errors('INF'))
+
+        # request to invalidate the token
+        result = invalidate_token(admin_id, token)
+
+        if result is True:
+            return Tools.Result(True, 'd')
+        else:
+            return Tools.Result(False, result)
 
     @staticmethod
     def update_info(admin_id, username=None, firstname=None, lastname=None):
