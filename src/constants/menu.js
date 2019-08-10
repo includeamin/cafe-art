@@ -1,7 +1,20 @@
 const data = [
   {
-    id: "Categories",
+    id: "Dashboards",
     icon: "iconsminds-shop-4",
+    label: "داشبورد",
+    to: "/app/maindashboards",
+    subs: [
+      {
+        icon: "iconsminds-add",
+        label: "منو اصلی",
+        to: "/app/maindashboards/showdashboard"
+      }
+    ]
+  },
+  {
+    id: "Categories",
+    icon: "iconsminds-dice",
     label: "دسته بندی",
     to: "/app/dashboards",
     subs: [
@@ -125,6 +138,30 @@ const data = [
             },
 
         ]
+    },
+    {
+        id: "Exit",
+        icon: "simple-icon-logout",
+        label: "خروج",
+        to: "/app/exit",
+        // subs: [
+        //     {
+        //         icon: "iconsminds-mail-photo",
+        //         label: "مشاهده نظرات",
+        //         to: "/app/comments/showcomments"
+        //     },
+        //     {
+        //         icon: "iconsminds-mail-photo",
+        //         label: "مشاهده نمودار ایتم",
+        //         to: "/app/comments/commentschart"
+        //     },
+        //     {
+        //         icon: "iconsminds-mail-photo",
+        //         label: "مشاهده نمودار دسته بندی",
+        //         to: "/app/comments/categorieschart"
+        //     },
+        //
+        // ]
     },
 
 

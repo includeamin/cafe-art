@@ -301,11 +301,12 @@ hr {
 
 .logo-single {
   width: 110px;
-  height: 35px;
+  height: 100px;
   background: url($logoPath) no-repeat;
   background-position: center center;
   display: inline-block;
   margin-bottom: 60px;
+  background-size: 120%;
 }
 
 .list-item-heading {
@@ -1726,7 +1727,8 @@ button {
 
 /* 09.Navbar*/
 .navbar {
-  background: $foreground-color;
+  //background: $foreground-color;
+  background: #F3CD71;
   height: $navbar-height;
   padding: 1.5rem $main-margin 1.5rem 0;
   @include depth(1);
@@ -1812,7 +1814,7 @@ button {
 
   .navbar-logo {
     width: 110px;
-    height: 35px;
+    height: 100px;
     position: absolute;
     left: 0;
     right: 0;
@@ -1823,6 +1825,7 @@ button {
       height: 100%;
       background: url($logoPath) no-repeat;
       background-position: center center;
+      background-size: 90%;
     }
 
     .logo-mobile {
@@ -6719,6 +6722,9 @@ input:-webkit-autofill {
   background-color: transparent;
   border-radius: 50%;
   display: inline-block;
+}
+.brw1{
+  border: 0.1em solid #666666;
 }
 //.color{
 //  background: #fa07fa;

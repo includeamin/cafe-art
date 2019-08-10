@@ -15,30 +15,30 @@ const TopnavEasyAccess = () => {
           right
           id="iconMenuDropdown"
         >
-          <NavLink to="/app/dashboards/default" className="icon-menu-item">
+          <NavLink to="/app/maindashboards" className="icon-menu-item">
             <i className="iconsminds-shop-4 d-block" />{" "}
             <IntlMessages id="menu.dashboards" />
           </NavLink>
 
-          <NavLink to="/app/ui" className="icon-menu-item">
-            <i className="iconsminds-pantone d-block" />{" "}
-            <IntlMessages id="menu.ui" />
+          <NavLink to="/app/dashboards" className="icon-menu-item">
+            <i className="iconsminds-dice d-block" />{" "}
+            <IntlMessages id="categories" />
           </NavLink>
-          <NavLink to="/app/ui/charts" className="icon-menu-item">
-            <i className="iconsminds-bar-chart-4 d-block" />{" "}
-            <IntlMessages id="menu.charts" />
+          <NavLink to="/app/items" className="icon-menu-item">
+            <i className="iconsminds-shopping-cart d-block" />{" "}
+            <IntlMessages id="items" />
           </NavLink>
-          <NavLink to="/app/applications/chat" className="icon-menu-item">
+          <NavLink to="/app/message" className="icon-menu-item">
             <i className="iconsminds-speach-bubble d-block" />{" "}
-            <IntlMessages id="menu.chat" />
+            <IntlMessages id="Notification" />
           </NavLink>
-          <NavLink to="/app/applications/survey" className="icon-menu-item">
-            <i className="iconsminds-formula d-block" />{" "}
-            <IntlMessages id="menu.survey" />
+          <NavLink to="/app/comments" className="icon-menu-item">
+            <i className="iconsminds-friendster d-block" />{" "}
+            <IntlMessages id="comments" />
           </NavLink>
-          <NavLink to="/app/applications/todo" className="icon-menu-item">
-            <i className="iconsminds-check d-block" />{" "}
-            <IntlMessages id="menu.todo" />
+          <NavLink to="/app/exit" className="icon-menu-item">
+            <i className="simple-icon-logout d-block" />{" "}
+            <IntlMessages id="exit" />
           </NavLink>
         </DropdownMenu>
       </UncontrolledDropdown>

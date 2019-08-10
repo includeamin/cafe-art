@@ -119,9 +119,6 @@ const loginWithEmailPasswordAsync = async (email, password) =>{
 function setitem(Id,Token) {
     localStorage.setItem('user_id',Id);
     localStorage.setItem('user_Token',Token);
-
-
-
     if (localStorage.getItem('user_Token')) {
         console.log('we can set localstorage ')
         return true
@@ -131,17 +128,21 @@ function setitem(Id,Token) {
 }
 
 async  function loginWithEmailPassword({ payload }) {
-        const { email, password } = payload.user;
-        const { history } = payload;
-    let BODY={'UserName':email,
+    const {email, password} = payload.user;
+    const {history} = payload;
+    let BODY = {
+        'UserName': email,
         'Password': password,
     };
     const data = await axios.post(`${Const.Amin_URL}admin/login`,BODY );
     const Description = JSON.parse(data.data.Description) ;
     const oprator=await setitem(Description.Id,Description.Token);
+    console.log( localStorage.getItem('user_id'));
     if (oprator) {
-        console.log('we are in ')
-        history.push('/')
+        console.log('we are in ');
+        await put(registerUserSuccess(Description.Id));
+        history.push('/');
+        console.log('after push');
     }else {
         console.log('fuck!!')
     }
@@ -155,7 +156,7 @@ const registerWithEmailPasswordAsync = async (email, password) =>
 
 function* registerWithEmailPassword({ payload }) {
     const { email, password } = payload.user;
-    const { history } = payload
+    const { history } = payload;
     try {
         const registerUser = yield call(registerWithEmailPasswordAsync, email, password);
         if (!registerUser.message) {
