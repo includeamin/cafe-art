@@ -11,8 +11,11 @@ componentDidMount(){
     //     'ID': `5d4aa615bedfee80aaadc94c`
     // };
     let headers = {
-        'ID':`${Const.Token}`,
-        'Token': `${Const.ID}`
+        // 'ID':`${Const.Token}`,
+        // 'Token': `${Const.ID}`
+
+        'Token':`${Const.Token}`,
+        'ID': `${Const.ID}`
     };
     console.log(headers);
     async function deleteItems(){

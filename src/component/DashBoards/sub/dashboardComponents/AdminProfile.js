@@ -40,12 +40,13 @@ export default class AdminProfile extends Component {
             'Token':`${Const.Token}`,
             'Id': `${Const.ID}`
         };
+        // console.log(headers)
         axios.get(`${Const.Amin_URL}admin/info` , {headers:headers}).then(responsive=>
         {
             const {Description}=responsive.data;
             // console.log(Description);
             let DES=JSON.parse(Description);
-            console.log(DES);
+            // console.log(DES);
 
             this.setState({
                 LName:DES.LastName,

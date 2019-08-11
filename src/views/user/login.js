@@ -18,47 +18,35 @@ class Login extends Component {
       password: ""
     };
   }
-
-
-  async setitem(Id,Token) {
-    console.log('ID: '+ Id);
-      await localStorage.setItem('user_id',Id);
-      await localStorage.setItem('user_Token',Token);
-        if (localStorage.getItem('user_Token')) {
-            console.log('we can set localstorage ');
-            return true
-        } else {
-            return false
-        }
-    }
-
     async getData(BODY){
+      console.log('we are in get data')
         const data = await axios.post(`${Const.Amin_URL}admin/login`,BODY );
         const Description = await JSON.parse(data.data.Description) ;
-        return Description
+        await localStorage.setItem('user_id',Description.Id);
+        await localStorage.setItem('user_Token',Description.Token);
+        if (localStorage.getItem('user_Token').length>1) {
+            console.log('we are in ');
+            console.log(this.props.history);
+            this.props.history.push("/");
+            // history.push('/');
+            console.log('after push');
+        }else {
+            console.log('fuck!!')
+        }
+
     }
   onUserLogin() {
     if (this.state.email !== "" && this.state.password !== "") {
-      this.props.loginUser(this.state, this.props.history);
+      // this.props.loginUser(this.state, this.props.history);
             const {email, password} = this.state;
             let BODY = {
                 'UserName': email,
                 'Password': password,
             };
-
-        let Description=this.getData(BODY);
-        const oprator=  this.setitem(Description.Id,Description.Token);
-        console.log( localStorage.getItem('user_id'));
-            if (oprator) {
-                console.log('we are in ');
-                this.props.history.push("/");
-                // history.push('/');
-                console.log('after push');
-            }else {
-                console.log('fuck!!')
-            }
+       this.getData(BODY);
     }
   }
+
     handelChange(event){
     let {name,value}=event.target;
            this.setState({
