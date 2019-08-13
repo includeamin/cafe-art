@@ -16,6 +16,16 @@ def get_items(row_id):
         return Tools.Result(False, ex.args)
 
 
+
+@item_route.route('/items/categorized', methods=['GET'])
+@login_required
+def get_all_items_by_category():
+    try:
+        return Item.get_all_items_by_category()
+    except Exception as ex:
+        return Tools.Result(False, ex.args)
+
+
 @item_route.route('/admin/test', methods=['GET'])
 @login_required
 def test():

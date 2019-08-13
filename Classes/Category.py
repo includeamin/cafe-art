@@ -25,6 +25,16 @@ class Category:
         return Tools.Result(True, Tools.dumps(categories))
 
     @staticmethod
+    def _get_categories():
+        categories_object = category_collection.find({}, {'RowId': 1, 'Title': 1})
+
+        categories = []
+        for category in categories_object:
+            categories.append(category)
+        
+        return categories
+
+    @staticmethod
     def add_category(row_id, title, icon_url, image_url):
 
         # make sure row id is unique

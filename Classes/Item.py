@@ -1,5 +1,6 @@
 from Database.DB import item_collection
 from Classes.Tools import Tools
+from Classes.Category import Category
 from bson import ObjectId
 from datetime import datetime
 from operator import itemgetter
@@ -154,6 +155,30 @@ class Item:
             return Tools.Result(False, Tools.errors('INF'))
 
         return Tools.Result(True, Tools.dumps(items))
+
+    @staticmethod
+    def get_all_items_by_category():
+        categories = Category._get_categories()
+
+        items_object = item_collection.find({}, {'_id': 0, 'RowId': 1, 'Title': 1})
+
+        items = []
+        for item in items_object:
+            items.append(item)
+
+        if len(items) == 0:
+            return Tools.Result(False, Tools.errors('INF'))
+
+        items_by_category = {}
+        for item in items:
+            for category in categories:
+                if int(item['RowId']) == int(category['RowId']):
+                    if category['Title'] not in items_by_category:
+                        items_by_category[category['Title']] = [item['Title']]
+                    else:
+                        items_by_category[category['Title']].append(item['Title'])
+        
+        return Tools.Result(True, items_by_category)
 
     @staticmethod
     def get_all_items():
@@ -437,8 +462,9 @@ class Item:
 
     @staticmethod
     def get_top_items():
-        items = item_collection.find({}, {'Comments': 1, 'Title': 1, 'ItemImageUrl': 1})
-        
+        items = item_collection.find(
+            {}, {'Comments': 1, 'Title': 1, 'ItemImageUrl': 1})
+
         if items is None:
             return Tools.Result(False, Tools.errors('INF'))
 
@@ -454,16 +480,17 @@ class Item:
                 continue
             for comment in item['Comments']:
                 sum_ += comment['Rate']
-            
+
             items_rate_arr.append({
                 'Title': item['Title'],
                 'AverageRate': sum_/total,
                 'Image': item['ItemImageUrl'],
                 'Total': total
             })
-        
+
         # sort items based on average rate
-        sorted_items = sorted(items_rate_arr, key=itemgetter('AverageRate'), reverse=True)
+        sorted_items = sorted(items_rate_arr, key=itemgetter(
+            'AverageRate'), reverse=True)
 
         upper_bound = min(5, len(items_rate_arr))
 
@@ -479,7 +506,7 @@ class Item:
         items_arr = []
         for item in items:
             items_arr.append(item)
-        
+
         total = 0
         seen = 0
         for item in items_arr:
@@ -488,7 +515,7 @@ class Item:
                 continue
             for comment in item['Comments']:
                 seen += 1 if comment['Seen'] is True else 0
-            
+
         response = {
             'Seen': seen,
             'Total': total
@@ -498,24 +525,22 @@ class Item:
 
     @staticmethod
     def get_all_unseen_comments():
-        items = item_collection.find({}, {'Comments': 1})
+        items = item_collection.find({}, {'Comments': 1, 'Title': 1})
 
         if items is None:
             return Tools.Result(False, 'INF')
-        
+
         items_arr = []
         for item in items:
             items_arr.append(item)
 
-        unseen_comments = {}
+        unseen_comments = []
         for item in items_arr:
             if len(item['Comments']) == 0:
                 continue
             for comment in item['Comments']:
                 if not comment['Seen']:
-                    if str(item['_id']) not in unseen_comments:
-                        unseen_comments[str(item['_id'])] = [comment]
-                    else:
-                        unseen_comments[str(item['_id'])].append(comment)
+                    comment['Title'] = item['Title']
+                    unseen_comments.append(comment)
 
         return Tools.Result(True, Tools.dumps(unseen_comments))
