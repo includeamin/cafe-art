@@ -198,6 +198,17 @@ def get_comments_on_item(item_id):
         return Tools.Result(False, ex.args)
 
 
+@item_route.route('/admin/item/comments/unseen', methods=['GET'])
+@login_required
+def get_all_unseen_comments():
+    try:
+        return Item.get_all_unseen_comments()
+    except Exception as ex:
+        import traceback
+        traceback.print_exc()
+        return Tools.Result(False, ex.args)
+
+
 @item_route.route('/admin/item/comments', methods=['GET'])
 @login_required
 def get_all_comments():
@@ -240,7 +251,6 @@ def get_top_items():
         return Tools.Result(False, ex.args)
 
 
-
 @item_route.route('/admin/statistics/comment/seen')
 @login_required
 def comments_seen():
@@ -250,6 +260,7 @@ def comments_seen():
         import traceback
         traceback.print_exc()
         return Tools.Result(False, ex.args)
+
 
 @item_route.route('/admin/comment/seen', methods=['POST'])
 @login_required

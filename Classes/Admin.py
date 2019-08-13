@@ -98,7 +98,6 @@ class Admin:
 
         return Tools.Result(True, Tools.dumps(info))
 
-        
     @staticmethod
     def update_info(admin_id, username=None, firstname=None, lastname=None):
 
@@ -141,24 +140,24 @@ class Admin:
 
         # make sure admin exists
         admin_object = admin_collection.find_one(
-            {'_id': ObjectId(admin_id)}, {'_id': 1})
+            {'_id': ObjectId(admin_id)}, {'_id': 1, 'Key': 1, 'Password': 1})
 
         if admin_object is None:
             return Tools.Result(False, Tools.errors('INF'))
 
         hash_key = str(admin_object['Key'])[2:-1]
 
-
         encrypted_password = str(admin_object['Password'])[2:-1].encode()
 
         cipher_suite = Fernet(hash_key)
 
-        decrypted_password = str(cipher_suite.decrypt(encrypted_password))[2:-1]
+        decrypted_password = str(
+            cipher_suite.decrypt(encrypted_password))[2:-1]
 
         if decrypted_password != prev_password:
             return Tools.Result(False, 'NA')
 
-        encrypted_password = cipher_suite.encrypt(new_password)
+        encrypted_password = cipher_suite.encrypt(new_password.encode())
 
         admin_collection.update_one(
             {'_id': ObjectId(admin_id)},
@@ -168,5 +167,5 @@ class Admin:
                 }
             }
         )
-        
+
         return Tools.Result(True, 'd')

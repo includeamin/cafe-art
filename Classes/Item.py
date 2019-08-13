@@ -495,3 +495,27 @@ class Item:
         }
 
         return Tools.Result(True, Tools.dumps(response))
+
+    @staticmethod
+    def get_all_unseen_comments():
+        items = item_collection.find({}, {'Comments': 1})
+
+        if items is None:
+            return Tools.Result(False, 'INF')
+        
+        items_arr = []
+        for item in items:
+            items_arr.append(item)
+
+        unseen_comments = {}
+        for item in items_arr:
+            if len(item['Comments']) == 0:
+                continue
+            for comment in item['Comments']:
+                if not comment['Seen']:
+                    if str(item['_id']) not in unseen_comments:
+                        unseen_comments[str(item['_id'])] = [comment]
+                    else:
+                        unseen_comments[str(item['_id'])].append(comment)
+
+        return Tools.Result(True, Tools.dumps(unseen_comments))
