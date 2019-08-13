@@ -17,19 +17,14 @@ class ShowMessage extends Component {
             id:'',Description:'',  modes:[0,1,2,3,4,5,6]
         }
     }
+    componentDidMount(){
 
-    componentWillReceiveProps(props){
-        let {ID}=props;
-        console.log(ID)
-        this.setState({
-            id:ID
-        });
         let headers = {
             'Token':`${Const.Token}`,
             'Id': `${Const.ID}`
         };
 
-        axios.get(`${Const.Amin_URL}admin/item/comments/${ID}` , {headers:headers}).then(responsive=>
+        axios.get(`${Const.Amin_URL}admin/notifications` , {headers:headers}).then(responsive=>
         {
             const {Description}=responsive.data;
             console.log(Description);
@@ -47,7 +42,7 @@ class ShowMessage extends Component {
         return (
             <div className="w-100">
                 <Row>
-                    {modes?modes.map((todo ,index)=><div className="col-sm-12 col-md-4 col-lg-3 mt-3" key={index}><RowShowMessage key={index} input={todo} index={index} img={breakfast}/></div> ):""}
+                    {Description?Description.map((todo ,index)=><div className="col-sm-12 col-md-4 col-lg-3 mt-3" key={index}><RowShowMessage key={index} {...todo}  index={index}/></div> ):""}
                 </Row>
             </div>
 

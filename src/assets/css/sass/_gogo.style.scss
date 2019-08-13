@@ -1379,6 +1379,22 @@ button {
   height:  50px;
   line-height:  50px;
 }
+.trashIconBox2 {
+  //padding: 0;
+  //font-size: 5em;
+  //width: 100px;
+  //height:  100px;
+  //line-height:  100px;
+  position: absolute;
+  top: 10px;
+  right: 10%;
+
+  padding: 0;
+  font-size: 2.5em;
+  width: 50px;
+  height:  50px;
+  line-height:  50px;
+}
 /* 05.Badges */
 
 .bg-theme-2,
@@ -6726,18 +6742,22 @@ input:-webkit-autofill {
 .brw1{
   border: 0.1em solid #666666;
 }
-//.color{
-//  background: #fa07fa;
-//  color: rgb(250,7,250,0.3);
-//
-//  background: #fa095a;
-//  color: rgb(250,9,90,0.3)
-//
-//  background: #fa095a;
-//  color: rgb(250,9,90,0.3)
-//}
-//.color3213{
-  //color: #362635;
-  //color: #86367e;
+.rotateShoWIcon{
+  position: absolute;
+  top: 10px;
+  left: 2px;
 
-//}
+  padding: 0;
+  //font-size: 2.5em;
+  //width: 50px;
+  //height:  50px;
+  line-height:  50px;
+}
+
+.catTitle{
+  direction: rtl;
+}
+.catsub{
+  direction: rtl;
+
+}

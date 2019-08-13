@@ -30,6 +30,7 @@ class Login extends Component {
             this.props.history.push("/");
             // history.push('/');
             console.log('after push');
+            window.location.reload();
         }else {
             console.log('fuck!!')
         }

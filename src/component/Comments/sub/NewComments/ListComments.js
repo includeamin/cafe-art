@@ -63,7 +63,7 @@ class ListComments extends Component {
         return (
             <div>
                 <Fragment>
-                    {Description?Description.map((todo ,index)=><CommentsRow key={index} accordion={accordion[index]} toggleAccordion={this.toggleAccordion.bind(this)} index={index}  input={todo} Name={this.props.Name}/>):""}
+                    {Description?Description.map((todo ,index)=><CommentsRow key={index} accordion={accordion[index]} toggleAccordion={this.toggleAccordion.bind(this)} index={index}  input={todo} Name={this.props.Name || todo['Title']}/>):""}
 
 
 

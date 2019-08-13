@@ -26,6 +26,24 @@ class ShowComments extends Component {
 
         }
     }
+    componentDidMount(){
+        if (this.props.ID.length<1) {
+            let headers = {
+                'Token':`${Const.Token}`,
+                'Id': `${Const.ID}`
+            };
+
+            axios.get(`${Const.Amin_URL}admin/item/comments/unseen` , {headers:headers}).then(responsive=>
+            {
+                const {Description}=responsive.data;
+                console.log(Description);
+                this.setState({
+                    Description:JSON.parse(Description)
+                })
+
+            }).catch(error=>{console.log(error)});        }
+
+    }
 
     componentWillReceiveProps(props){
         let {ID}=props;

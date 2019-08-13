@@ -5,6 +5,7 @@ import DashboardCard from "./dashboardComponents/DashboardCard";
 import DashboardTopItem from "./dashboardComponents/DashboardTopItem";
 import * as Const from "../../Const";
 import axios from "axios";
+import ShowCategoriesAndItems from "./dashboardComponents/ShowCategoriesAndItem/ShowCategoriesAndItems";
 
 class Showdashboard extends Component {
     constructor(props) {
@@ -26,7 +27,7 @@ class Showdashboard extends Component {
             let DES=JSON.parse(Description);
             this.setState({
                 data:DES
-            })
+            });
             console.log(DES);
 
         }).catch(error=>{console.log(error)});
@@ -35,17 +36,25 @@ class Showdashboard extends Component {
     render() {
         return (
             <div className='d-flex'>
+
                 <Colxx lg="6" md="6" xl="4" sm="12" className="mb-4">
                     <AdminProfile/>
                 </Colxx>
-                <div className='w-100'>
-                    <Colxx lg="12" md="12" xl="4" sm="12" className="mb-4">
+                <div className='col-4'>
+                    {/*<Colxx lg="12" md="12" xl="4" sm="12" className="mb-4">*/}
                         <DashboardCard/>
-                    </Colxx>
+                    {/*</Colxx>*/}
                     {
-                        this.state.data? <Colxx lg="12" md="12" xl="4" sm="12" className="mb-4"><DashboardTopItem data={this.state.data}/></Colxx>:""
+                        this.state.data?
+                            <DashboardTopItem data={this.state.data}/>
+                        // </Colxx>
+                            :""
                     }
                 </div>
+                    <Colxx lg="6" md="6" xl="4" sm="12" className="mb-4">
+                    <ShowCategoriesAndItems/>
+                    </Colxx>
+
 
 
 

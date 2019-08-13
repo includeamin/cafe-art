@@ -19,6 +19,7 @@ import * as Const from "../../../Const";
 import axios from "axios";
 import NotificationManager from "../../../../components/common/react-notifications/NotificationManager";
 import RowShowShow from "../../../RowShowShow";
+import ResetPassword from "./ResetPassword/ResetPassword";
 
 
 
@@ -138,7 +139,7 @@ export default class AdminProfile extends Component {
                     edit?
                         <CardBody>
                             <CardTitle className="text-white">
-                                <IntlMessages id="dashboards.advanced-search" />
+                                <IntlMessages id="مشاهده اطلاعات" />
                             </CardTitle>
                             <Form className="form-container" onSubmit={this.handlSubmit.bind(this)}>
                                 <Label className="form-group has-float-label mb-4">
@@ -162,13 +163,19 @@ export default class AdminProfile extends Component {
                                         <IntlMessages id="ارسال" />
                                     </Button>
                                 </FormGroup>
-
+                                <div >
+                                    <div className='w-100 mt-3 brw1' dir='rtl'>
+                                        <ResetPassword/>
+                                    </div>
+                                </div>
                             </Form>
+
+
                         </CardBody>
                         :
                         <CardBody dir={'rtl'}>
                             <CardTitle className="text-white">
-                                <IntlMessages id="dashboards.advanced-search" />
+                                <IntlMessages id="ویرایش اطلاعات" />
                             </CardTitle>
                             <div className="form-container">
                                 <div className='w-100 brw1'>
@@ -187,6 +194,7 @@ export default class AdminProfile extends Component {
                                         <IntlMessages id="ویرایش" />
                                     </Button>
                                 </div>
+
                             </div>
 
                         </CardBody>

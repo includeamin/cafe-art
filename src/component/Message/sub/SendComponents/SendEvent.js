@@ -164,7 +164,7 @@ class SendEvent extends Component {
                     <Card>
                         <CardBody>
                             <CardTitle>
-                                <IntlMessages id="Add-Notifications" />
+                                <IntlMessages id="اضافه کردن رخداد" />
                             </CardTitle>
 
                             <Formik
@@ -221,16 +221,8 @@ class SendEvent extends Component {
                                                         <IntlMessages id="تاریخ" />
                                                     </Label>
                                                     <div  >
-                                                        {/*<PersianCalender GetData={this.GetData.bind(this)}/>*/}
                                                         <PersianClassCalender GetData={this.GetData.bind(this)}/>
                                                     </div>
-
-                                                    {/*<Field className="form-control" name="Title"  />*/}
-                                                    {/*{errors.Title && touched.Title ? (*/}
-                                                        {/*<div className="invalid-feedback d-block">*/}
-                                                            {/*{errors.Title}*/}
-                                                        {/*</div>*/}
-                                                    {/*) : null}*/}
                                                 </FormGroup>
                                             </div>
                                         </div>
@@ -283,7 +275,7 @@ class SendEvent extends Component {
                                         <div className="w-100 d-flex ">
 
                                             <div className="col-6">
-                                                <CropComponent label={'آیکون'} onCropImg={this.handelCrop}/>
+                                                <CropComponent label={'آیکون'} onCropImg={this.handelCrop} aspect={3/2} />
                                             </div>
 
                                         </div>

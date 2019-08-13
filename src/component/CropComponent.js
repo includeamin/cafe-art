@@ -32,7 +32,7 @@ class CropComponent extends Component {
             crop: {
                 unit: "%",
                 width: 30,
-                aspect: 16 / 9
+                aspect:this.props.aspect || 16 / 9
             },imgIcon:null,imgBlob:'',imgCropFile:''
         }
     }

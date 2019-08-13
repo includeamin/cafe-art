@@ -28,6 +28,8 @@ import {
 import { MobileMenuIcon, MenuIcon } from "../../components/svg";
 import TopnavEasyAccess from "./Topnav.EasyAccess";
 import TopnavNotifications from "./Topnav.Notifications";
+import * as Const from "../../component/Const";
+import axios from "axios";
 
 class TopNav extends Component {
   constructor(props) {
@@ -35,9 +37,30 @@ class TopNav extends Component {
 
     this.state = {
       isInFullScreen: false,
-      searchKeyword: ""
+      searchKeyword: "",LName:'',FName:''
     };
   }
+    componentDidMount(){
+        let headers = {
+            'Token':`${Const.Token}`,
+            'Id': `${Const.ID}`
+        };
+        // console.log(headers)
+        axios.get(`${Const.Amin_URL}admin/info` , {headers:headers}).then(responsive=>
+        {
+            const {Description}=responsive.data;
+            // console.log(Description);
+            let DES=JSON.parse(Description);
+            // console.log(DES);
+
+            this.setState({
+                LName:DES.LastName,
+                FName:DES.FirstName,
+                UName:DES.UserName,
+            });
+
+        }).catch(error=>{console.log(error)});
+    }
 
   handleChangeLocale = locale => {
     this.props.changeLocale(locale);
@@ -187,6 +210,7 @@ class TopNav extends Component {
   render() {
     const { containerClassnames, menuClickCount, locale } = this.props;
     const { messages } = this.props.intl;
+    const { LName ,FName} = this.state;
     return (
       <nav className="navbar fixed-top">
         <NavLink
@@ -283,22 +307,22 @@ class TopNav extends Component {
           </div>
           <div className="user d-inline-block">
             <UncontrolledDropdown className="dropdown-menu-right">
-              <DropdownToggle className="p-0" color="empty">
-                <span className="name mr-1">Sarah Kortney</span>
+              {/*<DropdownToggle className="p-0" color="empty">*/}
+                <span className="name mr-1">{`${FName} ${LName}`}</span>
                 <span>
-                  <img alt="Profile" src="/assets/img/profile-pic-l.jpg" />
+                  <img alt="Profile" src="/assets/img/profile-pic-l-5.jpg" />
                 </span>
-              </DropdownToggle>
-              <DropdownMenu className="mt-3" right>
-                <DropdownItem>Account</DropdownItem>
-                <DropdownItem>Features</DropdownItem>
-                <DropdownItem>History</DropdownItem>
-                <DropdownItem>Support</DropdownItem>
-                <DropdownItem divider />
-                <DropdownItem onClick={() => this.handleLogout()}>
-                  Sign out
-                </DropdownItem>
-              </DropdownMenu>
+              {/*</DropdownToggle>*/}
+              {/*<DropdownMenu className="mt-3" right>*/}
+                {/*<DropdownItem>Account</DropdownItem>*/}
+                {/*<DropdownItem>Features</DropdownItem>*/}
+                {/*<DropdownItem>History</DropdownItem>*/}
+                {/*<DropdownItem>Support</DropdownItem>*/}
+                {/*<DropdownItem divider />*/}
+                {/*<DropdownItem onClick={() => this.handleLogout()}>*/}
+                  {/*Sign out*/}
+                {/*</DropdownItem>*/}
+              {/*</DropdownMenu>*/}
             </UncontrolledDropdown>
           </div>
         </div>

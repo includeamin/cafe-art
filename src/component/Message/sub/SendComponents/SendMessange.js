@@ -21,6 +21,7 @@ import NotificationManager from "../../../../components/common/react-notificatio
 
 import CropComponent from "../../../CropComponent";
 import * as Const from "../../../Const";
+import PersianClassCalender from "../PersianClassCalender";
 const imageMaxSize = 1000000000 ;// bytes
 const acceptedFileTypes = 'image/x-png, image/png, image/jpg, image/jpeg, image/gif';
 const acceptedFileTypesArray = acceptedFileTypes.split(",").map((item) => {return item.trim()});
@@ -39,80 +40,78 @@ class SendMessange extends Component {
     constructor(props) {
         super(props);
         this.state={
-            src: null, crop: '',imgIcon:null,
+            src: null, crop: '',imgIcon:null,Date:null
         }
     }
     handleSubmit = (values, { setSubmitting }) => {
-        // this.setState({
-        //     loaderActive:true
-        // });
+
         const payload = {
             ...values,
-            // TypeKind: values.TypeKind.value
-            // Names: values.Names.value,
+
         };
-        console.log(payload);
-        let {crop}=this.state;
-
-
+        let{Date}=this.state;
         let headers = {
             'Token':`${Const.Token}`,
             'Id': `${Const.ID}`
         };
         let BODY={'Title': payload.Title,
-            'RowId': payload.Rank,
-            'IconUrl': crop,
-            // 'ImageUrl': crop2
+            'Description': payload.Description,
+            'Date': Date,
         };
+        // Title Date Description
+        console.log(BODY)
 
-        // axios.post(`${Const.Amin_URL}admin/categories/add` ,BODY, {headers:headers}).then(responsive=>
-        // {
-        //     // this.setState({
-        //     //     loaderActive:false
-        //     // });
-        //     const {Description}=responsive.data;
-        //     if(Description === "d"){
-        //         NotificationManager.success(
-        //             "congratulation",
-        //             "your categories added",
-        //             3000,
-        //             null,
-        //             null,
-        //             "success"
-        //         );
-        //     }else {
-        //         NotificationManager.error(
-        //             " new game currency didnt add",
-        //             Description,
-        //             3000,
-        //             null,
-        //             null,
-        //             "success"
-        //         );
-        //     }
-        //
-        //     // let DES=JSON.parse(Description);
-        //     // this.props.inprogress(DES);x
-        //     console.log(Description)
-        // }).catch(error=>{
-        //     // this.setState({
-        //     //     loaderActive:false
-        //     // });
-        //     console.log(error)});
+        axios.post(`${Const.Amin_URL}admin/notification/push` ,BODY, {headers:headers}).then(responsive=>
+        {
+            // this.setState({
+            //     loaderActive:false
+            // });
+            const {Description}=responsive.data;
+            if(Description === "d"){
+                NotificationManager.success(
+                    "congratulation",
+                    "your categories added",
+                    3000,
+                    null,
+                    null,
+                    "success"
+                );
+            }else {
+                NotificationManager.error(
+                    " new game currency didnt add",
+                    Description,
+                    3000,
+                    null,
+                    null,
+                    "success"
+                );
+            }
 
+            // let DES=JSON.parse(Description);
+            // this.props.inprogress(DES);x
+            console.log(Description)
+        }).catch(error=>{
+            // this.setState({
+            //     loaderActive:false
+            // });
+            console.log(error)});
 
-    };
-
-
-    handelCrop = (src,crop,imgIcon) => {
-
-        console.log(crop);
-
-        this.setState({
-            src,crop,imgIcon
-        });
 
     };
+
+
+    GetData(Data){
+        // console.log(Data)
+        if (Data!==null){
+            let date=`${Data.year}/${Data.month}/${Data.day}`;
+            console.log(date);
+            this.setState({
+                Date: date
+            });
+
+        }
+        // console.log(date)
+    }
     render() {
 
 
@@ -122,7 +121,7 @@ class SendMessange extends Component {
                     <Card>
                         <CardBody>
                             <CardTitle>
-                                <IntlMessages id="Add-Notifications" />
+                                <IntlMessages id="ارسال پیام" />
                             </CardTitle>
 
                             <Formik
@@ -154,9 +153,6 @@ class SendMessange extends Component {
                                       isSubmitting
                                   }) => (
                                     <Form className="av-tooltip tooltip-label-bottom d-flex col-12 flex-column">
-
-
-
                                         <div className="w-100 d-flex ">
                                             <div className="col-sm-6 rowInput">
                                             <FormGroup className="form-group has-float-label position-relative">
@@ -172,16 +168,13 @@ class SendMessange extends Component {
                                             </FormGroup>
                                         </div>
                                             <div className="col-sm-6 rowInput">
-                                                <FormGroup className="form-group has-float-label position-relative">
+                                                <FormGroup className=" has-float-label position-relative">
                                                     <Label>
-                                                        <IntlMessages id="Title" />
+                                                        <IntlMessages id="تاریخ" />
                                                     </Label>
-                                                    <Field className="form-control" name="Title"  />
-                                                    {errors.Title && touched.Title ? (
-                                                        <div className="invalid-feedback d-block">
-                                                            {errors.Title}
-                                                        </div>
-                                                    ) : null}
+                                                    <div >
+                                                        <PersianClassCalender GetData={this.GetData.bind(this)}/>
+                                                    </div>
                                                 </FormGroup>
                                             </div>
                                         </div>
@@ -202,13 +195,6 @@ class SendMessange extends Component {
                                             </div>
 
                                         </div>
-                                        <div className="w-100 d-flex ">
-
-                                            <div className="col-6">
-                                                <CropComponent label={'icon'} onCropImg={this.handelCrop}/>
-                                            </div>
-
-                                    </div>
                                         <Button color="primary" type="submit" className="col-2 rowInput">
                                             Submit
                                         </Button>
@@ -216,8 +202,6 @@ class SendMessange extends Component {
                                 )}
                             </Formik>
                         </CardBody>
-
-
                     </Card>
 
                 </Colxx>
