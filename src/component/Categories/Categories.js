@@ -234,7 +234,7 @@ class Categories extends Component {
                                                         <CropComponent label={'آیکون'} onCropImg={this.handelCrop}/>
                                                     </div>
                                                     <div  className="col-6">
-                                                        <CropComponent label={'عکس'} onCropImg={this.handelCrop2}/>
+                                                        <CropComponent label={'عکس'} onCropImg={this.handelCrop2} aspect={1.5/1}/>
                                                     </div>
                                                 </div>
                                             </div>
