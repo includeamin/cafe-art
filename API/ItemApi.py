@@ -282,3 +282,12 @@ def admin_saw_comment():
         return Item.admin_saw_comment(data['CommentId'])
     except Exception as ex:
         return Tools.Result(False, ex.args)
+
+
+@item_route.route('/item/favorite/<user_id>', methods=['GET     '])
+@login_required
+def get_favorite_items(user_id):
+    try:
+        return Item.get_favorite_items(user_id)
+    except Exception as ex:
+        return Tools.Result(False, ex.args)

@@ -6,5 +6,6 @@
   "Item": "Item",
   "Event": "Event",
   "Admin": "Admin",
-  "Notification": "Notification"
+  "Notification": "Notification",
+  "Users": "Users"
 }

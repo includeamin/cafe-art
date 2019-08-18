@@ -544,3 +544,17 @@ class Item:
                     unseen_comments.append(comment)
 
         return Tools.Result(True, Tools.dumps(unseen_comments))
+
+
+    @staticmethod
+    def get_favorite_items(user_id):
+
+        items_object = item_collection.find({'Likes.UserId': user_id})
+
+        favorite_items = []
+        for item in items_object:
+            favorite_items.append(item)
+
+        return Tools.Result(True, Tools.dumps(favorite_items))
+
+
