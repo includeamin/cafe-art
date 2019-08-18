@@ -218,9 +218,8 @@ class RowShowItem extends Component {
                                     </div>
                                     <div className="col-12 d-flex mt-2">
                                         <div className="col-12 fontFamimily9em">
-                                            <RowShowShow label={"قیمت"} value={formatNumber(input.price)} />
+                                            <RowShowShow label={"قیمت"} value={formatNumber(input.Price)} />
                                         </div>
-
 
                                     </div>
                                     <CarouselEdite  data={input.Gallery}/>
