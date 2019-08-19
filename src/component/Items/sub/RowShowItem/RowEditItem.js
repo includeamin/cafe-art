@@ -22,6 +22,8 @@ import SuggestCategoriesComponent from "../../../SuggestCategoriesComponent";
 const SignupSchema = Yup.object().shape({
     Title: Yup.string()
         .required("Title number is required!"),
+    Description: Yup.string()
+        .required("Description  is required!"),
     Price: Yup.number()
         .required("Price number is required!"),
 
@@ -102,6 +104,7 @@ class RowEditItem extends Component {
             'CategoryName':categoriesName,
             'Price':payload.Price,
             'MenuImageUrl': crop,
+            'Description':payload.Description,
             'ItemId': itemId,
             'ItemImageUrl': crop2
         };
@@ -170,7 +173,7 @@ class RowEditItem extends Component {
 
                             <Formik
                                 initialValues={{
-                                    Title: this.props.Title,Price:this.props.price
+                                    Title: this.props.Title,Price:this.props.price,Description:this.props.Description
                                 }}
                                 validationSchema={SignupSchema}
                                 onSubmit={this.handleSubmit.bind(this)}
@@ -217,6 +220,22 @@ class RowEditItem extends Component {
                                             <div className="col-sm-4 rowInput">
                                                 <SuggestCategoriesComponent label='itemList' GetSuggestValue={this.GetSuggestValue.bind(this)}/>
                                             </div>
+                                        </div>
+                                        <div className="w-100 d-flex ">
+                                            <div className="col-sm-12 rowInput">
+                                                <FormGroup className="form-group has-float-label position-relative">
+                                                    <Label>
+                                                        <IntlMessages id="Description" />
+                                                    </Label>
+                                                    <Field className="form-control" name="Description" component="textarea" rows="6" />
+                                                    {errors.Description && touched.Description ? (
+                                                        <div className="invalid-feedback d-block">
+                                                            {errors.Description}
+                                                        </div>
+                                                    ) : null}
+                                                </FormGroup>
+                                            </div>
+
                                         </div>
 
 

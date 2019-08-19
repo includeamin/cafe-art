@@ -15,6 +15,7 @@ import DeleteModal from "../../../DeleteModal";
 import RowEditItem from "./RowEditItem";
 import AddItem from "../AddItem";
 import AddGalleryItem from "../../twoStepAddItem/AddGalleryItem";
+import ShowDescriptionItems from "../../showDescriptionItems";
 var classNames = require('classnames');
 
 // Gallery: (2) [{…}, {…}]
@@ -159,6 +160,7 @@ class RowShowItem extends Component {
         let { title,Rank,edit,price,id,itemName}=this.state;
         let {index , input}=this.props;
         console.log(input._id);
+        console.log(input.Description);
 
         // console.log(index)
 
@@ -222,6 +224,13 @@ class RowShowItem extends Component {
                                         </div>
 
                                     </div>
+                                    <div className="col-12 d-flex mt-2">
+                                        <div className="col-12 fontFamimily9em">
+                                            <ShowDescriptionItems label={"توضیحات"} value={input.Description}/>
+                                            {/*<RowShowShow label={"توضیحات"} value={input.Description} />*/}
+                                        </div>
+
+                                    </div>
                                     <CarouselEdite  data={input.Gallery}/>
 
                                     <span className=' badge-danger deleteBadge2' onClick={this.toggle}>
@@ -239,7 +248,7 @@ class RowShowItem extends Component {
                         </div> :
 
                         <div className='w-100' id='editComponent'>
-                            <RowEditItem Title={title} RowId={Rank} price={price} id={input._id}
+                            <RowEditItem Title={title} RowId={Rank} price={input.Price} id={input._id} Description={input.Description}
                                                handelGoTwoStep2={this.handelGoTwoStep2.bind(this)}  GetBackToMain={this.GetBackToMain.bind(this)}/>
                          <AddGalleryItem id={input._id} itemName={input.Title}/>
 

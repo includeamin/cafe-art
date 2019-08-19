@@ -40,7 +40,9 @@ import SuggestCategoriesComponent from "../../SuggestCategoriesComponent";
 
 const SignupSchema = Yup.object().shape({
     Title: Yup.string()
-        .required("Title number is required!"),
+        .required("Title  is required!"),
+    Description: Yup.string()
+        .required("Description  is required!"),
     Price: Yup.number()
         .required("Price number is required!"),
 
@@ -111,6 +113,7 @@ class AddItem extends Component {
             'CategoryName':categoriesName,
             'Price':payload.Price,
             'MenuImageUrl': crop,
+            'Description':payload.Description,
             'Gallery': files,
             'ItemImageUrl': crop2
         };
@@ -120,8 +123,10 @@ class AddItem extends Component {
             // this.setState({
             //     loaderActive:false
             // });
+            console.log(responsive)
             const {Description,State}=responsive.data;
             let DES=JSON.parse(Description);
+            console.log(responsive)
 
             if(State){
                 NotificationManager.success(
@@ -172,7 +177,7 @@ class AddItem extends Component {
                             <Formik
                                 initialValues={{
 
-                                    Title: "",Price:''
+                                    Title: "",Price:'',Description:''
 
                                 }}
                                 validationSchema={SignupSchema}
@@ -221,6 +226,22 @@ class AddItem extends Component {
                                                 <SuggestCategoriesComponent label='itemList' GetSuggestValue={this.GetSuggestValue.bind(this)}/>
 
                                             </div>
+                                        </div>
+                                        <div className="w-100 d-flex ">
+                                            <div className="col-sm-12 rowInput">
+                                                <FormGroup className="form-group has-float-label position-relative">
+                                                    <Label>
+                                                        <IntlMessages id="Description" />
+                                                    </Label>
+                                                    <Field className="form-control" name="Description" component="textarea" rows="6" />
+                                                    {errors.Description && touched.Description ? (
+                                                        <div className="invalid-feedback d-block">
+                                                            {errors.Description}
+                                                        </div>
+                                                    ) : null}
+                                                </FormGroup>
+                                            </div>
+
                                         </div>
                                         <div className="w-100 d-flex mt-3 ">
                                             <div className="col-6">
