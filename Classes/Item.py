@@ -8,10 +8,11 @@ from operator import itemgetter
 
 class Item:
 
-    def __init__(self, row_id, category_name, title, price, menu_image_url, item_image_url, gallery):
+    def __init__(self, row_id, category_name, title, description, price, menu_image_url, item_image_url, gallery):
         self.RowId = row_id
         self.CategoryName = category_name
         self.Title = title
+        self.Description = description
         self.MenuImageUrl = menu_image_url
         self.ItemImageUrl = item_image_url
         self.LikesCount = 0
@@ -21,7 +22,7 @@ class Item:
         self.Price = price
 
     @staticmethod
-    def add_item(row_id, category_name, title, price, menu_image_url, item_image_url, gallery):
+    def add_item(row_id, category_name, title, description, price, menu_image_url, item_image_url, gallery):
 
         gallery_objects = []
         for item in gallery:
@@ -33,7 +34,7 @@ class Item:
             })
 
         result = item_collection.insert_one(Item(
-            row_id, category_name, title, price, menu_image_url, item_image_url, gallery_objects).__dict__)
+            row_id, category_name, title, description, price, menu_image_url, item_image_url, gallery_objects).__dict__)
 
         return Tools.Result(True, Tools.dumps({
             '_id': result.inserted_id,
@@ -41,10 +42,10 @@ class Item:
         }))
 
     @staticmethod
-    def modify_item(item_id, row_id=None, category_name=None, title=None, price=None, menu_image_url=None, item_image_url=None):
+    def modify_item(item_id, row_id=None, category_name=None, title=None, description=None, price=None, menu_image_url=None, item_image_url=None):
 
         # make sure at least on attribute is not null
-        if row_id is None and category_name is None and title is None and price is None and menu_image_url is None and item_image_url is None:
+        if row_id is None and category_name is None and title is None and price is None and menu_image_url is None and item_image_url is None and description is None:
             return Tools.Result(False, Tools.errors('NA'))
 
         if (row_id is None and category_name is not None) or (row_id is not None and category_name is None):
@@ -68,6 +69,8 @@ class Item:
             updating_values['MenuImageUrl'] = menu_image_url
         if item_image_url is not None:
             updating_values['ItemImageUrl'] = item_image_url
+        if description is not None:
+            updating_values['Description'] = description
 
         item_collection.update_one(
             {'_id': ObjectId(item_id)},
@@ -145,7 +148,12 @@ class Item:
 
     @staticmethod
     def get_items(row_id):
-        items_object = item_collection.find({'RowId': row_id})
+
+        if str(row_id) != "-1":
+            items_object = item_collection.find({'RowId': row_id}, {'Comments': 0, 'CategoryName': 0})
+        else:
+            items_object = item_collection.find({}, {'Comments': 0, 'CategoryName': 0})
+
 
         items = []
         for item in items_object:

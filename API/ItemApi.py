@@ -44,13 +44,14 @@ def get_all_items():
 @item_route.route('/admin/item/add', methods=['POST'])
 @login_required
 @json_body_required
-@check_form_json_key(['RowId', 'Title', 'Price', 'MenuImageUrl', 'ItemImageUrl', 'Gallery'])
+@check_form_json_key(['RowId', 'Title', 'Description', 'Price', 'MenuImageUrl', 'ItemImageUrl', 'Gallery'])
 def add_item():
     try:
         data = request.get_json()
         return Item.add_item(data['RowId'],
                              data['CategoryName'],
                              data['Title'],
+                             data['Description'],
                              data['Price'],
                              data['MenuImageUrl'],
                              data['ItemImageUrl'],
@@ -72,6 +73,7 @@ def modify_item():
                                 data['RowId'] if 'RowId' in data else None,
                                 data['CategoryName'] if 'CategoryName' in data else None,
                                 data['Title'] if 'Title' in data else None,
+                                data['Description'] if 'Description' in data else None,
                                 data['Price'] if 'Price' in data else None,
                                 data['MenuImageUrl'] if 'MenuImageUrl' in data else None,
                                 data['ItemImageUrl'] if 'ItemImageUrl' in data else None
@@ -282,6 +284,7 @@ def admin_saw_comment():
         return Item.admin_saw_comment(data['CommentId'])
     except Exception as ex:
         return Tools.Result(False, ex.args)
+
 
 
 @item_route.route('/item/favorite/<user_id>', methods=['GET     '])

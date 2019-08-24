@@ -15,22 +15,39 @@ def enter_app():
         data = request.get_json()
         return User.enter_app(data['PhoneNumber'])
     except Exception as ex:
+        import traceback
+        traceback.print_exc()
+        return Tools.Result(False, ex.args)
+
+@user_route.route('/user/code/<phone_number>', methods=['GET'])
+def get_activation_code(phone_number):
+    try:
+        return User.get_activation_code(phone_number)
+    except Exception as ex:
         return Tools.Result(False, ex.args)
 
 
+@user_route.route('/user/login/guest', methods=['GET'])
+def login_as_guest():
+    try:
+        return User.login_as_guest()
+    except Exception as ex:
+        return Tools.Result(False, ex.args)
+
 @user_route.route('/user/sign_up/complete', methods=['POST'])
 @json_body_required
-@check_form_json_key(['PhoneNumber', 'FirstName', 'LastName', 'BirthDate', 'Gender'])
+@check_form_json_key(['PhoneNumber', 'Name', 'BirthDate', 'Gender'])
 def complete_sign_up():
     try:
         data = request.get_json()
         return User.complete_sign_up(data['PhoneNumber'],
-                                     data['FirstName'],
-                                     data['LastName'],
+                                     data['Name'],
                                      data['BirthDate'],
                                      data['Gender']
                                      )
     except Exception as ex:
+        import traceback
+        traceback.print_exc()
         return Tools.Result(False, ex.args)
 
 

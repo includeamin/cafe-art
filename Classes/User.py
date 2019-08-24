@@ -21,8 +21,7 @@ class User:
         email_regex = r'[a-zA-Z0-9._%-]+@[a-zA-Z-9._%-]+.[a-zA-Z]{2,6}'
 
     def __init__(self, phone_number, code):
-        self.FirstName = None
-        self.LastName = None
+        self.Name = None
         self.PhoneNumber = phone_number
 
         self.BirthDate = None
@@ -32,7 +31,7 @@ class User:
         self.Update_at = None
 
         self.Code = {
-            'Code': None if code is None else code['Code'],
+            'Code': None if code is None else code,
             'Is_Used': False
         }
         self.IsActive = False
@@ -88,12 +87,28 @@ class User:
 
         return Tools.Result(True, user_object['Code']['Code'])
 
+    @staticmethod
+    def login_as_guest():
+        guest_id = ObjectId()
+        token = gen_token_authentication(user_id=str(guest_id))
+
+        if not token:
+            return Tools.Result(False, Tools.errors("FTGT"))
+
+        response = {
+            'Id': str(guest_id),
+            'Token': token
+        }
+
+        return Tools.Result(True, Tools.dumps(response))
+    
     # required #
     @staticmethod
     def register(phone_number):
 
         # validate first_name, last_name and phone_number
-        if User.validate_phone(phone_number is None):
+        if User.validate_phone(phone_number) is None:
+            print(phone_number)
             return Tools.Result(False, Tools.errors('NA'))
 
         # check whether phone number is unique or not
@@ -128,8 +143,9 @@ class User:
         # registering was successful
         return Tools.Result(True, 'R')
 
+
     @staticmethod
-    def complete_sign_up(phone_number, first_name=None, last_name=None, birthdate=None, gender=None):
+    def complete_sign_up(phone_number, name=None, birthdate=None, gender=None):
         # validate phone number
         if User.validate_phone(phone_number) is None:
             return Tools.Result(False, Tools.errors('NA'))
@@ -145,12 +161,11 @@ class User:
         if user_object is None:
             return Tools.Result(False, Tools.errors('INF'))
 
-        user_object.update_one(
+        user_collection.update_one(
             {'PhoneNumber': phone_number},
             {
                 '$set': {
-                    'FirstName': first_name,
-                    'LastName': last_name,
+                    'Name': name,
                     'Birthdate': birthdate,
                     'Gender': gender
                 }
