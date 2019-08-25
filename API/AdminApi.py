@@ -7,6 +7,14 @@ from Middleware.Middlewares import json_body_required, login_required, check_for
 admin_route = Blueprint("admin_route", __name__, "template")
 
 
+@admin_route.route('/test/admin/register', methods=['POST'])
+def register():
+    try:
+        return Admin.register_admin()
+    except Exception as ex:
+        return Tools.Result(False, ex.args)
+
+
 @admin_route.route('/admin/login', methods=['POST'])
 @json_body_required
 @check_form_json_key(['UserName', 'Password'])

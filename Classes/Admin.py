@@ -33,7 +33,7 @@ class Admin:
             'Key': key
         })
 
-        return True
+        return Tools.Result(True, 'd')
 
     @staticmethod
     def login(username, password):
