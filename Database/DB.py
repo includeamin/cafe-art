@@ -31,8 +31,8 @@ if not DEBUG:
         Initer(get_database_url["Key"])
         url = Decode(get_database_url["DatabaseString"])
 else:
-    # url = 'mongodb://root:9ih16LFt1AooBz4YHb5HFcGK@s7.liara.ir:32430'
-    url = 'localhost:27017'
+    url = 'mongodb://root:9ih16LFt1AooBz4YHb5HFcGK@s7.liara.ir:32430'
+    # url = 'localhost:27017'
     configs = {
         "DatabaseName": "TempUserManagement",
         "UserCollection": "User",
