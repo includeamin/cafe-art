@@ -223,7 +223,7 @@ class AddItem extends Component {
                                                 </FormGroup>
                                             </div>
                                             <div className="col-sm-4 rowInput">
-                                                <SuggestCategoriesComponent label='itemList' GetSuggestValue={this.GetSuggestValue.bind(this)}/>
+                                                <SuggestCategoriesComponent label='دسته بندی' GetSuggestValue={this.GetSuggestValue.bind(this)}/>
 
                                             </div>
                                         </div>
@@ -231,7 +231,7 @@ class AddItem extends Component {
                                             <div className="col-sm-12 rowInput">
                                                 <FormGroup className="form-group has-float-label position-relative">
                                                     <Label>
-                                                        <IntlMessages id="Description" />
+                                                        <IntlMessages id="توضیحات" />
                                                     </Label>
                                                     <Field className="form-control" name="Description" component="textarea" rows="6" />
                                                     {errors.Description && touched.Description ? (
@@ -251,7 +251,6 @@ class AddItem extends Component {
                                                 <CropComponent label={'عکس'} onCropImg={this.handelCrop2}/>
                                             </div>
                                         </div>
-
                                         <Button color="primary" type="submit" className="col-2 rowInput">
                                             ارسال
                                         </Button>

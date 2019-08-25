@@ -16,6 +16,7 @@ import {
 import IntlMessages from "../../../helpers/IntlMessages";
 import { Colxx, Separator } from "../../../components/common/CustomBootstrap";
 import Breadcrumb from "../../../containers/navs/Breadcrumb";
+import AddGalleryItem from "../../../component/Items/twoStepAddItem/AddGalleryItem";
 
 export default class ModalUi extends Component {
   constructor(props) {
@@ -494,7 +495,9 @@ export default class ModalUi extends Component {
                     <ModalHeader toggle={this.toggleLarge}>
                       Modal title
                     </ModalHeader>
-                    <ModalBody>---</ModalBody>
+                    <ModalBody>
+                        <AddGalleryItem id={'afadfsdsf'} itemName={'sdfsdf'}/>
+                    </ModalBody>
                   </Modal>
 
                   <Modal

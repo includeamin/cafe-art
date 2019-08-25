@@ -10,8 +10,8 @@ class ShowDescriptionItems extends Component {
                 <p className="  m-2 fontSize17em warning-color-text  d-flex  justify-content-start">
                     <IntlMessages id={`${label} :`}/>
                 </p>
-                <p className=" m-2 fontSize17em font-weight-bold d-flex  justify-content-start  " dir='rtl'>
-                    {/*<div className='justify-content-start'></div>*/}
+                <p className=" m-2 fontSize17em font-weight-bold text-justify " dir='rtl'>
+                    {/*<div className='text-justify'></div>*/}
                     {value}
                 </p>
             </div>

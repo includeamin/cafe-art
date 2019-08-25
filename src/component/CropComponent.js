@@ -152,8 +152,15 @@ class CropComponent extends Component {
         const canvas = document.createElement("canvas");
         const scaleX = image.naturalWidth / image.width;
         const scaleY = image.naturalHeight / image.height;
+        // canvas.width = Math.ceil(crop.width*scaleX);
+        // canvas.height = Math.ceil(crop.height*scaleY);
         canvas.width = crop.width;
         canvas.height = crop.height;
+
+
+        // set canvas size
+        // canvas.width = targetWidth;
+        // canvas.height = targetHeight;
         const ctx = canvas.getContext("2d");
 
         ctx.drawImage(
@@ -220,8 +227,8 @@ class CropComponent extends Component {
                         />
                     )}
                     {croppedImageUrl && (
-                        <div>
-                            <img  alt="Crop" style={{ maxWidth: "100%" }} src={croppedImageUrl} />
+                        <div className='cropsImg'>
+                            <img  alt="Crop" style={{ maxHeight: "100%" }} src={croppedImageUrl} />
                         </div>
                     )}
                 </div>

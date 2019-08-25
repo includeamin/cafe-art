@@ -16,6 +16,7 @@ import RowEditItem from "./RowEditItem";
 import AddItem from "../AddItem";
 import AddGalleryItem from "../../twoStepAddItem/AddGalleryItem";
 import ShowDescriptionItems from "../../showDescriptionItems";
+import ModalGallery from "../../twoStepAddItem/ModalGallery";
 var classNames = require('classnames');
 
 // Gallery: (2) [{…}, {…}]
@@ -161,9 +162,7 @@ class RowShowItem extends Component {
         let {index , input}=this.props;
         console.log(input._id);
         console.log(input.Description);
-
         // console.log(index)
-
         // let {index , img}=this.props;
         return (
             <div>
@@ -248,9 +247,10 @@ class RowShowItem extends Component {
                         </div> :
 
                         <div className='w-100' id='editComponent'>
-                            <RowEditItem Title={title} RowId={Rank} price={input.Price} id={input._id} Description={input.Description}
+                            <RowEditItem Title={title} RowId={Rank} price={input.Price} id={input._id} Description={input.Description} itemName={input.Title}
                                                handelGoTwoStep2={this.handelGoTwoStep2.bind(this)}  GetBackToMain={this.GetBackToMain.bind(this)}/>
-                         <AddGalleryItem id={input._id} itemName={input.Title}/>
+                            {/*<ModalGallery id={input._id} itemName={input.Title}/>*/}
+                         {/*<AddGalleryItem id={input._id} itemName={input.Title}/>*/}
 
                         </div>
 

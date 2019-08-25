@@ -19,6 +19,7 @@ import {
 } from "reactstrap";
 import * as Yup from "yup";
 import SuggestCategoriesComponent from "../../../SuggestCategoriesComponent";
+import ModalGallery from "../../twoStepAddItem/ModalGallery";
 const SignupSchema = Yup.object().shape({
     Title: Yup.string()
         .required("Title number is required!"),
@@ -258,8 +259,13 @@ class RowEditItem extends Component {
                                             </Button>
                                         </div>
                                     </Form>
+                                    // <ModalGallery id={input._id} itemName={input.Title}/>
+
+                                    // <ModalGallery id={this.props.id} itemName={this.props.itemName}/>
                                 )}
                             </Formik>
+                            <ModalGallery id={this.props.id} itemName={this.props.Title}/>
+
                         </CardBody>
 
 
