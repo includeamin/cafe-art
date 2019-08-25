@@ -42,6 +42,15 @@ class Item:
         }))
 
     @staticmethod
+    def get_item(item_id):
+        item_object = item_collection.find_one({'_id': ObjectId(item_id)})
+
+        if item_object is None:
+            return Tools.Result(False, Tools.errors('INF'))
+
+        return Tools.Result(True, Tools.dumps(item_object))
+        
+    @staticmethod
     def modify_item(item_id, row_id=None, category_name=None, title=None, description=None, price=None, menu_image_url=None, item_image_url=None):
 
         # make sure at least on attribute is not null
@@ -568,7 +577,8 @@ class Item:
     @staticmethod
     def _get_favorite_items(user_id):
 
-        items_object = item_collection.find({'Likes.UserId': user_id})
+        items_object = item_collection.find(
+            {'Likes.UserId': user_id}, {'ItemImageUrl': 1, 'RowId': 1, 'Title': 1, 'CategoryName': 1})
 
         favorite_items = []
         for item in items_object:

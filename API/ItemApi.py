@@ -16,6 +16,14 @@ def get_items(row_id):
         return Tools.Result(False, ex.args)
 
 
+@item_route.route('/item/<item_id>', methods=['GET'])
+@login_required
+def get_item(item_id):
+    try:
+        return 
+    except Exception as ex:
+        return Tools.Result(False, ex.args)
+
 
 @item_route.route('/items/categorized', methods=['GET'])
 @login_required
@@ -296,7 +304,6 @@ def admin_saw_comment():
         return Item.admin_saw_comment(data['CommentId'])
     except Exception as ex:
         return Tools.Result(False, ex.args)
-
 
 
 @item_route.route('/item/favorite/<user_id>', methods=['GET     '])
