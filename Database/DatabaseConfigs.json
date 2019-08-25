@@ -1,11 +1,11 @@
 {
   "MicroServiceManagementURl" : "http://localhost:3000",
   "DatabaseName": "TempUserManagement",
-  "UserCollection": "User",
   "Category": "Category",
   "Item": "Item",
   "Event": "Event",
   "Admin": "Admin",
   "Notification": "Notification",
-  "Users": "Users"
+  "Users": "Users",
+  "Cafe": "Cafe"
 }

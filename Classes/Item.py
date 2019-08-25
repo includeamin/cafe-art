@@ -565,4 +565,45 @@ class Item:
 
         return Tools.Result(True, Tools.dumps(favorite_items))
 
+    @staticmethod
+    def _get_favorite_items(user_id):
+
+        items_object = item_collection.find({'Likes.UserId': user_id})
+
+        favorite_items = []
+        for item in items_object:
+            favorite_items.append(item)
+
+        return favorite_items
+
+    @staticmethod
+    def like_unlike_item(item_id, user_id):
+        valid = item_collection.find_one(
+            {'_id': ObjectId(item_id)}) is not None
+
+        if not valid:
+            return Tools.Result(False, Tools.errors('INF'))
+
+        liked_before = item_collection.find_one(
+            {'_id': ObjectId(item_id), 'Likes.UserId': user_id}) is not None
+
+        if liked_before:
+            item_collection.update_one(
+                {'_id': ObjectId(item_id)},
+                {
+                    '$pull': {'Likes': {'UserId': user_id}},
+                    '$inc': {'LikesCount': -1}
+                }
+            )
+
+        # update the likes
+        item_collection.update_one(
+            {'_id': ObjectId(item_id)},
+            {
+                '$push': {'Likes': {'UserId': user_id}},
+                '$inc': {'LikesCount': 1}
+            }
+        )
+
+        return Tools.Result(True, 'd')
 

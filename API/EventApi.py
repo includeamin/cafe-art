@@ -44,3 +44,12 @@ def get_events():
         return Event.get_events()
     except Exception as ex:
         return Tools.Result(False, ex.args)
+
+
+@event_route.route('/events/sorted', methods=['GET'])
+@login_required
+def get_events_sorted():
+    try:
+        return Event.get_events_sorted()
+    except Exception as ex:
+        return Tools.Result(False, ex.args)

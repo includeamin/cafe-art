@@ -17,3 +17,4 @@ flask-cors >= 3.0.7
 termcolor >= 1.1.0
 kavenegar >= 1.1.2
 bson
+jdatetime

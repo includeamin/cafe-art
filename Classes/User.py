@@ -7,6 +7,7 @@ from bson import ObjectId
 
 from Database.DB import user_collection
 from Classes.Tools import Tools
+from Classes.Item import Item
 from Classes.Bridge import send_authentication_email, gen_token_authentication, send_invention_sms, invalidate_token, \
     send_code_phone_number
 
@@ -35,7 +36,6 @@ class User:
             'Is_Used': False
         }
         self.IsActive = False
-
 
     # validations #
     @staticmethod
@@ -101,7 +101,7 @@ class User:
         }
 
         return Tools.Result(True, Tools.dumps(response))
-    
+
     # required #
     @staticmethod
     def register(phone_number):
@@ -142,7 +142,6 @@ class User:
 
         # registering was successful
         return Tools.Result(True, 'R')
-
 
     @staticmethod
     def complete_sign_up(phone_number, name=None, birthdate=None, gender=None):
@@ -307,7 +306,6 @@ class User:
     def generate_invitation_code():
         return User.generate_activation_code()
 
-    
     @staticmethod
     def resend_activation_code_to_phone_number(phone_number):
         # validate phone number
@@ -342,3 +340,38 @@ class User:
         sending_result = send_code_phone_number(phone_number, activation_code)
 
         return sending_result
+
+    @staticmethod
+    def get_profile_info(user_id):
+        user_object = user_collection.find_one({'_id': ObjectId(user_id)})
+
+        if user_object is None:
+            return Tools.Result(False, Tools.errors('INF'))
+
+        favorite_items = Item._get_favorite_items(user_id)
+
+        response = {
+            'ProfileInfo': user_object,
+            'FavoriteItems': favorite_items
+        }
+
+        return Tools.Result(True, Tools.dumps(response))
+
+    @staticmethod
+    def update_profile_info(user_id, name, birthdate):
+
+        result = user_collection.update_one(
+            {'_id': ObjectId(user_id)},
+            {
+                '$set': {
+                    'Name': name,
+                    'BirthDate': birthdate,
+                    'Update_at': datetime.now()
+                }
+            }
+        )
+
+        if result.modified_count == 0:
+            return Tools.Result(False, Tools.errors('INF'))
+        else:
+            return Tools.Result(True, 'd')

@@ -155,6 +155,18 @@ def unlike_item():
         return Tools.Result(False, ex.args)
 
 
+@item_route.route('/item/likeunlike', methods=['POST'])
+@login_required
+@json_body_required
+@check_form_json_key(['ItemId'])
+def like_unlike_item():
+    try:
+        data = request.get_json()
+        return Item.like_unlike_item(data['ItemId'], request.headers['Id'])
+    except Exception as ex:
+        return Tools.Result(False, ex.args)
+
+
 @item_route.route('/item/gallery/like', methods=['POST'])
 @login_required
 @json_body_required

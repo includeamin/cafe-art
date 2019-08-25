@@ -7,6 +7,7 @@ from API.EventApi import event_route
 from API.AdminApi import admin_route
 from API.NotificationApi import notification_route
 from API.UserApi import user_route
+from API.CafeApi import cafe_route
 
 app = Flask(__name__)
 
@@ -16,6 +17,7 @@ app.register_blueprint(event_route)
 app.register_blueprint(admin_route)
 app.register_blueprint(notification_route)
 app.register_blueprint(user_route)
+app.register_blueprint(cafe_route)
 
 CORS(app)
 

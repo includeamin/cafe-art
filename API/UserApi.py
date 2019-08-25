@@ -81,3 +81,12 @@ def resend_activation_code_to_phone_number():
         return User.resend_activation_code_to_phone_number(data['PhoneNumber'])
     except Exception as ex:
         return Tools.Result(False, ex.args)
+
+
+@user_route.route('/user/profile', methods=['GET'])
+@login_required
+def get_profile_info():
+    try:
+        return User.get_profile_info(request.headers['Id'])
+    except Exception as ex:
+        return Tools.Result(False, ex.args)

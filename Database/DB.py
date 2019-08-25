@@ -40,15 +40,16 @@ else:
         "Event": "Event",
         "Admin": "Admin",
         "Notification": "Notification",
-        "Users": "Users"
+        "Users": "Users",
+        "Cafe": "Cafe"
     }
 
 mongodb = pymongo.MongoClient(url)
 database = mongodb[configs["DatabaseName"]]
-UserDb = database[configs["UserCollection"]]
 category_collection = database[configs['Category']]
 item_collection = database[configs['Item']]
 event_collection = database[configs['Event']]
 admin_collection = database[configs['Admin']]
 notification_collection = database[configs['Notification']]
 user_collection = database[configs['Users']]
+cafe_collection = database[configs['Cafe']]
