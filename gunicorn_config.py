@@ -17,7 +17,7 @@
 #       Must be a positive integer. Generally set in the 64-2048
 #       range.
 #
-# bind = '0.0.0.0:3000'
+bind = '0.0.0.0:4002'
 backlog = 2048
 
 #
