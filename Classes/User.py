@@ -9,7 +9,7 @@ from Database.DB import user_collection
 from Classes.Tools import Tools
 from Classes.Item import Item
 from Classes.Auth import Auth
-from Classes.Bridge import send_authentication_email, gen_token_authentication, send_invention_sms, invalidate_token, \
+from Classes.Bridge import send_authentication_email, send_invention_sms, invalidate_token, \
     send_code_phone_number
 
 
@@ -273,7 +273,7 @@ class User:
             }
         )
 
-        token = gen_token_authentication(user_id=str(user_object["_id"]))
+        token = Auth.add_token(user_id=str(user_object["_id"]))
 
         if not token:
             return Tools.Result(False, Tools.errors("FTGT"))
