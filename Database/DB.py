@@ -42,7 +42,8 @@ else:
         "Admin": "Admin",
         "Notification": "Notification",
         "Users": "Users",
-        "Cafe": "Cafe"
+        "Cafe": "Cafe",
+        "Auth": "Auth"
     }
 
 mongodb = pymongo.MongoClient(url)
@@ -54,3 +55,4 @@ admin_collection = database[configs['Admin']]
 notification_collection = database[configs['Notification']]
 user_collection = database[configs['Users']]
 cafe_collection = database[configs['Cafe']]
+auth_collection = database[configs['Auth']]

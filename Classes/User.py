@@ -8,6 +8,7 @@ from bson import ObjectId
 from Database.DB import user_collection
 from Classes.Tools import Tools
 from Classes.Item import Item
+from Classes.Auth import Auth
 from Classes.Bridge import send_authentication_email, gen_token_authentication, send_invention_sms, invalidate_token, \
     send_code_phone_number
 
@@ -21,9 +22,10 @@ class User:
         activation_code_regex = r'[0-9]{4}'
         email_regex = r'[a-zA-Z0-9._%-]+@[a-zA-Z-9._%-]+.[a-zA-Z]{2,6}'
 
-    def __init__(self, phone_number, code):
+    def __init__(self, phone_number, code, uuid):
         self.Name = None
         self.PhoneNumber = phone_number
+        self.Uuid = uuid
 
         self.BirthDate = None
         self.Gender = None
@@ -88,12 +90,17 @@ class User:
         return Tools.Result(True, user_object['Code']['Code'])
 
     @staticmethod
-    def login_as_guest():
+    def login_as_guest(uuid):
         guest_id = ObjectId()
-        token = gen_token_authentication(user_id=str(guest_id))
+        token = Auth.add_token(str(guest_id))
 
         if not token:
             return Tools.Result(False, Tools.errors("FTGT"))
+
+        user_collection.insert_one({
+            '_id': guest_id,
+            'Uuid': uuid
+        })
 
         response = {
             'Id': str(guest_id),
@@ -104,7 +111,7 @@ class User:
 
     # required #
     @staticmethod
-    def register(phone_number):
+    def register(phone_number, uuid):
 
         # validate first_name, last_name and phone_number
         if User.validate_phone(phone_number) is None:
@@ -137,7 +144,7 @@ class User:
 
         # register the user in database with Not Confirmed status
         user_collection.insert_one(
-            User(phone_number, activation_code).__dict__
+            User(phone_number, activation_code, uuid).__dict__
         )
 
         # registering was successful
@@ -221,7 +228,7 @@ class User:
         return Tools.Result(True, 'L')
 
     @staticmethod
-    def enter_app(phone_number):
+    def enter_app(phone_number, uuid):
 
         # if user does already exist -> login
         user_is_active = user_collection.find_one(
@@ -231,7 +238,7 @@ class User:
             return User.login(phone_number)
         # else -> sign up
         else:
-            return User.register(phone_number)
+            return User.register(phone_number, uuid)
 
     @staticmethod
     def login_verification(phone_number, verification_code):
@@ -284,14 +291,18 @@ class User:
         # make sure user_id exists in database
         user_object = user_collection.find_one(
             {'_id': ObjectId(user_id)},
-            {'_id': 1}
+            {'_id': 1, 'PhoneNumber': 1}
         )
 
         if user_object is None:
             return Tools.Result(False, Tools.errors('INF'))
 
         # request to invalidate the token
-        result = invalidate_token(user_id, token)
+        result = Auth.delete_token(user_id)
+
+        # if user is guest -> delete it
+        if user_object['PhoneNumber'] is None:
+            user_collection.delete_one({'_id': ObjectId(user_id)})
 
         if result is True:
             return Tools.Result(True, 'd')

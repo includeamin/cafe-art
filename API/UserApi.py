@@ -9,11 +9,11 @@ user_route = Blueprint("user_route", __name__, "template")
 
 @user_route.route('/user/enter', methods=['POST'])
 @json_body_required
-@check_form_json_key(['PhoneNumber'])
+@check_form_json_key(['PhoneNumber', 'UUID'])
 def enter_app():
     try:
         data = request.get_json()
-        return User.enter_app(data['PhoneNumber'])
+        return User.enter_app(data['PhoneNumber'], data['UUID'])
     except Exception as ex:
         import traceback
         traceback.print_exc()
@@ -27,10 +27,13 @@ def get_activation_code(phone_number):
         return Tools.Result(False, ex.args)
 
 
-@user_route.route('/user/login/guest', methods=['GET'])
+@user_route.route('/user/login/guest', methods=['POST'])
+@json_body_required
+@check_form_json_key(['UUID'])
 def login_as_guest():
     try:
-        return User.login_as_guest()
+        data = request.get_json()
+        return User.login_as_guest(data['UUID'])
     except Exception as ex:
         return Tools.Result(False, ex.args)
 

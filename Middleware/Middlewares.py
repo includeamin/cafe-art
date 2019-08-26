@@ -1,7 +1,7 @@
 from flask import request
 from functools import wraps
 from Classes.Tools import Tools
-from Classes.Bridge import is_auth
+from Classes.Auth import Auth
 import requests
 
 Result = Tools.Result
@@ -27,7 +27,7 @@ def login_required(f):
                 return Result(False, Error('TINE'))
         except:
             return Result(False, Error('TINE'))
-        if not is_auth(request.headers["Id"], request.headers["Token"]):
+        if not Auth.is_auth(request.headers["Id"], request.headers["Token"]):
             print(request.headers["Id"], request.headers["Token"])
             return Result(False, Error("ACCD"))
         return f(*args, **kwargs)

@@ -1,6 +1,6 @@
 from Database.DB import admin_collection
 from Classes.Tools import Tools
-from Classes.Bridge import gen_token_authentication, invalidate_token
+from Classes.Auth import Auth
 from cryptography.fernet import Fernet
 from bson import ObjectId
 
@@ -56,7 +56,7 @@ class Admin:
         if decrypted_password != password:
             return Tools.Result(False, 'NA')
 
-        token = gen_token_authentication(admin_object['_id'])
+        token = Auth.add_token(admin_object['_id'])
 
         if token is False:
             return Tools.Result(False, Tools.errors("FTGT"))
@@ -81,7 +81,7 @@ class Admin:
             return Tools.Result(False, Tools.errors('INF'))
 
         # request to invalidate the token
-        result = invalidate_token(admin_id, token)
+        result = Auth.delete_token(admin_id)
 
         if result is True:
             return Tools.Result(True, 'd')

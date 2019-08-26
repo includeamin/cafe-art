@@ -17,7 +17,7 @@ class Cafe:
             '$push': {
                 'Images': {
                     'ImageId': image_id,
-                    'Image': image
+                    'Image': str(image)
                 }
             }
         }
