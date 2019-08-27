@@ -255,6 +255,17 @@ class Item:
 
         items = Item._get_gallery_image_urls_for_items(items)
 
+        for item in items:
+            menu_image_id = item['MenuImageUrl']['MenuImageId']
+            item.pop('MenuImageUrl')
+            item['MenuImageUrl'] = 'https://cafe-art-backend.liara.run/item/menu/image/{}'.format(
+                menu_image_id)
+
+            item_image_id = item['ItemImageUrl']['ItemImageId']
+            item.pop('ItemImageUrl')
+            item['ItemImageUrl'] = 'https://cafe-art-backend.liara.run/item/item/image/{}'.format(
+                item_image_id)
+
         return Tools.Result(True, Tools.dumps(items))
 
     @staticmethod
@@ -293,6 +304,19 @@ class Item:
 
         if len(items) == 0:
             return Tools.Result(False, Tools.errors('INF'))
+
+        items = Item._get_gallery_image_urls_for_items(items)
+
+        for item in items:
+            menu_image_id = item['MenuImageUrl']['MenuImageId']
+            item.pop('MenuImageUrl')
+            item['MenuImageUrl'] = 'https://cafe-art-backend.liara.run/item/menu/image/{}'.format(
+                menu_image_id)
+
+            item_image_id = item['ItemImageUrl']['ItemImageId']
+            item.pop('ItemImageUrl')
+            item['ItemImageUrl'] = 'https://cafe-art-backend.liara.run/item/item/image/{}'.format(
+                item_image_id)
 
         return Tools.Result(True, Tools.dumps(items))
 
