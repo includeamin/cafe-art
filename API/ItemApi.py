@@ -20,7 +20,23 @@ def get_items(row_id):
 @login_required
 def get_item(item_id):
     try:
-        return 
+        return Item.get_item(item_id)
+    except Exception as ex:
+        return Tools.Result(False, ex.args)
+
+
+@item_route.route('/item/item/image/<image_id>', methods=['GET'])
+def get_item_image(image_id):
+    try:
+        return Item.get_item_image(image_id)
+    except Exception as ex:
+        return Tools.Result(False, ex.args)
+
+
+@item_route.route('/item/menu/image/<image_id>', methods=['GET'])
+def get_item_menu_image(image_id):
+    try:
+        return Item.get_item_menu_image(image_id)
     except Exception as ex:
         return Tools.Result(False, ex.args)
 
@@ -52,7 +68,7 @@ def get_all_items():
 @item_route.route('/admin/item/add', methods=['POST'])
 @login_required
 @json_body_required
-@check_form_json_key(['RowId', 'Title', 'Description', 'Price', 'MenuImageUrl', 'ItemImageUrl', 'Gallery'])
+@check_form_json_key(['RowId', 'Title', 'Description', 'Price', 'MenuImageUrl', 'ItemImageUrl'])
 def add_item():
     try:
         data = request.get_json()
@@ -62,8 +78,7 @@ def add_item():
                              data['Description'],
                              data['Price'],
                              data['MenuImageUrl'],
-                             data['ItemImageUrl'],
-                             data['Gallery']
+                             data['ItemImageUrl']
                              )
     except Exception as ex:
         return Tools.Result(False, ex.args)
@@ -87,6 +102,8 @@ def modify_item():
                                 data['ItemImageUrl'] if 'ItemImageUrl' in data else None
                                 )
     except Exception as ex:
+        import traceback
+        traceback.print_exc()
         return Tools.Result(False, ex.args)
 
 
@@ -128,11 +145,18 @@ def delete_image_from_gallery():
         return Tools.Result(False, ex.args)
 
 
-@item_route.route('/item/gallery/<item_id>', methods=['GET'])
-@login_required
-def get_gallery_images(item_id):
+# @item_route.route('/item/gallery/<item_id>', methods=['GET'])
+# @login_required
+# def get_gallery_images(item_id):
+#     try:
+#         return Item.get_gallery_images(item_id)
+#     except Exception as ex:
+#         return Tools.Result(False, ex.args)
+
+@item_route.route('/item/gallery/<gallery_image_id>', methods=['GET'])
+def get_gallery_image(gallery_image_id):
     try:
-        return Item.get_gallery_images(item_id)
+        return Item.get_gallery_image(gallery_image_id)
     except Exception as ex:
         return Tools.Result(False, ex.args)
 

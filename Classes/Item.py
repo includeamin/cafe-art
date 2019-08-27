@@ -8,33 +8,30 @@ from operator import itemgetter
 
 class Item:
 
-    def __init__(self, row_id, category_name, title, description, price, menu_image_url, item_image_url, gallery):
+    def __init__(self, row_id, category_name, title, description, price, menu_image_url, item_image_url):
         self.RowId = row_id
         self.CategoryName = category_name
         self.Title = title
         self.Description = description
-        self.MenuImageUrl = menu_image_url
-        self.ItemImageUrl = item_image_url
+        self.MenuImageUrl = {
+            'MenuImage': menu_image_url,
+            'MenuImageId': str(ObjectId())
+        }
+        self.ItemImageUrl = {
+            'ItemImage': item_image_url,
+            'ItemImageId': str(ObjectId())
+        }
         self.LikesCount = 0
         self.Likes = []
         self.Comments = []
-        self.Gallery = gallery
+        self.Gallery = []
         self.Price = price
 
     @staticmethod
-    def add_item(row_id, category_name, title, description, price, menu_image_url, item_image_url, gallery):
-
-        gallery_objects = []
-        for item in gallery:
-            gallery_objects.append({
-                'ImageUrl': item,
-                'Likes': [],
-                'LikesCount': 0,
-                'Id': ObjectId()
-            })
+    def add_item(row_id, category_name, title, description, price, menu_image_url, item_image_url):
 
         result = item_collection.insert_one(Item(
-            row_id, category_name, title, description, price, menu_image_url, item_image_url, gallery_objects).__dict__)
+            str(row_id), category_name, title, description, price, menu_image_url, item_image_url).__dict__)
 
         return Tools.Result(True, Tools.dumps({
             '_id': result.inserted_id,
@@ -43,13 +40,56 @@ class Item:
 
     @staticmethod
     def get_item(item_id):
-        item_object = item_collection.find_one({'_id': ObjectId(item_id)})
+        item_object = item_collection.find_one({'_id': ObjectId(item_id)}, {
+            'RowId': 1,
+            'CategoryName': 1,
+            'Title': 1,
+            'Description': 1,
+            'MenuImageUrl': 1,
+            'ItemImageUrl': 1,
+            'Likes': 1,
+            'Price': 1
+        })
 
         if item_object is None:
             return Tools.Result(False, Tools.errors('INF'))
 
-        return Tools.Result(True, Tools.dumps(item_object))
+        menu_image_id = item_object['MenuImageUrl']['MenuImageId']
+        item_object.pop('MenuImageUrl')
+        item_object['MenuImageUrl'] = 'https://cafe-art-backend.liara.run/item/menu/image/{}'.format(
+            menu_image_id)
+
+        item_image_id = item_object['ItemImageUrl']['ItemImageId']
+        item_object.pop('ItemImageUrl')
+        item_object['ItemImageUrl'] = 'https://cafe-art-backend.liara.run/item/item/image/{}'.format(
+            item_image_id)
+
+        gallery_images_urls = Item._get_gallery_image_urls(item_id)
+
+        item_object['GalleryUrls'] = gallery_images_urls
         
+        return Tools.Result(True, Tools.dumps(item_object))
+
+    @staticmethod
+    def get_item_image(image_id):
+        item_object = item_collection.find_one(
+            {'ItemImageUrl.ItemImageId': image_id}, {'ItemImageUrl': 1})
+
+        if item_object is None:
+            return Tools.Result(False, Tools.errors('INF'))
+
+        return item_object['ItemImageUrl']['ItemImage']
+
+    @staticmethod
+    def get_item_menu_image(image_id):
+        item_object = item_collection.find_one(
+            {'MenuImageUrl.MenuImageId': image_id}, {'MenuImageUrl': 1})
+
+        if item_object is None:
+            return Tools.Result(False, Tools.errors('INF'))
+
+        return item_object['MenuImageUrl']['MenuImage']
+
     @staticmethod
     def modify_item(item_id, row_id=None, category_name=None, title=None, description=None, price=None, menu_image_url=None, item_image_url=None):
 
@@ -70,14 +110,14 @@ class Item:
         if title is not None:
             updating_values['Title'] = title
         if row_id is not None:
-            updating_values['RowId'] = row_id
+            updating_values['RowId'] = str(row_id)
             updating_values['CategoryName'] = category_name
         if price is not None:
             updating_values['Price'] = price
         if menu_image_url is not None:
-            updating_values['MenuImageUrl'] = menu_image_url
+            updating_values['MenuImageUrl.MenuImage'] = menu_image_url
         if item_image_url is not None:
-            updating_values['ItemImageUrl'] = item_image_url
+            updating_values['ItemImageUrl.ItemImage'] = item_image_url
         if description is not None:
             updating_values['Description'] = description
 
@@ -111,7 +151,7 @@ class Item:
                 'ImageUrl': item,
                 'Likes': [],
                 'LikesCount': 0,
-                'Id': ObjectId()
+                'Id': str(ObjectId())
             })
 
         item_collection.update_one(
@@ -138,12 +178,53 @@ class Item:
             {'_id': ObjectId(item_id)},
             {
                 '$pull': {
-                    'Gallery': {'Id': ObjectId(gallery_image_id)}
+                    'Gallery': {'Id': gallery_image_id}
                 }
             }
         )
 
         return Tools.Result(True, 'd')
+
+    @staticmethod
+    def _get_gallery_image_urls(item_id):
+        item = item_collection.find_one({'_id': ObjectId(item_id)}, {'Gallery': 1})
+
+        if item is None:
+            return Tools.Result(False, Tools.errors('INF'))
+
+        gallery_ids = []
+        for gallery in item['Gallery']:
+            gallery_ids.append(
+                "https://cafe-art-backend.liara.run/item/gallery/{}".format(gallery['Id']))
+
+        return gallery_ids
+
+    @staticmethod
+    def _get_gallery_image_urls_for_items(item_objects):
+
+        for item in item_objects:
+            gallery_urls = []
+            for gallery in item['Gallery']:
+                gallery_urls.append("https://cafe-art-backend.liara.run/item/gallery/{}".format(gallery['Id']))
+
+            item['Gallery'] = gallery_urls
+        
+        return item_objects
+
+    @staticmethod
+    def get_gallery_image(gallery_image_id):
+        item = item_collection.find_one(
+            {'Gallery.Id': gallery_image_id}, {'Gallery': 1})
+
+        if item is None:
+            return Tools.Result(False, Tools.errors('INF'))
+
+        response_gallery_image = ""
+        for gallery_image in item['Gallery']:
+            if gallery_image['Id'] == gallery_image_id:
+                response_gallery_image = gallery_image['ImageUrl']
+
+        return response_gallery_image
 
     @staticmethod
     def get_gallery_images(item_id):
@@ -159,10 +240,11 @@ class Item:
     def get_items(row_id):
 
         if str(row_id) != "-1":
-            items_object = item_collection.find({'RowId': row_id}, {'Comments': 0, 'CategoryName': 0})
+            items_object = item_collection.find(
+                {'RowId': row_id}, {'Comments': 0, 'CategoryName': 0})
         else:
-            items_object = item_collection.find({}, {'Comments': 0, 'CategoryName': 0})
-
+            items_object = item_collection.find(
+                {}, {'Comments': 0, 'CategoryName': 0})
 
         items = []
         for item in items_object:
@@ -171,13 +253,16 @@ class Item:
         if len(items) == 0:
             return Tools.Result(False, Tools.errors('INF'))
 
+        items = Item._get_gallery_image_urls_for_items(items)
+
         return Tools.Result(True, Tools.dumps(items))
 
     @staticmethod
     def get_all_items_by_category():
         categories = Category._get_categories()
 
-        items_object = item_collection.find({}, {'_id': 0, 'RowId': 1, 'Title': 1})
+        items_object = item_collection.find(
+            {}, {'_id': 0, 'RowId': 1, 'Title': 1})
 
         items = []
         for item in items_object:
@@ -193,8 +278,9 @@ class Item:
                     if category['Title'] not in items_by_category:
                         items_by_category[category['Title']] = [item['Title']]
                     else:
-                        items_by_category[category['Title']].append(item['Title'])
-        
+                        items_by_category[category['Title']].append(
+                            item['Title'])
+
         return Tools.Result(True, items_by_category)
 
     @staticmethod
@@ -562,7 +648,6 @@ class Item:
 
         return Tools.Result(True, Tools.dumps(unseen_comments))
 
-
     @staticmethod
     def get_favorite_items(user_id):
 
@@ -616,4 +701,3 @@ class Item:
         )
 
         return Tools.Result(True, 'd')
-

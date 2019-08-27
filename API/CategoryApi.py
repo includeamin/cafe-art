@@ -13,6 +13,24 @@ def get_categories():
     try:
         return Category.get_categories()
     except Exception as ex:
+        import traceback
+        traceback.print_exc()
+        return Tools.Result(False, ex.args)
+
+
+@category_route.route('/category/icon/<icon_id>', methods=['GET'])
+def get_category_icon(icon_id):
+    try:
+        return Category.get_category_icon(icon_id)
+    except Exception as ex:
+        return Tools.Result(False, ex.args)
+
+
+@category_route.route('/category/image/<image_id>', methods=['GET'])
+def get_category_image(image_id):
+    try:
+        return Category.get_category_image(image_id)
+    except Exception as ex:
         return Tools.Result(False, ex.args)
 
 
