@@ -53,3 +53,11 @@ def get_events_sorted():
         return Event.get_events_sorted()
     except Exception as ex:
         return Tools.Result(False, ex.args)
+
+
+@event_route.route('/event/image/<image_id>', methods=['GET'])
+def get_event_image(image_id):
+    try:
+        return Event.get_event_image(image_id)
+    except Exception as ex:
+        return Tools.Result(False, ex.args)

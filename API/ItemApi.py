@@ -11,7 +11,7 @@ item_route = Blueprint("item_route", __name__, "template")
 @login_required
 def get_items(row_id):
     try:
-        return Item.get_items(row_id)
+        return Item.get_items(row_id, request.headers['Id'])
     except Exception as ex:
         return Tools.Result(False, ex.args)
 

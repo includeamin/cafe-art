@@ -237,7 +237,7 @@ class Item:
         return Tools.Result(True, Tools.dumps(item['Gallery']))
 
     @staticmethod
-    def get_items(row_id):
+    def get_items(row_id, user_id):
 
         if str(row_id) != "-1":
             items_object = item_collection.find(
@@ -265,6 +265,12 @@ class Item:
             item.pop('ItemImageUrl')
             item['ItemImageUrl'] = 'https://cafe-art-backend.liara.run/item/item/image/{}'.format(
                 item_image_id)
+
+            if len(item['Likes']) == 0:
+                item['IsLiked'] = False
+
+            for user_id_ in item['Likes']:
+                item['IsLiked'] = True if user_id_['UserId'] == user_id else False
 
         return Tools.Result(True, Tools.dumps(items))
 
@@ -691,6 +697,8 @@ class Item:
 
         favorite_items = []
         for item in items_object:
+            item["ItemImageUrl"] = "https://cafe-art-backend.liara.run/item/item/image/{0}".format(
+                item['ItemImageUrl']['ItemImageId'])
             favorite_items.append(item)
 
         return favorite_items
@@ -707,13 +715,17 @@ class Item:
             {'_id': ObjectId(item_id), 'Likes.UserId': user_id}) is not None
 
         if liked_before:
-            item_collection.update_one(
+            print(item_id)
+            print(user_id)
+            print('is liked before')
+            res = item_collection.update_one(
                 {'_id': ObjectId(item_id)},
                 {
                     '$pull': {'Likes': {'UserId': user_id}},
                     '$inc': {'LikesCount': -1}
                 }
             )
+            return Tools.Result(True, 'd')
 
         # update the likes
         item_collection.update_one(

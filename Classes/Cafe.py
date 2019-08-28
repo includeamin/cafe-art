@@ -10,7 +10,7 @@ class Cafe:
 
     @staticmethod
     def add_image(image):
-        image_id = ObjectId()
+        image_id = str(ObjectId())
 
         cafe_collection.update_one({},
                                    {
@@ -30,7 +30,7 @@ class Cafe:
         result = cafe_collection.update_one({}, {
             '$pull': {
                 'Images': {
-                    'ImageId': ObjectId(image_id)
+                    'ImageId': image_id
                 }
             }
         })
@@ -46,3 +46,25 @@ class Cafe:
         images = cafe_collection.find_one({}, {'_id': 0})
 
         return Tools.Result(True, Tools.dumps(images))
+
+
+    @staticmethod
+    def get_image_urls():
+        images = cafe_collection.find_one({}, {'_id': 0})
+
+        image_urls = []
+        for image in images:
+            image_urls.append('https://cafe-art-backend.liara.run/cafe/image/{}'.format(image['ImageId']))
+
+        return Tools.Result(True, Tools.dumps(image_urls))
+
+    @staticmethod
+    def get_image(image_id):
+        images = cafe_collection.find_one({}, {'_id': 0})
+
+        for image in images:
+            if image['ImageId'] == image_id:
+                return image['Image']
+
+        return ""
+            

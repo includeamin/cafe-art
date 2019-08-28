@@ -37,3 +37,18 @@ def get_images():
         return Cafe.get_images()
     except Exception as ex:
         return Tools.Result(False, ex.args)
+
+@cafe_route.route('/cafe/image/urls', methods=['GET'])
+@login_required
+def get_image_urls():
+    try:
+        return Cafe.get_image_urls()
+    except Exception as ex:
+        return Tools.Result(False, ex.args)
+
+@cafe_route.route('/cafe/image/<image_id>', methods=['GET'])
+def get_image(image_id):
+    try:
+        return Cafe.get_image(image_id)
+    except Exception as ex:
+        return Tools.Result(False, ex.args)

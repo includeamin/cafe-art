@@ -12,7 +12,10 @@ class Event:
         self.Title = title
         self.Date = date
         self.Price = price
-        self.ImageUrl = image_url
+        self.ImageUrl = {
+            'ImageId': str(ObjectId()),
+            'Image': str(image_url)
+        }
         self.Capacity = capacity
 
     @staticmethod
@@ -27,9 +30,20 @@ class Event:
 
         events = []
         for event in event_object:
+            event_image_id = event['ImageUrl']['ImageId']
+            event['ImageUrl'] = 'https://cafe-art-backend.liara.run/event/image/{}'.format(event_image_id)
             events.append(event)
 
         return Tools.Result(True, Tools.dumps(events))
+
+    @staticmethod
+    def get_event_image(image_id):
+        event = event_collection.find_one({'ImageUrl.ImageId': image_id}, {'ImageUrl': 1})
+
+        if event is None:
+            return Tools.Result(False, Tools.errors('INF'))
+
+        return event['ImageUrl']['Image']
 
     @staticmethod
     def delete_event(event_id):
@@ -54,6 +68,10 @@ class Event:
         passed_events = []
         upcoming_events = []
         for event in events:
+
+            event_image_id = event['ImageUrl']['ImageId']
+            event['ImageUrl'] = 'https://cafe-art-backend.liara.run/event/image/{}'.format(event_image_id)
+
             event_date = event['Date']
             splitted = event_date.split('/')
             year = int(splitted[0])
