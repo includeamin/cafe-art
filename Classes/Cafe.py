@@ -53,7 +53,7 @@ class Cafe:
         images = cafe_collection.find_one({}, {'_id': 0})
 
         image_urls = []
-        for image in images:
+        for image in images['Images']:
             image_urls.append('https://cafe-art-backend.liara.run/cafe/image/{}'.format(image['ImageId']))
 
         return Tools.Result(True, Tools.dumps(image_urls))
@@ -62,7 +62,7 @@ class Cafe:
     def get_image(image_id):
         images = cafe_collection.find_one({}, {'_id': 0})
 
-        for image in images:
+        for image in images['Images']:
             if image['ImageId'] == image_id:
                 return image['Image']
 

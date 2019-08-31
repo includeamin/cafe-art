@@ -27,6 +27,11 @@ RUN pip3  install -r requirements.txt
 RUN pip3 install gunicorn
 RUN pip3 install termcolor
 
+RUN apt-get install -y sudo curl wget locales
+RUN locale-gen en_CA.UTF-8
+ENV LC_ALL=en_CA.UTF-8
+ENV LANG=en_CA.UTF-8
+ENV LANGUAGE=en_CA.UTF-8
 
 
 

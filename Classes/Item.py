@@ -276,7 +276,9 @@ class Item:
 
     @staticmethod
     def get_all_items_by_category():
+
         categories = Category._get_categories()
+        print(categories)
 
         items_object = item_collection.find(
             {}, {'_id': 0, 'RowId': 1, 'Title': 1})
@@ -289,14 +291,13 @@ class Item:
             return Tools.Result(False, Tools.errors('INF'))
 
         items_by_category = {}
+        for category in categories:
+            items_by_category[category['Title']] = []
+
         for item in items:
             for category in categories:
                 if int(item['RowId']) == int(category['RowId']):
-                    if category['Title'] not in items_by_category:
-                        items_by_category[category['Title']] = [item['Title']]
-                    else:
-                        items_by_category[category['Title']].append(
-                            item['Title'])
+                    items_by_category[category['Title']].append(item['Title'])
 
         return Tools.Result(True, items_by_category)
 
@@ -588,7 +589,7 @@ class Item:
             if total == 0:
                 continue
             for comment in item['Comments']:
-                sum_ += comment['Rate']
+                sum_ += int(comment['Rate'])
             items_rate_arr[item['Title']] = sum_/total
 
         return Tools.Result(True, Tools.dumps(items_rate_arr))
@@ -612,12 +613,12 @@ class Item:
             if total == 0:
                 continue
             for comment in item['Comments']:
-                sum_ += comment['Rate']
+                sum_ += int(comment['Rate'])
 
             items_rate_arr.append({
                 'Title': item['Title'],
                 'AverageRate': sum_/total,
-                'Image': item['ItemImageUrl'],
+                'Image': 'https://cafe-art-backend.liara.run/item/item/image/{}'.format(item['ItemImageUrl']['ItemImageId']),
                 'Total': total
             })
 
@@ -715,10 +716,7 @@ class Item:
             {'_id': ObjectId(item_id), 'Likes.UserId': user_id}) is not None
 
         if liked_before:
-            print(item_id)
-            print(user_id)
-            print('is liked before')
-            res = item_collection.update_one(
+            item_collection.update_one(
                 {'_id': ObjectId(item_id)},
                 {
                     '$pull': {'Likes': {'UserId': user_id}},

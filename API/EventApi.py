@@ -52,6 +52,8 @@ def get_events_sorted():
     try:
         return Event.get_events_sorted()
     except Exception as ex:
+        import traceback
+        traceback.print_exc()
         return Tools.Result(False, ex.args)
 
 

@@ -106,9 +106,9 @@ class Category:
         if title is not None:
             updating_values['Title'] = title
         if icon_url is not None:
-            updating_values['IconUrl'] = icon_url
+            updating_values['IconUrl.IconImage'] = icon_url
         if image_url is not None:
-            updating_values['ImageUrl'] = image_url
+            updating_values['ImageUrl.ImageUrl'] = image_url
 
         category_collection.update_one(
             {'_id': ObjectId(category_id)},

@@ -78,7 +78,7 @@ class Event:
             month = int(splitted[1])
             day = int(splitted[2])
             cr_date = jdatetime.date(year, month, day).togregorian()
-            if cr_date > datetime.now():
+            if cr_date < datetime.now().date():
                 passed_events.append({
                     'sdate': cr_date,
                     'Event': event

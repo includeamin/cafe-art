@@ -19,6 +19,7 @@ def enter_app():
         traceback.print_exc()
         return Tools.Result(False, ex.args)
 
+
 @user_route.route('/user/code/<phone_number>', methods=['GET'])
 def get_activation_code(phone_number):
     try:
@@ -36,6 +37,7 @@ def login_as_guest():
         return User.login_as_guest(data['UUID'])
     except Exception as ex:
         return Tools.Result(False, ex.args)
+
 
 @user_route.route('/user/sign_up/complete', methods=['POST'])
 @json_body_required
@@ -70,7 +72,7 @@ def logout():
     try:
         return User.logout(request.headers['Id'],
                            request.headers['Token']
-        )
+                           )
     except Exception as ex:
         return Tools.Result(False, ex.args)
 
@@ -91,5 +93,20 @@ def resend_activation_code_to_phone_number():
 def get_profile_info():
     try:
         return User.get_profile_info(request.headers['Id'])
+    except Exception as ex:
+        return Tools.Result(False, ex.args)
+
+
+@user_route.route('/user/profile/update', methods=['POST'])
+@login_required
+@json_body_required
+@check_form_json_key(['Name', 'Birthdate'])
+def update_profile_info():
+    try:
+        data = request.get_json()
+        return User.update_profile_info(request.headers['Id'],
+                                        data['Name'],
+                                        data['Birthdate']
+                                        )
     except Exception as ex:
         return Tools.Result(False, ex.args)

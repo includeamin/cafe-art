@@ -24,9 +24,9 @@ def login_required(f):
     def decorated_function(*args, **kwargs):
         try:
             if not request.headers["Token"] or not request.headers["Id"]:
-                return Result(False, Error('TINE'))
+                return Result(False, Error('TINX'))
         except:
-            return Result(False, Error('TINE'))
+            return Result(False, Error('TINX'))
         if not Auth.is_auth(request.headers["Id"], request.headers["Token"]):
             print(request.headers["Id"], request.headers["Token"])
             return Result(False, Error("ACCD"))

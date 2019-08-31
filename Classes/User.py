@@ -368,9 +368,10 @@ class User:
 
         return Tools.Result(True, Tools.dumps(response))
 
+
     @staticmethod
     def update_profile_info(user_id, name, birthdate):
-
+        
         result = user_collection.update_one(
             {'_id': ObjectId(user_id)},
             {
