@@ -31,6 +31,7 @@ if not DEBUG:
         Initer(get_database_url["Key"])
         url = Decode(get_database_url["DatabaseString"])
 else:
+    #todo : change to final database
     url = 'mongodb://root:9ih16LFt1AooBz4YHb5HFcGK@s7.liara.ir:32430'
     # url = 'localhost:27017'
     configs = {
