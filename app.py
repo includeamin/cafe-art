@@ -10,7 +10,8 @@ from API.UserApi import user_route
 from API.CafeApi import cafe_route
 
 app = Flask(__name__)
-
+import os
+print(os.environ['SMSKEY'])
 app.register_blueprint(category_route)
 app.register_blueprint(item_route)
 app.register_blueprint(event_route)
@@ -39,7 +40,8 @@ def what():
                     "Author": "AminJamal",
                     "NickName": "Includeamin",
                     "Email": "aminjamal10@gmail.com",
-                    "WebSite": "includeamin.com"})
+                    "WebSite": "includeamin.com"
+                   })
 
 
 if __name__ == '__main__':
