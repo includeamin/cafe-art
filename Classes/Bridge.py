@@ -3,6 +3,7 @@ from Classes.Tools import Tools
 import json
 import logging
 
+
 Result = Tools.Result
 Dumps = Tools.dumps
 Error = Tools.errors
@@ -25,6 +26,13 @@ def send_authentication_email(email, code):
 
 def send_invention_sms(phonenumber, code):
     try:
+
+        msg = f"کافه آرت کد فعالسازی : { code} "
+        key = "6F43714C41496A2B386F624931324F61494A323157736F6A73394B766B504871"
+        url_2 = f'https://api.kavenegar.com/v1/{key}/verify/lookup.json?receptor={phonenumber}&token={code}&template=cafe-art'
+        a = requests.get(url_2)
+        print(a)
+        # todo : check for failing or not
         return json.dumps({'State': True})
     except Exception as ex:
         return Result(True, ex.args)
