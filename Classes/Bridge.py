@@ -91,19 +91,23 @@ def invalidate_token(user_id, token):
 
 
 def send_code_phone_number(phone_number, activation_code):
+    key = os.environ['SMSKEY']
+    url_2 = f'https://api.kavenegar.com/v1/{key}/verify/lookup.json?receptor={phone_number}&token={activation_code}&template=cafe-art'
+    a = requests.get(url_2)
+    print(a)
     return json.dumps({'State': True})
     # send activation code to phone number
-    sending_result = requests.get(
-        'https://chichiapp.ir:3008/sms/authenticate/send/{}/{}'.format(phone_number, activation_code),
-        verify=False)
+    # sending_result = requests.get(
+    #     'https://chichiapp.ir:3008/sms/authenticate/send/{}/{}'.format(phone_number, activation_code),
+    #     verify=False)
 
     # parse result
-    result_dict = json.loads(sending_result.text)
+    # result_dict = json.loads(sending_result.text)
 
     # check whether sending was successful
-    successful = result_dict['State']
+    # successful = result_dict['State']
 
-    if successful:
-        return Tools.Result(True, 'd')
-    else:
-        return Tools.Result(False, Tools.errors('INF'))
+    # if successful:
+    #     return Tools.Result(True, 'd')
+    # else:
+    #     return Tools.Result(False, Tools.errors('INF'))
